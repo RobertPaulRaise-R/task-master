@@ -7,10 +7,10 @@ function Tab({ label, img, alt, to }: TabProps) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex gap-5 py-1.5 rounded-md ${
+        `flex gap-5 py-1 rounded-md ${
           isActive
-            ? "text-gray-800 bg-indigo-100 font-medium"
-            : "hover:text-gray-800 hover:bg-[#f5f9ff]"
+            ? "text-stone-800 bg-white font-medium"
+            : "hover:text-gray-800 hover:bg-stone-300"
         }`
       }
     >

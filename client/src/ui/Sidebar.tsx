@@ -14,7 +14,7 @@ function Sidebar() {
   console.log(theme);
 
   return (
-    <aside className="px-5 py-3 max-w-60 border-gray-400 border-r h-screen">
+    <aside className="px-5 py-3 max-w-60 h-screen">
       <div className="flex items-center justify-between">
         <img src="" alt="" />
         <h1 className="text-md font-bold">Seven Tasks</h1>

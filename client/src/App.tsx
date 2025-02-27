@@ -4,10 +4,12 @@ import Navbar from "./ui/Navbar";
 
 function App() {
   return (
-    <div className="flex h-screen bg-white text-gray-900">
+    <div className="flex h-screen bg-[#F4F6F6] text-gray-900">
       <Sidebar />
-      <Navbar />
-      <Outlet />
+      <div className="bg-white w-full m-1.5 p-4 rounded-md shadow-md">
+        <Navbar />
+        <Outlet />
+      </div>
     </div>
   );
 }
