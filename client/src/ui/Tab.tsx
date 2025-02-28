@@ -1,20 +1,21 @@
+import { ReactNode } from "react";
 import { NavLink } from "react-router";
 
-type TabProps = { label: string; img?: string; alt?: string; to: string };
+type TabProps = { label: string; icon: ReactNode; to: string };
 
-function Tab({ label, img, alt, to }: TabProps) {
+function Tab({ label, icon, to }: TabProps) {
   return (
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex gap-5 py-1 rounded-md ${
+        `flex items-center gap-2 px-2 py-1 rounded-md ${
           isActive
-            ? "text-stone-800 bg-white font-medium"
+            ? "text-stone-800 bg-white font-medium shadow-sm"
             : "hover:text-gray-800 hover:bg-stone-300"
         }`
       }
     >
-      <img src={img} alt={alt} />
+      {icon}
       <span>{label}</span>
     </NavLink>
   );

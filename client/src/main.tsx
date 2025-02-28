@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
 import { BrowserRouter, Route, Routes } from "react-router";
-import Dashboard from "./features/dashboard/Dashboard.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

@@ -1,6 +1,16 @@
+import { MdDashboard, MdQueryStats, MdTaskAlt } from "react-icons/md";
 import { useTheme } from "../context/ThemeContext";
 import Tab from "./Tab";
 import TabGroup from "./TabGroup";
+import { GrAction, GrTasks } from "react-icons/gr";
+import { RiTeamFill } from "react-icons/ri";
+import { RxActivityLog } from "react-icons/rx";
+import {
+  HiArchiveBoxXMark,
+  HiMiniChatBubbleLeftEllipsis,
+} from "react-icons/hi2";
+import { IoCalendarNumberSharp } from "react-icons/io5";
+import { SiGoogleanalytics } from "react-icons/si";
 
 // Core: Dashboard, Tasks, Projects.
 // Team: Teams, Activity, Chat.
@@ -44,27 +54,26 @@ function Sidebar() {
 
       <div className="flex flex-col">
         <TabGroup>
-          <Tab to="dashboard" label="Dashboard" />
-          <Tab to="tasks" label="Tasks" />
-          <Tab to="projects" label="Projects" />
+          <Tab to="dashboard" label="Dashboard" icon={<MdDashboard />} />
+          <Tab to="tasks" label="Tasks" icon={<MdTaskAlt />} />
+          <Tab to="projects" label="Projects" icon={<GrTasks />} />
+          <Tab to="archives" label="Archives" icon={<HiArchiveBoxXMark />} />
         </TabGroup>
 
         <TabGroup>
-          <Tab to="teams" label="Teams" />
-          <Tab to="activity" label="Activity" />
-          <Tab to="chat" label="Chat" />
+          <Tab to="teams" label="Teams" icon={<RiTeamFill />} />
+          <Tab to="activity" label="Activity" icon={<GrAction />} />
+          <Tab to="chat" label="Chat" icon={<HiMiniChatBubbleLeftEllipsis />} />
         </TabGroup>
 
         <TabGroup>
-          <Tab to="calendar" label="Calendar" />
-          <Tab to="timeline" label="Timeline" />
-          <Tab to="analytics" label="Analytics" />
-        </TabGroup>
-
-        <TabGroup>
-          <Tab to="settings" label="Settings" />
-          <Tab to="notification" label="Notification" />
-          <Tab to="archives" label="Archives" />
+          <Tab
+            to="calendar"
+            label="Calendar"
+            icon={<IoCalendarNumberSharp />}
+          />
+          <Tab to="timeline" label="Timeline" icon={<MdQueryStats />} />
+          <Tab to="analytics" label="Analytics" icon={<SiGoogleanalytics />} />
         </TabGroup>
       </div>
     </aside>

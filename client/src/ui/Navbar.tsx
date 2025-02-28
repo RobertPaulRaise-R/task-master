@@ -1,7 +1,7 @@
-import { BsDash } from "react-icons/bs";
-import { CgProfile } from "react-icons/cg";
-import { CiSettings } from "react-icons/ci";
 import { useLocation } from "react-router";
+import { CgProfile } from "react-icons/cg";
+import { IoNotifications, IoSettings } from "react-icons/io5";
+
 import SearchBar from "./SearchBar";
 
 function Navbar() {
@@ -9,15 +9,18 @@ function Navbar() {
   const pageName = url.pathname.slice(5);
 
   return (
-    <nav className="w-full">
+    <nav className="sticky top-0 bg-gray-50 px-4 py-3 w-full z-50">
       <div className="flex items-center justify-between">
         <h2 className="text-stone-600 uppercase font-bold text-md">
           {pageName}
         </h2>
         <div className="flex items-center gap-3">
           <SearchBar />
-          <BsDash />
-          <CiSettings size={28} />
+
+          <div className="w-[1px] h-8 bg-stone-800 ml-2"></div>
+
+          <IoNotifications size={28} />
+          <IoSettings size={28} />
           <CgProfile size={28} />
         </div>
       </div>
