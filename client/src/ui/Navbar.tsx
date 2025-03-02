@@ -9,7 +9,7 @@ function Navbar() {
   const pageName = url.pathname.slice(5);
 
   return (
-    <nav className="sticky top-0 bg-gray-50 px-4 py-3 w-full z-50">
+    <nav className="sticky top-0 px-4 py-3 w-full z-50">
       <div className="flex items-center justify-between">
         <h2 className="text-stone-600 uppercase font-bold text-md">
           {pageName}

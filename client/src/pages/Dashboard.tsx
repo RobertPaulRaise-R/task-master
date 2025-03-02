@@ -3,17 +3,40 @@ import Task from "../features/dashboard/Task";
 
 const sampleDate = [
   {
-    name: "Complete MrBeast YT Thumbnail Design and Among us Thumbnail",
+    name: "Complete MrBeast YT Thumbnail Design",
     dueDate: "21.3.2025",
+    status: "pending",
+    assignedTo: "Robert Paul Raise",
+    priority: "low",
   },
-  { name: "task2", dueDate: "21.3.2025" },
-  { name: "task3", dueDate: "21.3.2025" },
-  { name: "task4", dueDate: "21.3.2025" },
-  { name: "task4", dueDate: "21.3.2025" },
-  { name: "task4", dueDate: "21.3.2025" },
-  { name: "task4", dueDate: "21.3.2025" },
-  { name: "task4", dueDate: "21.3.2025" },
-  { name: "task4", dueDate: "21.3.2025" },
+  {
+    name: "Complete MrBeast YT Thumbnail Design",
+    dueDate: "21.3.2025",
+    status: "pending",
+    assignedTo: "Robert Paul Raise",
+    priority: "medium",
+  },
+  {
+    name: "Complete MrBeast YT Thumbnail Design",
+    dueDate: "21.3.2025",
+    status: "pending",
+    assignedTo: "Robert Paul Raise",
+    priority: "high",
+  },
+  {
+    name: "Complete MrBeast YT Thumbnail Design",
+    dueDate: "21.3.2025",
+    status: "pending",
+    assignedTo: "Robert Paul Raise",
+    priority: "low",
+  },
+  {
+    name: "Complete MrBeast YT Thumbnail Design",
+    dueDate: "21.3.2025",
+    status: "pending",
+    assignedTo: "Robert Paul Raise",
+    priority: "low",
+  },
 ];
 
 function Dashboard() {
@@ -32,35 +55,6 @@ function Dashboard() {
               <span>There is no tasks right now</span>
             )}
           </ListSection.List>
-        </ListSection>
-
-        <ListSection>
-          <ListSection.Header label="Projects">
-            <div></div>
-          </ListSection.Header>
-        </ListSection>
-
-        <ListSection>
-          <ListSection.Header label="People">
-            <div></div>
-          </ListSection.Header>
-
-          <ListSection.List>
-            {sampleDate.map((item, i) => (
-              <div
-                key={i}
-                className="h-14 mt-2 px-3 bg-white rounded-md flex items-center"
-              >
-                <span>{item.name}</span>
-              </div>
-            ))}
-          </ListSection.List>
-        </ListSection>
-
-        <ListSection>
-          <ListSection.Header label="Private Notepad">
-            <div></div>
-          </ListSection.Header>
         </ListSection>
       </div>
     </div>

@@ -1,28 +1,28 @@
-import { MdOutlineDelete, MdOutlineDone } from "react-icons/md";
-import IconButton from "../../ui/IconButton";
+import Priority from "../tasks/Priority";
 
 interface TaskType {
-  dueDate: string;
   name: string;
+  dueDate: string;
+  status: string;
+  assignedTo: string;
+  priority: "high" | "medium" | "low";
 }
 
 function Task({ item }: { item: TaskType }) {
   return (
-    <div className="h-18 my-2.5 mx-3 px-3 bg-[#30332E] border-[#E0E0E0] border rounded-md grid grid-cols-6 items-center gap-3 shadow-sm">
-      <span className="col-span-4 overflow-hidden">{item.name}</span>
+    <div className="flex justify-between border border-[#e4e4e7] p-4 min-h-20 rounded-md">
+      <div className="flex flex-col gap-1">
+        <span className="text-[16px] font-medium col-span-4">{item.name}</span>
+        <div className="flex items-center gap-3 text-[#71717a] text-[14px]">
+          <span>{item.dueDate}</span>
+          <span>{item.status}</span>
+          <span>{item.assignedTo}</span>
+        </div>
+      </div>
 
       <span className="col-start-5 text-xs text-[#4A4A4A] font-semibold">
-        {item.dueDate}
+        <Priority priority={item.priority} />
       </span>
-
-      <div className="col-start-6 flex items-center justify-center gap-2">
-        <IconButton bgColor="bg-[#00C851]">
-          <MdOutlineDone size={20} color="#000" />
-        </IconButton>
-        <IconButton bgColor="bg-red-500">
-          <MdOutlineDelete size={20} color="#000" />
-        </IconButton>
-      </div>
     </div>
   );
 }

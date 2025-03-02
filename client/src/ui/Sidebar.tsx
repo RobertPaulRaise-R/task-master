@@ -27,7 +27,7 @@ function Sidebar() {
     <aside className="px-5 py-3 max-w-60 h-screen">
       <div className="flex items-center justify-between">
         <img src="" alt="" />
-        <h1 className="text-md font-bold">Seven Tasks</h1>
+        <h1 className="text-md font-bold">Taskters</h1>
 
         <div className="p-4">
           <label className="flex items-center space-x-2 cursor-pointer">
