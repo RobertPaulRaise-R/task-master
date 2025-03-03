@@ -12,7 +12,7 @@ function ListSection({
   return (
     <ListSectionContext.Provider value={{}}>
       <div
-        className={`max-h-[358px] border border-[#e4e4e7] bg-brand-50 text-brand-900 rounded-lg overflow-hidden ${className}`}
+        className={`max-h-[358px] border border-light-400 bg-brand-50 text-brand-900 rounded-lg overflow-hidden ${className}`}
       >
         {children}
       </div>

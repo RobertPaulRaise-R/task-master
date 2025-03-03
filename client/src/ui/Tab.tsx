@@ -8,10 +8,10 @@ function Tab({ label, icon, to }: TabProps) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex items-center gap-2 px-2 py-1 rounded-md ${
+        `flex items-center gap-2 rounded-md px-2 py-1 ${
           isActive
-            ? "text-stone-800 bg-white font-medium shadow-sm"
-            : "hover:text-gray-800 hover:bg-stone-300"
+            ? "bg-light-100 border-light-300 border font-medium text-stone-800 shadow-sm"
+            : "hover:bg-light-100 hover:text-gray-800"
         }`
       }
     >

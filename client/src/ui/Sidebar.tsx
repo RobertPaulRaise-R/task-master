@@ -1,4 +1,3 @@
-import { useTheme } from "../context/ThemeContext";
 import Tab from "./Tab";
 import TabGroup from "./TabGroup";
 
@@ -19,61 +18,57 @@ import { SiGoogleanalytics } from "react-icons/si";
 // Stretch: Goals, Files, Integrations.
 
 function Sidebar() {
-  const { theme, toggleTheme } = useTheme();
-
-  console.log(theme);
-
   return (
-    <aside className="px-5 py-3 max-w-60 h-screen">
+    <aside className="h-screen max-w-[255px] min-w-52 px-5 py-3">
       <div className="flex items-center justify-between">
-        <img src="" alt="" />
-        <h1 className="text-md font-bold">Taskters</h1>
-
-        <div className="p-4">
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={theme === "dark"}
-              onChange={toggleTheme}
-              className="hidden"
-            />
-            <div
-              className={`w-12 h-6 rounded-full p-1 flex items-center transition-colors duration-300 ${
-                theme === "dark" ? "bg-primary" : "bg-gray-600"
-              }`}
-            >
-              <div
-                className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
-                  theme === "dark" ? "translate-x-6" : "translate-x-0"
-                }`}
-              />
-            </div>
-          </label>
-        </div>
+        <h1 className="text-md font-bold">
+          <span className="bg-light-900 text-light-100 mr-2 px-2 py-1">T</span>
+          Taskters
+        </h1>
       </div>
 
       <div className="flex flex-col">
         <TabGroup>
-          <Tab to="dashboard" label="Dashboard" icon={<MdDashboard />} />
-          <Tab to="tasks" label="Tasks" icon={<MdTaskAlt />} />
-          <Tab to="projects" label="Projects" icon={<GrTasks />} />
-          <Tab to="archives" label="Archives" icon={<HiArchiveBoxXMark />} />
+          <Tab
+            to="dashboard"
+            label="Dashboard"
+            icon={<MdDashboard size={20} />}
+          />
+          <Tab to="tasks" label="Tasks" icon={<MdTaskAlt size={20} />} />
+          <Tab to="projects" label="Projects" icon={<GrTasks size={20} />} />
+          <Tab
+            to="archives"
+            label="Archives"
+            icon={<HiArchiveBoxXMark size={20} />}
+          />
         </TabGroup>
 
         <TabGroup>
-          <Tab to="teams" label="Teams" icon={<RiTeamFill />} />
-          <Tab to="activity" label="Activity" icon={<GrAction />} />
-          <Tab to="chat" label="Chat" icon={<HiMiniChatBubbleLeftEllipsis />} />
+          <Tab to="teams" label="Teams" icon={<RiTeamFill size={20} />} />
+          <Tab to="activity" label="Activity" icon={<GrAction size={20} />} />
+          <Tab
+            to="chat"
+            label="Chat"
+            icon={<HiMiniChatBubbleLeftEllipsis size={20} />}
+          />
         </TabGroup>
 
         <TabGroup>
           <Tab
             to="calendar"
             label="Calendar"
-            icon={<IoCalendarNumberSharp />}
+            icon={<IoCalendarNumberSharp size={20} />}
           />
-          <Tab to="timeline" label="Timeline" icon={<MdQueryStats />} />
-          <Tab to="analytics" label="Analytics" icon={<SiGoogleanalytics />} />
+          <Tab
+            to="timeline"
+            label="Timeline"
+            icon={<MdQueryStats size={20} />}
+          />
+          <Tab
+            to="analytics"
+            label="Analytics"
+            icon={<SiGoogleanalytics size={20} />}
+          />
         </TabGroup>
       </div>
     </aside>

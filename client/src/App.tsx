@@ -4,7 +4,7 @@ import Navbar from "./ui/Navbar";
 
 function App() {
   return (
-    <div className=" bg-brand-200 flex h-screen">
+    <div className="bg-light-50 flex h-screen ">
       <Sidebar />
       <div className="w-full m-2 rounded-md shadow-md overflow-auto">
         <Navbar />

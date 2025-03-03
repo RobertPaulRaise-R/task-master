@@ -1,27 +1,37 @@
 import { useLocation } from "react-router";
 import { CgProfile } from "react-icons/cg";
-import { IoNotifications, IoSettings } from "react-icons/io5";
+import { IoSettingsOutline } from "react-icons/io5";
+import { BiBell } from "react-icons/bi";
 
 import SearchBar from "./SearchBar";
+import IconButton from "./IconButton";
 
 function Navbar() {
   const url = useLocation();
   const pageName = url.pathname.slice(5);
 
   return (
-    <nav className="sticky top-0 px-4 py-3 w-full z-50">
+    <nav className="sticky top-0 z-50 w-full px-4 py-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-stone-600 uppercase font-bold text-md">
+        <h2 className="text-brand-300 text-md font-bold uppercase">
           {pageName}
         </h2>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <SearchBar />
 
-          <div className="w-[1px] h-8 bg-stone-800 ml-2"></div>
+          <div className="bg-light-400 ml-2 h-8 w-[1px]"></div>
 
-          <IoNotifications size={28} />
-          <IoSettings size={28} />
-          <CgProfile size={28} />
+          <IconButton>
+            <BiBell size={24} />
+          </IconButton>
+
+          <IconButton>
+            <IoSettingsOutline size={24} />
+          </IconButton>
+
+          <IconButton>
+            <CgProfile size={24} />
+          </IconButton>
         </div>
       </div>
     </nav>
