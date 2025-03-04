@@ -21,12 +21,17 @@
   --color-light-900: oklch(14.08% 0.0044 285.82);
   --color-light-950: oklch(0% 0 0);
 
-  --color-avocado-100: oklch(0.99 0 0);
-  --color-avocado-200: oklch(0.98 0.04 113.22);
-  --color-avocado-300: oklch(0.94 0.11 115.03);
-  --color-avocado-400: oklch(0.92 0.19 114.08);
-  --color-avocado-500: oklch(0.84 0.18 117.33);
-  --color-avocado-600: oklch(0.53 0.12 118.34);
+  --color-brand-50: #eff5ff;
+  --color-brand-100: #dbe8fe;
+  --color-brand-200: #bfd7fe;
+  --color-brand-300: #93bbfd;
+  --color-brand-400: #609afa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2570eb;
+  --color-brand-700: #1d64d8;
+  --color-brand-800: #1e55af;
+  --color-brand-900: #1e478a;
+  --color-brand-950: #172e54;
 
   --sidebar-background: 0 0% 100%;
   --sidebar-foreground: 240 10% 3.9%;

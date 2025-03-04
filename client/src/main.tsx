@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Dashboard from "./pages/Dashboard.tsx";
+import Projects from "./pages/Projects.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -15,7 +16,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="app" element={<App />}>
             <Route index path="dashboard" element={<Dashboard />} />
             <Route path="tasks" />
-            <Route path="projects" />
+            <Route path="projects" element={<Projects />} />
             <Route path="projects/:id" />
 
             <Route path="teams" />
@@ -36,5 +37,5 @@ createRoot(document.getElementById("root")!).render(
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
-  </StrictMode>
+  </StrictMode>,
 );
