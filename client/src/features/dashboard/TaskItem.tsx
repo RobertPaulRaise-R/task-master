@@ -1,18 +1,17 @@
-import { PiCalendarDotsDuotone, PiCalendarDuotone } from "react-icons/pi";
 import Priority from "../tasks/Priority";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { HiOutlineClock } from "react-icons/hi2";
 import { MdOutlinePerson } from "react-icons/md";
 
-interface TaskType {
+interface TaskItemType {
   name: string;
   dueDate: string;
   status: string;
   assignedTo: string;
-  priority: "high" | "medium" | "low";
+  priority: "low" | "medium" | "high";
 }
 
-function Task({ item }: { item: TaskType }) {
+function TaskItem({ item }: { item: TaskItemType }) {
   return (
     <div className="border-light-400 flex min-h-20 justify-between rounded-md border p-4">
       <div className="flex flex-col gap-1">
@@ -40,4 +39,4 @@ function Task({ item }: { item: TaskType }) {
   );
 }
 
-export default Task;
+export default TaskItem;

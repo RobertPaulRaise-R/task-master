@@ -1,4 +1,53 @@
+import ProjectCard from "../features/projects/ProjectCard";
 import Button from "../ui/Button";
+
+const projects = [
+  {
+    id: "asdas",
+    name: "Task Master",
+    description:
+      "Task Mangement App askfjhajs asjh ashdsa dajhsdas djhasd jajsdhbj ",
+    createdAt: "21/2/24",
+    members: 2,
+    clientName: "Robert Paul Raise",
+  },
+
+  {
+    id: "asdas",
+    name: "Task Master",
+    description: "Task Mangement App",
+    createdAt: "21/2/24",
+    members: 2,
+    clientName: "Robert Paul Raise",
+  },
+
+  {
+    id: "asdas",
+    name: "Task Master",
+    description: "Task Mangement App",
+    createdAt: "21/2/24",
+    members: 2,
+    clientName: "Robert Paul Raise",
+  },
+
+  {
+    id: "asdas",
+    name: "Task Master",
+    description: "Task Mangement App",
+    createdAt: "21/2/24",
+    members: 2,
+    clientName: "Robert Paul Raise",
+  },
+
+  {
+    id: "asdas",
+    name: "Task Master",
+    description: "Task Mangement App",
+    createdAt: "21/2/24",
+    members: 2,
+    clientName: "Robert Paul Raise",
+  },
+];
 
 function Projects() {
   return (
@@ -15,6 +64,12 @@ function Projects() {
           <Button>Name</Button>
           <Button>New Project</Button>
         </div>
+      </div>
+
+      <div className="mt-5 grid grid-cols-4 gap-3">
+        {projects.map((project) => (
+          <ProjectCard project={project} />
+        ))}
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ function Tab({ label, icon, to }: TabProps) {
       className={({ isActive }) =>
         `flex items-center gap-2 rounded-md px-2 py-1 ${
           isActive
-            ? "bg-light-100 border-light-300 border font-medium text-stone-800 shadow-sm"
+            ? "bg-brand-600 border-brand-300 text-brand-100 border font-medium shadow-sm"
             : "hover:bg-light-100 hover:text-gray-800"
         }`
       }

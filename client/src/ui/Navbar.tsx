@@ -11,9 +11,9 @@ function Navbar() {
   const pageName = url.pathname.slice(5);
 
   return (
-    <nav className="sticky top-0 z-50 w-full px-4 py-3">
+    <nav className="bg-light-50 sticky top-0 z-50 w-full px-4 py-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-brand-300 text-md font-bold uppercase">
+        <h2 className="text-brand-500 text-md font-bold uppercase">
           {pageName}
         </h2>
         <div className="flex items-center gap-4">

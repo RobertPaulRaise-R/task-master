@@ -12,7 +12,7 @@ function ListSection({
   return (
     <ListSectionContext.Provider value={{}}>
       <div
-        className={`max-h-[358px] border border-light-400 bg-brand-50 text-brand-900 rounded-lg overflow-hidden ${className}`}
+        className={`border-light-400 bg-light-50 text-light-900 max-h-[358px] overflow-hidden rounded-lg border ${className}`}
       >
         {children}
       </div>
@@ -22,7 +22,7 @@ function ListSection({
 
 function Header({ label, children }: { label: string; children?: ReactNode }) {
   return (
-    <div className="sticky top-0 h-14 px-6 pt-6 pb-2 flex items-center justify-between z-10">
+    <div className="sticky top-0 z-10 flex h-14 items-center justify-between px-6 pt-6 pb-2">
       <span className="font-medium">{label}</span>
       {children}
     </div>
@@ -31,7 +31,7 @@ function Header({ label, children }: { label: string; children?: ReactNode }) {
 
 function List({ children }: { children: ReactNode }) {
   return (
-    <div className="h-[calc(358px-56px)] flex flex-col gap-3 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+    <div className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 flex h-[calc(358px-56px)] flex-col gap-3 overflow-y-auto p-6">
       {children}
     </div>
   );

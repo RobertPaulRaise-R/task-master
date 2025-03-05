@@ -6,6 +6,7 @@ import { ThemeProvider } from "./context/ThemeContext.tsx";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Dashboard from "./pages/Dashboard.tsx";
 import Projects from "./pages/Projects.tsx";
+import Tasks from "./pages/Tasks.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -15,7 +16,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/" />
           <Route path="app" element={<App />}>
             <Route index path="dashboard" element={<Dashboard />} />
-            <Route path="tasks" />
+            <Route path="tasks" element={<Tasks />} />
             <Route path="projects" element={<Projects />} />
             <Route path="projects/:id" />
 

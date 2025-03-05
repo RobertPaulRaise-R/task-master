@@ -1,5 +1,5 @@
 import ListSection from "../features/dashboard/ListSection";
-import Task from "../features/dashboard/Task";
+import TaskItem from "../features/dashboard/TaskItem";
 
 const sampleDate = [
   {
@@ -41,7 +41,7 @@ const sampleDate = [
 
 function Dashboard() {
   return (
-    <div className="pt-4 mx-4">
+    <div className="mx-4 pt-4">
       <div className="grid grid-cols-2 gap-x-10 gap-y-4">
         <ListSection>
           <ListSection.Header label="Assigned Tasks">
@@ -50,7 +50,7 @@ function Dashboard() {
 
           <ListSection.List>
             {sampleDate.length > 0 ? (
-              sampleDate.map((item, i) => <Task item={item} key={i} />)
+              sampleDate.map((item, i) => <TaskItem item={item} key={i} />)
             ) : (
               <span>There is no tasks right now</span>
             )}
