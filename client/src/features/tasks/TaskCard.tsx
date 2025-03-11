@@ -1,25 +1,17 @@
 import { useDrag } from "react-dnd";
+import { Task } from "../../pages/Tasks";
+import Priority from "./Priority";
 
 export const ItemTypes = {
   TASK: "task",
 };
 
-export interface TaskType {
-  id: string;
-  title: string;
-  status: "To Do" | "In Progress" | "In Review" | "Done";
-  priority: "Low" | "Medium" | "High";
-  dueDate: Date;
-  projectId: string;
-  userId: string;
-}
-
 function TaskCard({
   task,
   onDrop,
 }: {
-  task: object;
-  onDrop: (task: object) => void;
+  task: Task;
+  onDrop: (task: Task) => void;
 }) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.TASK,
@@ -32,19 +24,24 @@ function TaskCard({
   return (
     <div
       ref={drag}
-      className={`bg-brand-50 mb-2 cursor-move rounded border p-3 ${
+      className={`mb-2 flex cursor-move flex-col gap-2 rounded border p-3 ${
         isDragging ? "opacity-50" : ""
       }`}
       onClick={() => onDrop(task)} // Optional: Handle clicks for editing
     >
-      <h3 className="text-brand-900 font-medium">{task.title}</h3>
-      <p className="text-brand-600 text-sm">
+      <h3 className="text-light-900 line-clamp-1 font-medium hover:line-clamp-none">
+        {task.title}
+      </h3>
+      <p className="text-light-800 line-clamp-2 text-sm">
         {task.description || "No description"}
       </p>
-      <span className="text-brand-700 text-xs">
-        Due:{" "}
-        {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "N/A"}
-      </span>
+      <div className="flex items-center justify-between">
+        <span className="text-light-700 text-xs">
+          Due:{" "}
+          {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "N/A"}
+        </span>
+        <Priority priority={task.priority} />
+      </div>
     </div>
   );
 }

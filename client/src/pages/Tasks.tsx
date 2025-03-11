@@ -1,80 +1,20 @@
-// function Tasks() {
-//   return (
-//     <div className="p-4">
-//       <div className="flex gap-4">
-//         <button>Kanban</button>
-//         <button>List</button>
-//       </div>
-
-//       <div className="mt-5 grid grid-cols-4 gap-4">
-//         <div>
-//           <KanbanHeader label="To Do" />
-//           {/* Here the list of task will come */}
-//         </div>
-
-//         <div>
-//           {/* Here the list of task will come */}
-//           <KanbanHeader label="In Progress" />
-//         </div>
-
-//         <div>
-//           <KanbanHeader label="In Review" />
-//           {/* Here the list of task will come */}
-//         </div>
-
-//         <div>
-//           <KanbanHeader label="Completed" />
-//           {/* Here the list of task will come */}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
 import { useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import KanbanColumn from "../features/tasks/KanbanColumn";
+import TaskListView from "../features/tasks/TaskListView";
+import { initialTasks } from "../data";
 
-interface Task {
+export interface Task {
   id: string;
   title: string;
+  description: string;
   status: string;
-  priority: string;
+  priority: "high" | "medium" | "low";
   dueDate: string;
   projectId: string;
   userId: string;
 }
-
-const initialTasks: Task[] = [
-  {
-    id: "kihfs9i72kijfd",
-    title: "Create Table",
-    status: "To Do",
-    priority: "Low",
-    dueDate: "2024-02-21",
-    projectId: "iufg8254698yu",
-    userId: "872736826gjhg",
-  },
-  {
-    id: "kihfs9i72kugef",
-    title: "Create Timeline",
-    status: "To Do",
-    priority: "Low",
-    dueDate: "2024-02-21",
-    projectId: "iufg8254698yu",
-    userId: "872736826gjhg",
-  },
-  {
-    id: "kihfs9i72kijhjgf",
-    title: "Create Karen",
-    status: "To Do",
-    priority: "Low",
-    dueDate: "2024-02-21",
-    projectId: "iufg8254698yu",
-    userId: "872736826gjhg",
-  },
-];
 
 function Tasks() {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
@@ -129,21 +69,8 @@ function Tasks() {
           </div>
         ) : (
           <div className="mt-5">
-            <h2 className="text-brand-900 mb-4 font-bold">Task List View</h2>
-            {tasks.map((task) => (
-              <div
-                key={task.id}
-                className="bg-brand-50 mb-2 rounded border p-3"
-              >
-                <h3 className="text-brand-900 font-medium">{task.title}</h3>
-                <p className="text-brand-600 text-sm">
-                  {task.priority} Priority
-                </p>
-                <span className="text-brand-700 text-xs">
-                  Status: {task.status}, Due:{" "}
-                  {new Date(task.dueDate).toLocaleDateString("en-GB")}
-                </span>
-              </div>
+            {statuses.map((status) => (
+              <TaskListView status={status} tasks={tasks} />
             ))}
           </div>
         )}

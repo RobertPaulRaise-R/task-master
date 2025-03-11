@@ -16,18 +16,22 @@ function KanbanColumn({ status, tasks, onDrop }) {
   return (
     <div
       ref={drop}
-      className={`bg-brand-200 border-brand-300 flex-1 rounded-lg border p-4 ${
-        isOver ? "bg-brand-300" : ""
+      className={`border-light-300 h-screen flex-1 rounded-lg border ${
+        isOver ? "bg-brand-200" : ""
       }`}
     >
-      <h2 className="text-brand-900 mb-4 font-bold">{status}</h2>
-      {filteredTasks.map((task: TaskType) => (
-        <TaskCard
-          key={task.id}
-          task={task}
-          onDrop={(task) => onDrop(task.id, status)}
-        />
-      ))}
+      <h2 className="text-brand-900 bg-brand-100 mb-4 p-2 font-bold">
+        {status}
+      </h2>
+      <div className="px-2">
+        {filteredTasks.map((task: TaskType) => (
+          <TaskCard
+            key={task.id}
+            task={task}
+            onDrop={(task) => onDrop(task.id, status)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
