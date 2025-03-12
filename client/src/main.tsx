@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Dashboard from "./pages/Dashboard.tsx";
 import Projects from "./pages/Projects.tsx";
 import Tasks from "./pages/Tasks.tsx";
+import Calendar from "./pages/Calendar.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -24,7 +25,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="activity" />
             <Route path="chat" />
 
-            <Route path="calendar" />
+            <Route path="calendar" element={<Calendar />} />
             <Route path="timeline" />
             <Route path="analytics" />
 
