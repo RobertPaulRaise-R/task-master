@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import Projects from "./pages/Projects.tsx";
 import Tasks from "./pages/Tasks.tsx";
 import Calendar from "./pages/Calendar.tsx";
+import Chat from "./pages/Chat.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -23,7 +24,7 @@ createRoot(document.getElementById("root")!).render(
 
             <Route path="teams" />
             <Route path="activity" />
-            <Route path="chat" />
+            <Route path="chat" element={<Chat />} />
 
             <Route path="calendar" element={<Calendar />} />
             <Route path="timeline" />

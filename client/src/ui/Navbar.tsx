@@ -17,7 +17,7 @@ function Navbar() {
           {pageName}
         </h2>
         <div className="flex items-center gap-4">
-          <SearchBar />
+          <SearchBar label="search anything" />
 
           <div className="bg-light-400 ml-2 h-8 w-[1px]"></div>
 
