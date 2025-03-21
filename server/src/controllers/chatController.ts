@@ -7,8 +7,8 @@ export const createChat = async (req: Request, res: Response) => {
     const chat = new Chat({ ...req.body, lastMessageAt: new Date() });
     const savedChat = await chat.save();
     res.status(201).json(savedChat);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+  } catch (err) {
+    res.status(400).json({ message: err });
   }
 };
 
@@ -30,8 +30,8 @@ export const sendMessage = async (req: Request, res: Response) => {
     await chat.save();
 
     res.status(200).json(savedMessage);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+  } catch (err) {
+    res.status(400).json({ message: err });
   }
 };
 
@@ -41,7 +41,7 @@ export const getChatMessages = async (req: Request, res: Response) => {
       .sort({ timestamp: -1 })
       .populate("senderId", "name avatar");
     res.status(200).json(messages);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    res.status(500).json({ message: err });
   }
 };
