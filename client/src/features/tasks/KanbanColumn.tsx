@@ -1,17 +1,29 @@
 import { useDrop } from "react-dnd";
-import TaskCard, { TaskType } from "../tasks/TaskCard";
+import TaskCard from "../tasks/TaskCard";
 import { ItemTypes } from "../tasks/TaskCard";
+import { Task } from "../../types";
 
-function KanbanColumn({ status, tasks, onDrop }) {
+function KanbanColumn({
+  status,
+  tasks,
+  onDrop,
+}: {
+  status: "To Do" | "In Progress" | "In Review" | "Done";
+  tasks: Task[];
+  onDrop: (
+    taskId: string,
+    newStatus: "To Do" | "In Progress" | "In Review" | "Done",
+  ) => void;
+}) {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.TASK,
-    drop: (item) => onDrop(item.id, status),
-    collect: (monitor) => ({
+    drop: (item: Task) => onDrop(item._id, status),
+    collect: (monitor: { isOver: () => void }) => ({
       isOver: monitor.isOver(),
     }),
   }));
 
-  const filteredTasks = tasks.filter((task) => task.status === status);
+  const filteredTasks: Task[] = tasks.filter((task) => task.status === status);
 
   return (
     <div
@@ -24,11 +36,11 @@ function KanbanColumn({ status, tasks, onDrop }) {
         {status}
       </h2>
       <div className="px-2">
-        {filteredTasks.map((task: TaskType) => (
+        {filteredTasks.map((task: Task) => (
           <TaskCard
-            key={task.id}
+            key={task._id}
             task={task}
-            onDrop={(task) => onDrop(task.id, status)}
+            onDrop={(task) => onDrop(task._id, status)}
           />
         ))}
       </div>

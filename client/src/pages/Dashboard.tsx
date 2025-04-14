@@ -1,45 +1,18 @@
 import ListSection from "../features/dashboard/ListSection";
 import TaskItem from "../features/dashboard/TaskItem";
-
-const sampleDate = [
-  {
-    name: "Complete MrBeast YT Thumbnail Design",
-    dueDate: "21.3.2025",
-    status: "pending",
-    assignedTo: "Robert Paul Raise",
-    priority: "low",
-  },
-  {
-    name: "Complete MrBeast YT Thumbnail Design",
-    dueDate: "21.3.2025",
-    status: "pending",
-    assignedTo: "Robert Paul Raise",
-    priority: "medium",
-  },
-  {
-    name: "Complete MrBeast YT Thumbnail Design",
-    dueDate: "21.3.2025",
-    status: "pending",
-    assignedTo: "Robert Paul Raise",
-    priority: "high",
-  },
-  {
-    name: "Complete MrBeast YT Thumbnail Design",
-    dueDate: "21.3.2025",
-    status: "pending",
-    assignedTo: "Robert Paul Raise",
-    priority: "low",
-  },
-  {
-    name: "Complete MrBeast YT Thumbnail Design",
-    dueDate: "21.3.2025",
-    status: "pending",
-    assignedTo: "Robert Paul Raise",
-    priority: "low",
-  },
-];
+import { Task } from "../types";
+import Spinner from "../ui/Spinner";
+import { useTasks } from "../features/tasks/useTasks";
 
 function Dashboard() {
+  const { isPending, error, tasks } = useTasks();
+
+  if (isPending) return <Spinner size={10} />;
+
+  if (error) throw new Error("Tasks not available");
+
+  console.log(tasks);
+
   return (
     <div className="mx-4 pt-4">
       <div className="grid grid-cols-2 gap-x-10 gap-y-4">
@@ -49,8 +22,10 @@ function Dashboard() {
           </ListSection.Header>
 
           <ListSection.List>
-            {sampleDate.length > 0 ? (
-              sampleDate.map((item, i) => <TaskItem item={item} key={i} />)
+            {tasks.length > 0 ? (
+              tasks.map((item: Task, i: number) => (
+                <TaskItem item={item} key={i} />
+              ))
             ) : (
               <span>There is no tasks right now</span>
             )}

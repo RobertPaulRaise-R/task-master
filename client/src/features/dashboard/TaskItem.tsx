@@ -1,21 +1,13 @@
 import Priority from "../tasks/Priority";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { HiOutlineClock } from "react-icons/hi2";
-import { MdOutlinePerson } from "react-icons/md";
+import { Task } from "../../types";
 
-interface TaskItemType {
-  name: string;
-  dueDate: string;
-  status: string;
-  assignedTo: string;
-  priority: "low" | "medium" | "high";
-}
-
-function TaskItem({ item }: { item: TaskItemType }) {
+function TaskItem({ item }: { item: Task }) {
   return (
     <div className="border-light-400 flex min-h-20 justify-between rounded-md border p-4">
       <div className="flex flex-col gap-1">
-        <span className="col-span-4 text-[16px] font-medium">{item.name}</span>
+        <span className="col-span-4 text-[16px] font-medium">{item.title}</span>
         <div className="text-light-700 flex items-center gap-3 text-[14px]">
           <span className="flex items-center gap-1">
             <FaRegCalendarAlt />
@@ -25,10 +17,10 @@ function TaskItem({ item }: { item: TaskItemType }) {
             <HiOutlineClock />
             {item.status}
           </span>
-          <span className="flex items-center gap-0.5">
+          {/* <span className="flex items-center gap-0.5">
             <MdOutlinePerson />
-            {item.assignedTo}
-          </span>
+            {item.userId}
+          </span> */}
         </div>
       </div>
 

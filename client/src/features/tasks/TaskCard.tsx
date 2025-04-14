@@ -1,6 +1,7 @@
 import { useDrag } from "react-dnd";
-import { Task } from "../../pages/Tasks";
+
 import Priority from "./Priority";
+import { Task } from "../../types";
 
 export const ItemTypes = {
   TASK: "task",
@@ -11,7 +12,7 @@ function TaskCard({
   onDrop,
 }: {
   task: Task;
-  onDrop: (task: Task) => void;
+  onDrop?: (task: Task) => void;
 }) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.TASK,

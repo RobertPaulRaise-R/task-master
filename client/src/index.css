@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
+* {
+  transition: all 0.3s;
+}
+
 :root {
-  font-family: "Geist", sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 ::-webkit-scrollbar {

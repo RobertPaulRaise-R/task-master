@@ -1,13 +1,13 @@
-function Priority({ priority }: { priority: "high" | "medium" | "low" }) {
+function Priority({ priority }: { priority: "High" | "Medium" | "Low" }) {
   const color =
-    priority === "high"
+    priority === "High"
       ? "bg-red-100 text-red-800"
-      : priority === "medium"
-      ? "bg-blue-100 text-blue-800"
-      : "bg-green-100 text-green-800";
+      : priority === "Medium"
+        ? "bg-blue-100 text-blue-800"
+        : "bg-green-100 text-green-800";
 
   return (
-    <span className={`text-xs font-normal px-2 py-1 rounded-full ${color}`}>
+    <span className={`rounded-full px-2 py-1 text-xs font-normal ${color}`}>
       {priority}
     </span>
   );

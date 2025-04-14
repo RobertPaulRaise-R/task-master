@@ -3,38 +3,38 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import KanbanColumn from "../features/tasks/KanbanColumn";
 import TaskListView from "../features/tasks/TaskListView";
-import { initialTasks } from "../data";
 
 import { useForm } from "react-hook-form";
 import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
-
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  status: string;
-  priority: "high" | "medium" | "low";
-  dueDate: string;
-  projectId: string;
-  userId: string;
-}
+import { Task } from "../types";
+import { useTasks } from "../features/tasks/useTasks";
+import Spinner from "../ui/Spinner";
 
 function Tasks() {
+  const { isPending, error, tasks: tasksData } = useTasks();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm();
 
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const [tasks, setTasks] = useState<Task[]>(tasksData as Task[]);
   const [view, setView] = useState<"kanban" | "list">("kanban");
   const [showForm, setShowForm] = useState(false);
 
-  const handleDrop = (taskId: string, newStatus: string) => {
+  if (isPending) return <Spinner size={10} />;
+
+  if (error) throw new Error("There is no tasks");
+
+  const handleDrop = (
+    taskId: string,
+    newStatus: "To Do" | "In Progress" | "In Review" | "Done",
+  ) => {
+    console.log(taskId, newStatus);
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.id === taskId ? { ...task, status: newStatus } : task,
+        task._id === taskId ? { ...task, status: newStatus } : task,
       ),
     );
   };
@@ -43,11 +43,11 @@ function Tasks() {
     setShowForm((show) => !show);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     console.log(data);
   };
 
-  const statuses = ["To Do", "In Progress", "In Review", "Completed"];
+  const statuses = ["To Do", "In Progress", "In Review", "Done"];
 
   return (
     <DndProvider backend={HTML5Backend}>
