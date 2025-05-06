@@ -1,9 +1,14 @@
 import { ReactNode } from "react";
 import { NavLink } from "react-router";
 
-type TabProps = { label: string; icon: ReactNode; to: string };
+type TabProps = {
+  label: string;
+  icon: ReactNode;
+  to: string;
+  isExpanded: boolean;
+};
 
-function Tab({ label, icon, to }: TabProps) {
+function Tab({ label, icon, to, isExpanded }: TabProps) {
   return (
     <NavLink
       to={to}
@@ -16,7 +21,7 @@ function Tab({ label, icon, to }: TabProps) {
       }
     >
       {icon}
-      <span>{label}</span>
+      {isExpanded ? <span>{label}</span> : null}
     </NavLink>
   );
 }

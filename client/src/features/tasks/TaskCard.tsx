@@ -1,34 +1,33 @@
-import { useDrag } from "react-dnd";
-
+import { useDraggable } from "@dnd-kit/core";
 import Priority from "./Priority";
 import { Task } from "../../types";
 
-export const ItemTypes = {
-  TASK: "task",
-};
-
 function TaskCard({
   task,
-  onDrop,
+  // onDrop is no longer directly used here for drag-and-drop
+  onClick, // Renamed prop to better reflect click functionality
 }: {
   task: Task;
-  onDrop?: (task: Task) => void;
+  onClick?: (task: Task) => void; // Optional: Handle clicks for editing
 }) {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.TASK,
-    item: { id: task.id, status: task.status },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  }));
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: task._id, // Use a stable and unique ID for the task
+  });
+
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
 
   return (
     <div
-      ref={drag}
-      className={`mb-2 flex cursor-move flex-col gap-2 rounded border p-3 ${
-        isDragging ? "opacity-50" : ""
-      }`}
-      onClick={() => onDrop(task)} // Optional: Handle clicks for editing
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={`mb-2 flex cursor-grab flex-col gap-2 rounded border p-3`}
+      onClick={() => onClick?.(task)} // Call onClick handler if provided
     >
       <h3 className="text-light-900 line-clamp-1 font-medium hover:line-clamp-none">
         {task.title}

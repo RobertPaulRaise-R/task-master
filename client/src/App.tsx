@@ -1,23 +1,28 @@
-import { Navigate, Outlet, useNavigate } from "react-router";
+import { Navigate, Outlet } from "react-router";
 import Sidebar from "./ui/Sidebar";
 import Navbar from "./ui/Navbar";
 import { useAuth } from "./hooks/useAuth";
 import Spinner from "./ui/Spinner";
+import { useState } from "react";
 
 function App() {
-  const navigate = useNavigate();
+  const [isExpanded, setIsExpanded] = useState(true);
   const { data, isError, isLoading } = useAuth();
 
-  console.log(data);
-  if (isLoading) <Spinner size={20} />;
-  if (isError) return navigate("/login");
+  if (isLoading) {
+    return <Spinner size={20} />;
+  }
+
+  if (isError || !data) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div className="bg-light-50 flex h-screen">
-      <Sidebar />
+      <Sidebar isExpanded={isExpanded} />
       <div className="m-2 w-full overflow-auto rounded-md shadow-md">
-        <Navbar />
-        {data ? <Outlet /> : <Navigate to={"/login"} />}
+        <Navbar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
+        <Outlet />
       </div>
     </div>
   );

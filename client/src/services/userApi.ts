@@ -26,6 +26,8 @@ export const loginUser = async (data: { email: string; password: string }) => {
     credentials: "include",
   });
 
+  console.log(res);
+
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.message || "Login failed");
@@ -40,6 +42,21 @@ export const auth = async () => {
   });
 
   if (!res.ok) throw new Error("Not authenticated");
+
+  return res.json();
+};
+
+export const logoutUser = async () => {
+  const res = await fetch("http://localhost:3000/api/users/logout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || "Login failed");
+  }
 
   return res.json();
 };

@@ -1,56 +1,98 @@
-import { useState } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import KanbanColumn from "../features/tasks/KanbanColumn";
-import TaskListView from "../features/tasks/TaskListView";
+import { useState, useCallback } from "react";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import KanbanColumn from "../features/tasks/KanbanColumn"; // Make sure your path is correct
+import TaskListView from "../features/tasks/TaskListView"; // Make sure your path is correct
 
 import { useForm } from "react-hook-form";
-import FormRow from "../ui/FormRow";
-import Input from "../ui/Input";
-import { Task } from "../types";
-import { useTasks } from "../features/tasks/useTasks";
-import Spinner from "../ui/Spinner";
+import FormRow from "../ui/FormRow"; // Make sure your path is correct
+import Input from "../ui/Input"; // Make sure your path is correct
+import { Task } from "../types"; // Make sure your path is correct
+import { useTasks } from "../features/tasks/useTasks"; // Make sure your path is correct
+import Spinner from "../ui/Spinner"; // Make sure your path is correct
+import ModalView from "../ui/ModalView"; // Make sure your path is correct
+import { useMutation } from "@tanstack/react-query";
+import { createTask } from "../services/taskApi";
+// import { useMutation } from "@tanstack/react-query"; // Make sure your path is correct
 
 function Tasks() {
   const { isPending, error, tasks: tasksData } = useTasks();
+
   const {
     register,
     handleSubmit,
-    // formState: { errors },
-  } = useForm();
+    // formState: { errors }, // You can use this for form validation
+    reset,
+  } = useForm<{
+    taskName: string;
+    taskDescription: string;
+    taskPriority: "low" | "medium" | "high";
+    taskDueDate: string;
+  }>();
 
   const [tasks, setTasks] = useState<Task[]>(tasksData as Task[]);
   const [view, setView] = useState<"kanban" | "list">("kanban");
   const [showForm, setShowForm] = useState(false);
 
-  if (isPending) return <Spinner size={10} />;
+  const handleTaskDrop = useCallback(
+    (
+      taskId: string,
+      newStatus: "To Do" | "In Progress" | "In Review" | "Done",
+    ) => {
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task._id === taskId ? { ...task, status: newStatus } : task,
+        ),
+      );
+    },
+    [],
+  );
 
-  if (error) throw new Error("There is no tasks");
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
 
-  const handleDrop = (
-    taskId: string,
-    newStatus: "To Do" | "In Progress" | "In Review" | "Done",
-  ) => {
-    console.log(taskId, newStatus);
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task._id === taskId ? { ...task, status: newStatus } : task,
-      ),
-    );
-  };
+      if (active && over && active.id !== over.id) {
+        handleTaskDrop(active.id as string, over.id as Task["status"]);
+      }
+    },
+    [handleTaskDrop],
+  );
 
   const handleShowForm = () => {
     setShowForm((show) => !show);
   };
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const mutation = useMutation({ mutationFn: createTask });
+
+  const onSubmit = (data: {
+    title: string;
+    description: string;
+    priority: "Low" | "Medium" | "High";
+    dueDate: string;
+  }) => {
+    // In a real app, you'd use a mutation to create the task on the server
+    // const newTask: Task = {
+    //   title: data.taskName,
+    //   description: data.taskDescription,
+    //   status: "To Do", //  default status
+    //   priority: data.taskPriority,
+    //   dueDate: data.taskDueDate,
+    // };
+    mutation.mutate(data);
+
+    // setTasks((prevTasks) => [...prevTasks, newTask]);
+    setShowForm(false);
+    reset(); // Reset the form after successful submission
   };
 
   const statuses = ["To Do", "In Progress", "In Review", "Done"];
 
+  if (isPending) return <Spinner size={10} />;
+
+  if (error) throw new Error("There is no tasks");
+
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndContext onDragEnd={handleDragEnd}>
       <div className="p-4">
         <div className="mb-4 flex justify-between">
           <div className="flex gap-4">
@@ -84,25 +126,35 @@ function Tasks() {
           </button>
         </div>
 
-        {showForm && (
+        <ModalView
+          title="Create New Task"
+          isOpen={showForm}
+          onClose={() => setShowForm((show) => !show)}
+        >
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-5"
           >
             <FormRow>
-              <span>Task Name</span>
-              <Input {...register("taskName", { required: true })} />
+              <label className="text-light-600">Task Name</label>
+              <Input
+                {...register("taskName", { required: true })}
+                placeholder="Create a doom game in typescript"
+              />
             </FormRow>
 
             <FormRow>
-              <span>Task Description</span>
-              <Input {...register("taskDescription", { required: true })} />
+              <label className="text-light-600">Task Description</label>
+              <Input
+                {...register("taskDescription", { required: true })}
+                placeholder="Create a react typescript project and express as the backend and use sql lite for database"
+              />
             </FormRow>
 
             <FormRow>
-              <span>Task Priority</span>
+              <label className="text-light-600">Task Priority</label>
               <select
-                className="border px-4 py-2"
+                className="border-light-800 rounded-sm border px-4 py-2"
                 {...register("taskPriority", { required: true })}
               >
                 <option value={"low"}>Low</option>
@@ -112,8 +164,8 @@ function Tasks() {
             </FormRow>
 
             <FormRow>
-              <span>Task Due Date</span>
-              <input
+              <label className="text-light-600">Task Due Date</label>
+              <Input
                 type="date"
                 {...register("taskDueDate", { required: true })}
               />
@@ -123,16 +175,15 @@ function Tasks() {
               Create
             </button>
           </form>
-        )}
+        </ModalView>
 
         {view === "kanban" ? (
           <div className="mt-10 grid grid-cols-4 gap-4">
             {statuses.map((status) => (
               <KanbanColumn
                 key={status}
-                status={status}
+                status={status as Task["status"]}
                 tasks={tasks}
-                onDrop={handleDrop}
               />
             ))}
           </div>
@@ -144,7 +195,7 @@ function Tasks() {
           </div>
         )}
       </div>
-    </DndProvider>
+    </DndContext>
   );
 }
 

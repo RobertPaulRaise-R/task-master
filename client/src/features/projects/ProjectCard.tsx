@@ -16,7 +16,7 @@ function ProjectCard({ project }: { project: ProjectType }) {
     <div className="border-light-300 grid grid-rows-3 gap-3 rounded-lg border p-3">
       <div className="flex items-center justify-between">
         <Link
-          className="hover:text-brand-600 hover:underline"
+          className="hover:text-brand-600 font-medium hover:underline"
           to={`/app/projects/${project.id}`}
         >
           {project.name}
@@ -27,9 +27,9 @@ function ProjectCard({ project }: { project: ProjectType }) {
         </IconButton>
       </div>
 
-      <span className="line-clamp-2">{project.description}</span>
+      <span className="line-clamp-2 text-sm">{project.description}</span>
 
-      <div className="flex items-center justify-between text-sm">
+      <div className="flex items-center justify-between text-xs">
         <span>{project.clientName}</span>
         <span>{project.members} members</span>
       </div>

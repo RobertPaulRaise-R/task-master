@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 interface IUser extends Document {
   name: string;
   email: string;
+  username: string;
   password: string; // Hash this in practice
   avatar?: { data: Buffer | undefined; contentType: string | undefined }; // URL or path to avatar
   company: string;
@@ -24,6 +25,7 @@ const userSchema: Schema<IUserDocument> = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true },
     avatar: {
       data: { type: Buffer },

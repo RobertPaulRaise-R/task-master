@@ -6,7 +6,9 @@ interface ITask extends Document {
   status: "To Do" | "In Progress" | "In Review" | "Done";
   priority: "Low" | "Medium" | "High";
   dueDate: Date;
+  color: string;
   projectId: mongoose.Types.ObjectId;
+  teamId: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
 }
 
@@ -34,9 +36,18 @@ const taskSchema: Schema<ITask> = new Schema(
       type: Date,
       default: null,
     },
+    color: {
+      type: String,
+      default: "333333",
+    },
     projectId: {
       type: Schema.Types.ObjectId,
       ref: "Project",
+      default: null,
+    },
+    teamId: {
+      type: Schema.Types.ObjectId,
+      ref: "Team",
       default: null,
     },
     userId: {

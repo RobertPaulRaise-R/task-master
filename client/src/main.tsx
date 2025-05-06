@@ -13,6 +13,7 @@ import LandingPage from "./pages/LandingPage.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SignUp from "./pages/SignUp.tsx";
 import Login from "./pages/Login.tsx";
+import Timeline from "./pages/Timeline.tsx";
 
 const queryClient = new QueryClient();
 
@@ -35,17 +36,14 @@ createRoot(document.getElementById("root")!).render(
               <Route path="projects/:id" />
 
               <Route path="teams" />
-              <Route path="activity" />
               <Route path="chat" element={<Chat />} />
 
               <Route path="calendar" element={<Calendar />} />
-              <Route path="timeline" />
+              <Route path="timeline" element={<Timeline />} />
               <Route path="analytics" />
 
               <Route path="settings" />
               <Route path="notification" />
-              <Route path="archives" />
-              <Route path="templates" />
 
               <Route path="404" />
             </Route>

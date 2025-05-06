@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import { Link } from "react-router";
 import FeatureCard from "../ui/FeatureCard";
 import { useState } from "react";
@@ -8,13 +9,41 @@ function LandingPage() {
   return (
     <div className="bg-[#333] p-8 align-middle text-white">
       <div className="m-auto max-w-[1200px]">
-        <nav className="flex items-center justify-between">
-          <h2 className="font-semibold">Task Master</h2>
+        <nav className="flex items-center justify-center md:justify-between">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="logo hidden text-sm font-semibold md:block md:text-lg"
+          >
+            Task Master
+          </motion.h2>
 
-          <ul className="flex items-center gap-3">
-            <li className="hover:underline">Solutions</li>
-            <li className="hover:underline">Pricing</li>
-            <li className="hover:underline">Resources</li>
+          <ul className="flex items-center gap-3 text-xs md:text-sm">
+            <motion.li
+              initial={{ opacity: 0, y: -10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+              className="hover:underline"
+            >
+              Solutions
+            </motion.li>
+            <motion.li
+              initial={{ opacity: 0, y: -10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.3 }}
+              className="hover:underline"
+            >
+              Pricing
+            </motion.li>
+            <motion.li
+              initial={{ opacity: 0, y: -10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.4 }}
+              className="hover:underline"
+            >
+              Resources
+            </motion.li>
           </ul>
 
           {/* <Link to={"/app"} className="rounded-full bg-stone-500 px-6 py-3">
@@ -39,9 +68,14 @@ function LandingPage() {
 
         <main className="mt-20">
           <section className="flex flex-col gap-8">
-            <h1 className="text-center text-8xl font-bold">
+            <motion.h1
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="text-center text-5xl font-bold md:text-7xl lg:text-8xl"
+            >
               The Go-To Hub for All Your To-Dos
-            </h1>
+            </motion.h1>
 
             <span className="mx-auto block text-center lg:w-[500px]">
               Your essential tool for streamlining task management and achieving
@@ -69,7 +103,7 @@ function LandingPage() {
               <span className="size-1.5 rounded-full bg-purple-400"></span>
             </div>
 
-            <h1 className="mt-10 text-center text-7xl font-bold text-stone-300 lg:w-[900px]">
+            <h1 className="mt-10 text-center text-3xl font-bold text-stone-300 lg:w-[900px] lg:text-7xl">
               Performance Insights for your productivity
             </h1>
 
@@ -102,7 +136,7 @@ function LandingPage() {
               <span className="size-1.5 rounded-full bg-purple-400"></span>
             </div>
 
-            <h1 className="mt-10 text-center text-7xl font-bold text-stone-300 lg:w-[900px]">
+            <h1 className="mt-10 text-center text-3xl font-bold text-stone-300 lg:w-[900px] lg:text-7xl">
               Smart Task Prioritization for Optimal Workflow
             </h1>
 
@@ -111,7 +145,7 @@ function LandingPage() {
                 <div className="flex items-center justify-center gap-1 rounded-full bg-stone-700 px-2 py-2">
                   <button
                     onClick={() => setActive("kanban")}
-                    className={`rounded-full px-6 py-2 text-xs ${active === "kanban" ? "bg-white/30 font-semibold" : ""}`}
+                    className={`rounded-full px-3 py-2 text-xs ${active === "kanban" ? "bg-white/30 font-semibold" : ""}`}
                   >
                     Kanban
                   </button>

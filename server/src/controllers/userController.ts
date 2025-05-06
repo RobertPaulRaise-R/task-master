@@ -24,15 +24,21 @@ export const registerUser = asyncHandler(
 
 export const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    res.status(400).json({ message: "Please provide email and password" });
+    return;
+  }
+
   const user = await User.findOne({ email });
   if (!user) {
-    res.status(400).json({ message: "Invalid Credentials" });
+    res.status(401).json({ message: "Invalid email or password" });
     return;
   }
 
   const isMatch = await user.comparePassword(password);
   if (!isMatch) {
-    res.status(400).json({ message: "Invalid Credentials" });
+    res.status(401).json({ message: "Invalid email or password" });
     return;
   }
 
@@ -42,13 +48,14 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
 
   res.status(200).json({
-    message: "Logged In",
+    message: "Logged in successfully",
+    user: { id: user._id, email: user.email }, // Only send non-sensitive data
   });
 });
 

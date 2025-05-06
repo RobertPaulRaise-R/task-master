@@ -1,33 +1,23 @@
-import { useDrop } from "react-dnd";
+import { useDroppable } from "@dnd-kit/core";
 import TaskCard from "../tasks/TaskCard";
-import { ItemTypes } from "../tasks/TaskCard";
 import { Task } from "../../types";
 
 function KanbanColumn({
   status,
   tasks,
-  onDrop,
 }: {
   status: "To Do" | "In Progress" | "In Review" | "Done";
   tasks: Task[];
-  onDrop: (
-    taskId: string,
-    newStatus: "To Do" | "In Progress" | "In Review" | "Done",
-  ) => void;
 }) {
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: ItemTypes.TASK,
-    drop: (item: Task) => onDrop(item._id, status),
-    collect: (monitor: { isOver: () => void }) => ({
-      isOver: monitor.isOver(),
-    }),
-  }));
+  const { setNodeRef, isOver } = useDroppable({
+    id: status, // Unique ID for the droppable area
+  });
 
   const filteredTasks: Task[] = tasks.filter((task) => task.status === status);
 
   return (
     <div
-      ref={drop}
+      ref={setNodeRef}
       className={`border-light-300 h-screen flex-1 rounded-lg border ${
         isOver ? "bg-brand-200" : ""
       }`}
@@ -40,7 +30,7 @@ function KanbanColumn({
           <TaskCard
             key={task._id}
             task={task}
-            onDrop={(task) => onDrop(task._id, status)}
+            // We only need to pass the task ID here; the drop logic happens at the column level
           />
         ))}
       </div>

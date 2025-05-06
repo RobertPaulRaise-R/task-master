@@ -18,7 +18,7 @@ const uplaod = multer({ storage });
 router.post("/", registerUser);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
-router.post("/auth", isAuthenticaed);
+router.get("/auth", isAuthenticaed);
 router.post("/:id/avatar", uplaod.single("avatar"), uploadAvatar);
 
 router.get("/", getUser);
