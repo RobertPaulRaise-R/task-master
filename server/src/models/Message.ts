@@ -21,4 +21,4 @@ const messageSchema: Schema<IMessage> = new Schema({
 // Index for performance (e.g., chatId, timestamp, senderId)
 messageSchema.index({ chatId: 1, timestamp: -1, senderId: 1 });
 
-export default mongoose.model<IMessage>("Message", messageSchema);
+export const Message = mongoose.model<IMessage>("Message", messageSchema);

@@ -4,6 +4,7 @@ export function useTasks() {
   const {
     isPending,
     error,
+    isError,
     data: tasks,
   } = useQuery({
     queryKey: ["tasks"],
@@ -11,5 +12,5 @@ export function useTasks() {
       fetch("http://localhost:3000/api/tasks").then((res) => res.json()),
   });
 
-  return { isPending, error, tasks };
+  return { isPending, error, isError, tasks };
 }

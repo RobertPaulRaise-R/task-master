@@ -61,4 +61,4 @@ const taskSchema: Schema<ITask> = new Schema(
 
 taskSchema.index({ status: 1, dueDate: 1, projectId: 1 });
 
-export default mongoose.model<ITask>("Task", taskSchema);
+export const Task = mongoose.model<ITask>("Task", taskSchema);

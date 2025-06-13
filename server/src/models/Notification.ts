@@ -19,7 +19,7 @@ const notificationSchema: Schema<INotification> = new Schema({
 // Index for performance (e.g., userId, timestamp)
 notificationSchema.index({ userId: 1, timestamp: -1 });
 
-export default mongoose.model<INotification>(
+export const Notification = mongoose.model<INotification>(
   "Notification",
   notificationSchema
 );

@@ -1,7 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import KanbanColumn from "../features/tasks/KanbanColumn"; // Make sure your path is correct
-import TaskListView from "../features/tasks/TaskListView"; // Make sure your path is correct
+import KanbanColumn from "../features/tasks/KanbanColumn";
+import TaskListView from "../features/tasks/TaskListView";
 
 import { useForm } from "react-hook-form";
 import FormRow from "../ui/FormRow"; // Make sure your path is correct
@@ -10,30 +10,33 @@ import { Task } from "../types"; // Make sure your path is correct
 import { useTasks } from "../features/tasks/useTasks"; // Make sure your path is correct
 import Spinner from "../ui/Spinner"; // Make sure your path is correct
 import ModalView from "../ui/ModalView"; // Make sure your path is correct
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTask } from "../services/taskApi";
-// import { useMutation } from "@tanstack/react-query"; // Make sure your path is correct
+import { updateTaskStatus } from "../features/tasks/updateTaskStatus";
 
 function Tasks() {
-  const { isPending, error, tasks: tasksData } = useTasks();
+  const { isPending, tasks: tasksData, error } = useTasks();
+  const queryClient = useQueryClient();
 
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors }, // You can use this for form validation
-    reset,
-  } = useForm<{
+  const { register, handleSubmit, reset } = useForm<{
     taskName: string;
     taskDescription: string;
     taskPriority: "low" | "medium" | "high";
     taskDueDate: string;
   }>();
 
-  const [tasks, setTasks] = useState<Task[]>(tasksData as Task[]);
+  const [tasks, setTasks] = useState<Task[]>(tasksData || []); // Initialize with empty array
   const [view, setView] = useState<"kanban" | "list">("kanban");
   const [showForm, setShowForm] = useState(false);
 
-  const handleTaskDrop = useCallback(
+  useEffect(() => {
+    if (tasksData) {
+      setTasks(tasksData);
+    }
+  }, [tasksData]);
+
+  // Update local state immediately
+  const handleLocalTaskDrop = useCallback(
     (
       taskId: string,
       newStatus: "To Do" | "In Progress" | "In Review" | "Done",
@@ -47,49 +50,81 @@ function Tasks() {
     [],
   );
 
+  const updateTaskStatusMutation = useMutation({
+    mutationFn: ({
+      taskId,
+      status,
+    }: {
+      taskId: string;
+      status: Task["status"];
+    }) => updateTaskStatus(taskId, status),
+    onSuccess: () => {
+      // Invalidate the tasks query to refetch updated data
+      queryClient.invalidateQueries(["tasks"]);
+    },
+    onError: (error) => {
+      console.error("Error updating task status:", error);
+      // Optionally, revert the local state update if the server update fails
+      // You might need to keep track of the previous state to do this effectively.
+    },
+  });
+
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
 
       if (active && over && active.id !== over.id) {
-        handleTaskDrop(active.id as string, over.id as Task["status"]);
+        const taskId = active.id as string;
+        const newStatus = over.id as Task["status"];
+        handleLocalTaskDrop(taskId, newStatus);
+        updateTaskStatusMutation.mutate({ taskId, status: newStatus });
       }
     },
-    [handleTaskDrop],
+    [handleLocalTaskDrop, updateTaskStatusMutation],
   );
 
   const handleShowForm = () => {
     setShowForm((show) => !show);
   };
 
-  const mutation = useMutation({ mutationFn: createTask });
+  const createTaskMutation = useMutation({
+    mutationFn: (data: {
+      name: string;
+      description: string;
+      priority: "Low" | "Medium" | "High";
+      dueDate: string;
+    }) => createTask(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["tasks"]);
+      setShowForm(false);
+      reset();
+    },
+    onError: (error) => {
+      console.error("Error creating task:", error);
+      // Optionally display an error message to the user
+    },
+  });
 
   const onSubmit = (data: {
-    title: string;
-    description: string;
-    priority: "Low" | "Medium" | "High";
-    dueDate: string;
+    taskName: string;
+    taskDescription: string;
+    taskPriority: "Low" | "Medium" | "High";
+    taskDueDate: string;
   }) => {
-    // In a real app, you'd use a mutation to create the task on the server
-    // const newTask: Task = {
-    //   title: data.taskName,
-    //   description: data.taskDescription,
-    //   status: "To Do", //  default status
-    //   priority: data.taskPriority,
-    //   dueDate: data.taskDueDate,
-    // };
-    mutation.mutate(data);
-
-    // setTasks((prevTasks) => [...prevTasks, newTask]);
-    setShowForm(false);
-    reset(); // Reset the form after successful submission
+    createTaskMutation.mutate({
+      title: data.taskName,
+      description: data.taskDescription,
+      priority:
+        data.taskPriority.charAt(0).toUpperCase() + data.taskPriority.slice(1), // Capitalize priority
+      dueDate: data.taskDueDate,
+    });
   };
 
   const statuses = ["To Do", "In Progress", "In Review", "Done"];
 
   if (isPending) return <Spinner size={10} />;
 
-  if (error) throw new Error("There is no tasks");
+  if (error) return <p className="text-red-500">Error loading tasks!</p>;
 
   return (
     <DndContext onDragEnd={handleDragEnd}>

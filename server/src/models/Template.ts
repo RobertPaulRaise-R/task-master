@@ -19,4 +19,4 @@ const templateSchema: Schema<ITemplate> = new Schema({
 // Index for performance (e.g., name, type)
 templateSchema.index({ name: 1, type: 1 });
 
-export default mongoose.model<ITemplate>("Template", templateSchema);
+export const Template = mongoose.model<ITemplate>("Template", templateSchema);

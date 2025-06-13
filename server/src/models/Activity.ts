@@ -19,4 +19,4 @@ const activitySchema: Schema<IActivity> = new Schema({
 // Index for performance (e.g., timestamp, userId)
 activitySchema.index({ timestamp: -1, userId: 1 });
 
-export default mongoose.model<IActivity>("Activity", activitySchema);
+export const Activity = mongoose.model<IActivity>("Activity", activitySchema);

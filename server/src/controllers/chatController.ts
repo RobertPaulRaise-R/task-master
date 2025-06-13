@@ -1,24 +1,67 @@
 import { Request, Response } from "express";
-
-import Message from "../models/Message.js";
-import { Friend } from "../models/Friend.js";
+import { Message } from "../models/Message.js";
 import { Chat } from "../models/Chat.js";
+import { Friend } from "../models/Friend.js";
+import { Server } from "socket.io";
 
+interface AuthenticatedUser {
+  _id: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: AuthenticatedUser;
+    }
+  }
+}
+
+let io: Server;
+
+export const setIO = (socketIO: Server) => {
+  io = socketIO;
+};
+
+/**
+ * @description Create a new chat
+ * @route POST /api/chats
+ * @access Private
+ */
 export const createChat = async (req: Request, res: Response) => {
   try {
     const chat = new Chat({ ...req.body, lastMessageAt: new Date() });
+
+    if (!chat) {
+      return res.status(400).json({ message: "Cannot create chat instance" });
+    }
+
     const savedChat = await chat.save();
+
     res.status(201).json(savedChat);
-  } catch (err) {
-    res.status(400).json({ message: err });
+  } catch (error) {
+    console.error("Error creating chat:", error);
+
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    res
+      .status(500)
+      .json({ message: "Failed to create chat", error: errorMessage });
   }
 };
 
+/**
+ * @description Send a new message in a chat
+ * @route POST /api/messages
+ * @access Private
+ */
 export const sendMessage = async (req: Request, res: Response) => {
   try {
     const { chatId, content, senderId, attachments = [] } = req.body;
+
     const chat = await Chat.findById(chatId);
-    if (!chat) throw new Error("Chat not found");
+    if (!chat) {
+      return res.status(404).json({ message: "Chat not found" });
+    }
 
     const message = new Message({
       chatId,
@@ -26,28 +69,51 @@ export const sendMessage = async (req: Request, res: Response) => {
       content,
       attachments,
     });
+
     const savedMessage = await message.save();
 
     chat.lastMessageAt = savedMessage.timestamp;
     await chat.save();
 
     res.status(200).json(savedMessage);
-  } catch (err) {
-    res.status(400).json({ message: err });
+  } catch (error) {
+    console.error("Error sending message:", error);
+
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    res
+      .status(500)
+      .json({ message: "Failed to send message", error: errorMessage });
   }
 };
 
+/**
+ * @description Get all messages for a specific chat
+ * @route GET /api/messages/:chatId
+ * @access Private
+ */
 export const getChatMessages = async (req: Request, res: Response) => {
   try {
     const messages = await Message.find({ chatId: req.params.chatId })
       .sort({ timestamp: -1 })
       .populate("senderId", "name avatar");
+
     res.status(200).json(messages);
-  } catch (err) {
-    res.status(500).json({ message: err });
+  } catch (error) {
+    console.error("Error fetching chat messages:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    res
+      .status(500)
+      .json({ message: "Failed to fetch chat messages", error: errorMessage });
   }
 };
 
+/**
+ * @description Get all chats for the authenticated user
+ * @route GET /api/chats/user
+ * @access Private
+ */
 export const getUserChats = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
@@ -63,54 +129,51 @@ export const getUserChats = async (req: Request, res: Response) => {
     })
       .populate({
         path: "participants",
-        select: "_id", //  Select only the _id field.  You can add 'name' or other fields if needed.
-        // populate: { // Removed nested population, handle friendships separately
-        //   path: 'friendship',
-        //   select: 'status',
-        //   match: { status: 'accepted' },
-        // },
+        select: "_id name avatar",
       })
-      .sort({ lastMessageAt: -1 }); // Sort by most recent message
+      .sort({ lastMessageAt: -1 });
 
-    // 3.  Filter out any participants that are not friends.  This is necessary
-    //     because the 'participants' field of the Chat model can contain users
-    //     who are not friends.  We only want to show chats with friends.
     const filteredChats = await Promise.all(
       chats.map(async (chat) => {
         if (chat.type === "direct") {
-          //  For direct chats, find the friend.
-          const friendId = chat.participants.find(
-            (participant: any) => !participant._id.equals(userId)
+          const friendParticipant = chat.participants.find(
+            (participant: any) =>
+              participant && participant._id && !participant._id.equals(userId)
           );
 
-          if (!friendId) {
-            return null; //  Should not happen, but handle it to be safe.
+          if (!friendParticipant) {
+            console.warn(
+              `Direct chat ${chat._id} missing a second participant or participant._id.`
+            );
+            return null;
           }
-          // Check friendship status
+          const friendId = friendParticipant._id;
+
           const friendship = await Friend.findOne({
             $or: [
-              { user: userId, friend: friendId },
-              { user: friendId, friend: userId },
+              { user: userId, friend: friendId, status: "accepted" },
+              { user: friendId, friend: userId, status: "accepted" },
             ],
-            status: "accepted",
           });
 
           if (!friendship) {
-            return null; //  Remove the chat if the users are not friends.
+            return null;
           }
-          return chat; // Return the chat if they are friends
+          return chat;
         }
-        return chat; // Return group and team chats without filtering
+        return chat;
       })
     );
 
-    // 4. Remove null chats (chats where the users are not friends)
     const validChats = filteredChats.filter((chat) => chat !== null);
 
-    // 5.  Send the response.
     res.status(200).json(validChats);
   } catch (error) {
     console.error("Error fetching user chats:", error);
-    res.status(500).json({ message: "Internal server error", error });
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: errorMessage });
   }
 };

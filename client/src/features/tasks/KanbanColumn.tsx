@@ -18,7 +18,7 @@ function KanbanColumn({
   return (
     <div
       ref={setNodeRef}
-      className={`border-light-300 h-screen flex-1 rounded-lg border ${
+      className={`border-light-300 min-h-screen flex-1 rounded-lg border ${
         isOver ? "bg-brand-200" : ""
       }`}
     >

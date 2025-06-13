@@ -23,10 +23,9 @@ interface DropdownMenuProps {
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
   items,
   triggerElement,
-  placement = "bottom-start",
-  offset = [0, 4], // Default offset
+  placement = "right",
+  offset = [0, 10], // Default offset
   className,
-  triggerClassName,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -99,15 +98,22 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     let right: number;
     let bottom: number;
 
-    if (placement === "right") {
-      top = triggerRect.y + 20;
-      right = containerRect.right - triggerRect.right;
+    const horizontalOffset = offset[0];
+    const verticalOffset = offset[1];
 
-      console.log(top, right);
+    if (placement === "right") {
+      top = triggerRect.height + verticalOffset;
 
       return {
         top: `${top}px`,
         right: 0,
+      };
+    } else if (placement === "left") {
+      top = triggerRect.height + verticalOffset;
+
+      return {
+        top: `${top}px`,
+        left: 0,
       };
     }
 

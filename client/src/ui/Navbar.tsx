@@ -39,12 +39,12 @@ function Navbar({
     {
       label: "Profile",
       icon: <MdPerson />,
-      onClick: () => console.log("Rename clicked"),
+      onClick: () => navigate("/app/profile"),
     },
     {
       label: "Settings",
       icon: <IoMdSettings />,
-      onClick: () => console.log("Copy Link clicked"),
+      onClick: () => navigate("/app/settings"),
     },
     {
       label: "Logout",

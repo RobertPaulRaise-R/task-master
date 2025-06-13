@@ -21,4 +21,4 @@ const fileSchema: Schema<IFile> = new Schema({
 // Index for performance (e.g., userId, taskId)
 fileSchema.index({ userId: 1, taskId: 1, projectId: 1 });
 
-export default mongoose.model<IFile>("File", fileSchema);
+export const File = mongoose.model<IFile>("File", fileSchema);

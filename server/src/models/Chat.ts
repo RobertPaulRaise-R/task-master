@@ -1,10 +1,10 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 interface IChat extends Document {
-  participants: mongoose.Types.ObjectId[]; // Users or teams involved
-  type: "direct" | "group" | "team"; // Type of chat
-  lastMessageAt: Date; // Timestamp of the most recent message
-  name?: string; // Optional name for group and team chats
+  name?: string;
+  participants: mongoose.Types.ObjectId[];
+  type: "direct" | "group" | "team";
+  lastMessageAt: Date;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,62 +1,60 @@
+import axios from "axios";
+
+const API_BASE_URL = "http://localhost:3000/api/users";
+
 export const createUser = async (data: {
   name: string;
   email: string;
   password: string;
 }) => {
-  const res = await fetch("http://localhost:3000/api/users", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-    credentials: "include",
-  });
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || "Registration failed");
+  try {
+    const res = await axios.post(`${API_BASE_URL}`, data, {
+      withCredentials: true,
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Registration failed");
   }
-
-  return res.json();
 };
 
 export const loginUser = async (data: { email: string; password: string }) => {
-  const res = await fetch("http://localhost:3000/api/users/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-    credentials: "include",
-  });
-
-  console.log(res);
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || "Login failed");
+  try {
+    const res = await axios.post(`${API_BASE_URL}/login`, data, {
+      withCredentials: true,
+      headers: { "Content-Type": "application/json" },
+    });
+    console.log(res);
+    return res.data;
+  } catch (error: any) {
+    console.log(error.response);
+    throw new Error(error.response?.data?.message || "Login failed");
   }
-
-  return res.json();
 };
 
 export const auth = async () => {
-  const res = await fetch("http://localhost:3000/api/users/auth", {
-    credentials: "include",
-  });
-
-  if (!res.ok) throw new Error("Not authenticated");
-
-  return res.json();
+  try {
+    const res = await axios.get(`${API_BASE_URL}/auth`, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (error: any) {
+    throw new Error("Not authenticated");
+  }
 };
 
 export const logoutUser = async () => {
-  const res = await fetch("http://localhost:3000/api/users/logout", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || "Login failed");
+  try {
+    const res = await axios.post(
+      `${API_BASE_URL}/logout`,
+      {}, // Empty body for logout
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    return res.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Logout failed");
   }
-
-  return res.json();
 };

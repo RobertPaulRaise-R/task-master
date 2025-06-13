@@ -28,4 +28,4 @@ const teamSchema: Schema<ITeam> = new Schema(
 // Index for performance (e.g., name, members)
 teamSchema.index({ name: 1, members: 1 });
 
-export default mongoose.model<ITeam>("Team", teamSchema);
+export const Team = mongoose.model<ITeam>("Team", teamSchema);

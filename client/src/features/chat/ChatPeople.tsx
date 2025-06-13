@@ -2,10 +2,16 @@ import { useContext } from "react";
 import { PersonType } from "./PeopleSection";
 import { ChatContext } from "../../pages/Chat";
 
-function People({ person }: { person: PersonType }) {
+function ChatPeople({ person }: { person: PersonType }) {
   const { setShowChat } = useContext(ChatContext);
+
   return (
-    <div className="border-light-300 mt-2 flex gap-2 rounded-lg border p-2">
+    <div
+      className="border-light-300 mt-2 flex gap-2 rounded-lg border p-2"
+      onClick={() =>
+        setShowChat(setShowChat === person.name ? "" : person.name)
+      }
+    >
       {person.img ? (
         <img src="" alt="" />
       ) : (
@@ -28,4 +34,4 @@ function People({ person }: { person: PersonType }) {
   );
 }
 
-export default People;
+export default ChatPeople;
