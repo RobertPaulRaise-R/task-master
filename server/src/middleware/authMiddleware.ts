@@ -10,7 +10,7 @@ declare global {
     }
 }
 
-export const protect = (req: Request, res: Response, next: NextFunction) => {
+export const protect = (req: any, res: any, next: any) => {
     const token = req.cookies.token;
 
     if (!token) {
@@ -20,10 +20,7 @@ export const protect = (req: Request, res: Response, next: NextFunction) => {
     try {
         const decoded: any = jwt.verify(
             token,
-            process.env.JWT_SECRET as string,
-            {
-                complete: true,
-            }
+            process.env.JWT_SECRET as string
         ); // Verify with your secret
         req.user = { _id: decoded.id }; // Attach user ID from token payload to req.user
         next();
