@@ -62,6 +62,9 @@ module.exports = {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
       },
+      backgroundImage: {
+        'orange-10-gradient': 'linear-gradient(to bottom right, #f97316 10%, #171717 100%)',
+      },
     },
   },
   plugins: [],

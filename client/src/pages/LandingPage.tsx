@@ -2,12 +2,47 @@ import { motion } from "motion/react";
 import { Link } from "react-router";
 import FeatureCard from "../ui/FeatureCard";
 import { useState } from "react";
+import NavLink from "../ui/NavLink";
+import { MdAutoMode } from "react-icons/md";
+import { IoSpeedometerOutline } from "react-icons/io5";
+import { BsGlobe } from "react-icons/bs";
+import { CiHeadphones } from "react-icons/ci";
+import { BsDatabaseLock } from "react-icons/bs";
+import { TfiLayoutTabWindow } from "react-icons/tfi";
+import PriceCard from "../ui/PriceCard";
+
+const pricePlans = {
+    free: [
+        "Collaborate with up to 3 teammates",
+        "Core task management features",
+        "Unlimited projects and tasks",
+        "Board and list views"
+    ],
+    pro: [
+        "Collaborate with up to 10 teammates",
+        "Custom workflows and templates",
+        "Advanced tracking and reports",
+        "Role based access control",
+        "Automated task reminders",
+        "Priority integrations",
+        "Email support"
+    ],
+    team: [
+        "Dedicated success manager included",
+        "Custom roles and permissions",
+        "Unlimited workflows and automations",
+        "Up to 25 teammates",
+        "Real-time analytics",
+        "Premium integration",
+        "Priority support"
+    ]
+}
 
 function LandingPage() {
-  const [active, setActive] = useState("kanban");
+  const [plan, setPlan] = useState<"monthly" | "yearly">("monthly");
 
   return (
-    <div className="bg-[#333] p-8 align-middle text-white">
+    <div className="bg-neutral-950 p-8 align-middle text-white">
       <div className="m-auto max-w-[1200px]">
         <nav className="flex items-center justify-center md:justify-between">
           <motion.h2
@@ -16,34 +51,33 @@ function LandingPage() {
             transition={{ duration: 0.3 }}
             className="logo hidden text-sm font-semibold md:block md:text-lg"
           >
-            Task Master
+            Taskley 
           </motion.h2>
 
           <ul className="flex items-center gap-3 text-xs md:text-sm">
-            <motion.li
-              initial={{ opacity: 0, y: -10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
-              className="hover:underline"
-            >
-              Solutions
-            </motion.li>
-            <motion.li
-              initial={{ opacity: 0, y: -10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.3 }}
-              className="hover:underline"
-            >
-              Pricing
-            </motion.li>
-            <motion.li
-              initial={{ opacity: 0, y: -10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.4 }}
-              className="hover:underline"
-            >
-              Resources
-            </motion.li>
+            <NavLink delay={0.1}>
+                <span>About</span>
+            </NavLink>
+
+            <NavLink delay={0.2}>
+                <span>Features</span>
+            </NavLink>
+
+            <NavLink delay={0.3}>
+                <span>Benefits</span>
+            </NavLink>
+
+            <NavLink delay={0.4}>
+                <span>Customers</span>
+            </NavLink>
+
+            <NavLink delay={0.5}>
+                <span>Pricing</span>
+            </NavLink>
+
+            <NavLink delay={0.6}>
+                <span>Contact</span>
+            </NavLink>
           </ul>
 
           {/* <Link to={"/app"} className="rounded-full bg-stone-500 px-6 py-3">
@@ -67,27 +101,41 @@ function LandingPage() {
         </nav>
 
         <main className="">
-          <section className="flex h-screen flex-col justify-center gap-8">
+          <section className="flex flex-col gap-8">
             <motion.h1
               initial={{ opacity: 0, scale: 0 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="text-center text-5xl font-bold md:text-7xl lg:text-8xl"
+              className="text-xl font-bold md:text-3xl lg:text-5xl mt-40"
             >
-              The Go-To Hub for All Your To-Dos
+                <p>
+                    Organize your work,
+                </p>
+                <p>
+                    simplify your life
+                </p>
             </motion.h1>
 
-            <span className="mx-auto block text-center lg:w-[500px]">
-              Your essential tool for streamlining task management and achieving
-              greater efficiency in your daily routine.
+            <span className="block text-neutral-400 lg:w-[500px]">
+                Manage projects effortlessly with smart tools, stay on track, meed deadlines, and keep your team productive.
             </span>
+
+            <div className="flex items-center gap-3">
+            <Link
+              to={"/app"}
+              className="rounded-lg bg-brand-500 px-6 py-3 text-sm md:text-md lg:text-lg font-semibold hover:cursor-pointer"
+            >
+              <span>Get Started</span>
+            </Link>
 
             <Link
               to={"/app"}
-              className="mx-auto inline-block rounded-full bg-linear-to-r/longer from-blue-400 to-pink-500 px-6 py-3 text-xl font-semibold"
+              className="rounded-lg bg-neutral-900 border border-neutral-700 px-6 py-3 text-sm md:text-md lg:text-lg font-semibold hover:cursor-pointer"
             >
-              <span className="hover:cursor-pointer">Start now it's free!</span>
+              <span>How it works</span>
             </Link>
+
+            </div>
           </section>
 
           <section className="mt-14">
@@ -96,136 +144,52 @@ function LandingPage() {
             </div>
           </section>
 
-          <section className="mt-20 flex flex-col items-center p-8">
-            <div className="flex items-center gap-3 rounded-full bg-white/10 px-6 py-2">
-              <span className="size-1.5 rounded-full bg-purple-400"></span>
-              <span>METRIX</span>
-              <span className="size-1.5 rounded-full bg-purple-400"></span>
+          {/* FEATURES SECTION */}
+          {/*
+          <section className="mt-20">
+            <h3 className="lg:text-4xl font-semibold">Focus on what matters</h3>
+            <p className="w-[400px] mt-4 text-sm">Explore powerful features designed to help teams plan, track and deliver tasks with ease.</p>
+
+            <div>
+                <div>
+                    <h4>Stay organized and manage tasks effortlessly</h4> 
+                    <p>Prioritize, track progress, and manage everything in one place for a smooter workflow</p>
+                </div>
             </div>
+          </section>
+          */}
 
-            <h1 className="mt-10 text-center text-3xl font-bold text-stone-300 lg:w-[900px] lg:text-7xl">
-              Performance Insights for your productivity
-            </h1>
+          <section className="mt-40">
+            <h3 className="lg:text-4xl font-semibold">Why people choose Taskley</h3>
+            <p className="mt-6 text-sm">Unlock the full potential of your business with unparalleled efficiency and productivity.</p>
 
-            <div className="mt-14 grid gap-8 md:grid-cols-3 lg:grid-cols-3">
-              <FeatureCard
-                title="Get More Done, Faster!"
-                label="of users complete their tasks on time."
-                percentage="98"
-                description="Our app helps users stay productive by efficiently managing tasks and meeting deadlines."
-              />
-              <FeatureCard
-                title="Same Time, Work Smarter!"
-                label="faster than with traditional methods."
-                percentage="25"
-                description="Our smart design and remaidners help users finish tasks faster, freeing up time for what matters most."
-              />
-              <FeatureCard
-                title="Boost Your Teams's Efficiency!"
-                label="increase in productivity."
-                percentage="30"
-                description="Our app improves collaboration and task tracking, boosting communication and meeting deadlines faster."
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
+                <FeatureCard icon={<MdAutoMode />} title="Automated reports" description="Generate reports effortlessly and stay informed with ease."/>
+                <FeatureCard icon={<BsGlobe />} title="Seamless integration" description="Effortlessly connect Aurix with your existing tools for a unified workflow."/>
+                <FeatureCard icon={<IoSpeedometerOutline />} title="Boost productivity" description="Automate routine tasks to save time and enhance your team's efficiency."/>
+                <FeatureCard icon={<CiHeadphones />} title="24/7 Support" description="Get round-the-clock assistance with our support team."/>
+                <FeatureCard icon={<BsDatabaseLock />} title="Data Security & compliance" description="Protect your business with advanced encryption and compliance standards."/>
+                <FeatureCard icon={<TfiLayoutTabWindow />} title="Intuitive user experience" description="User friendly, straightforward interface"/>
             </div>
           </section>
 
-          <section className="mt-20 flex flex-col items-center p-8">
-            <div className="flex items-center gap-3 rounded-full bg-white/10 px-6 py-2">
-              <span className="size-1.5 rounded-full bg-purple-400"></span>
-              <span>FEATURES</span>
-              <span className="size-1.5 rounded-full bg-purple-400"></span>
+          <section className="mt-40">
+            <h3 className="lg:text-4xl font-semibold">Pick the perfect plan</h3>
+            <div className="flex items-center justify-between">
+                <p className="mt-6 text-sm">Stay organized, hit your goals, and scale your productivity on your terms.</p>
+                <div className="flex items-center bg-neutral-900 border border-neutral-700 rounded-lg p-1 transition-all">
+                    <button onClick={() => setPlan("monthly")} className={`px-3 py-2 rounded-md ${plan === "monthly" ? "bg-neutral-950" : ""}`}>Monthly</button>
+                    <button onClick={() => setPlan("yearly")} className={`px-3 py-2 rounded-md ${plan === "yearly" ? "bg-neutral-950" : ""}`}>Yearly</button>
+                </div>
             </div>
 
-            <h1 className="mt-10 text-center text-3xl font-bold text-stone-300 lg:w-[900px] lg:text-7xl">
-              Smart Task Prioritization for Optimal Workflow
-            </h1>
-
-            <div className="mt-14 grid gap-8 md:grid-cols-1 lg:grid-cols-2">
-              <div className="bg-stone-800 px-16 py-10">
-                <div className="flex items-center justify-center gap-1 rounded-full bg-stone-700 px-2 py-2">
-                  <button
-                    onClick={() => setActive("kanban")}
-                    className={`rounded-full px-3 py-2 text-xs ${active === "kanban" ? "bg-white/30 font-semibold" : ""}`}
-                  >
-                    Kanban
-                  </button>
-                  <button
-                    onClick={() => setActive("list")}
-                    className={`rounded-full px-6 py-2 text-xs ${active === "list" ? "bg-white/30 font-semibold" : ""}`}
-                  >
-                    List
-                  </button>
-                  <button
-                    onClick={() => setActive("calendar")}
-                    className={`rounded-full px-6 py-2 text-xs ${active === "calendar" ? "bg-white/30 font-semibold" : ""}`}
-                  >
-                    Calendar
-                  </button>
-                </div>
-
-                {active === "kanban" ? (
-                  <div>
-                    <div className="mt-10 flex flex-col items-start gap-2 rounded-lg border border-white/10 px-6 py-6">
-                      <span className="rounded-full bg-purple-600 px-4 py-1 text-xs font-semibold">
-                        Design
-                      </span>
-                      <span className="text-sm font-semibold">
-                        Presentation to the design team
-                      </span>
-
-                      <span className="mt-2 text-xs text-gray-300">
-                        September 10, 2024
-                      </span>
-                      <span className="text-xs text-gray-300">
-                        2:00 pm to 2:30 pm
-                      </span>
-                    </div>
-
-                    <div className="mt-10 flex flex-col gap-2">
-                      <h3 className="text-3xl font-semibold">
-                        Customizable Views
-                      </h3>
-                      <span className="text-xs text-stone-400">
-                        Easily switch between multiple views such as list,
-                        calendar or kanban, allowing you to traitor your
-                        workflow to your specific needs and preferences.
-                      </span>
-                    </div>
-                  </div>
-                ) : active === "list" ? (
-                  <>
-                    <div>
-                      <span>Presentation to the design team</span>
-                    </div>
-                  </>
-                ) : (
-                  <></>
-                )}
-              </div>
-
-              <div className="flex flex-col justify-evenly bg-stone-800 px-16 py-10">
-                <div className="grid grid-cols-3">
-                  <button>Fitness</button>
-                  <button>Work Projects</button>
-                  <button>Household Chores</button>
-                  <button>Personal Goals</button>
-                  <button>Finance</button>
-                  <button>Travel Planning</button>
-                  <button>Learning and Development</button>
-                  <button>Health and Wellness</button>
-                </div>
-
-                <div className="mt-10 flex flex-col gap-2">
-                  <h3 className="text-3xl font-semibold">Task Organization</h3>
-                  <span className="text-xs text-stone-400">
-                    Organize tasks into customizable categories like work,
-                    personal, and health, ensuring a clear and structured
-                    overview of your responsibilities.
-                  </span>
-                </div>
-              </div>
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <PriceCard color="orange" planName="Free" desc="Ideal solution for small teams and fast moving startups" price={0} planLen="Forever" features={pricePlans.free}/>
+                <PriceCard color="violet" planName="Pro" desc="Ideal solution for small teams and fast moving startups" price={16} planLen="month" features={pricePlans.pro}/>
+                <PriceCard color="green" planName="Team" desc="Ideal solution for small teams and fast moving startups" price={42} planLen="month" features={pricePlans.team}/>
             </div>
           </section>
+
         </main>
       </div>
     </div>

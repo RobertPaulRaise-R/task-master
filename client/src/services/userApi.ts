@@ -1,7 +1,6 @@
 import axios from "axios";
-import { data } from "react-router";
 
-const API_BASE_URL = "http://localhost:3000/api/users";
+const API_BASE_URL = `${import.meta.env.BASE_URL}/api/users/`;
 
 export const getUser = async () => {
     try {

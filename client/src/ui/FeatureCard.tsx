@@ -1,31 +1,15 @@
-function FeatureCard({
-  title,
-  label,
-  percentage,
-  description,
-}: {
-  title: string;
-  label: string;
-  percentage: string;
-  description: string;
-}) {
-  return (
-    <div className="h-90 w-80 bg-gradient-to-br from-white/10 to-white/80 p-[1px]">
-      <div className="flex h-full w-full flex-col justify-between gap-8 bg-gray-800 p-10">
-        <span className="font-semibold">{title}</span>
-        <div className="flex flex-col">
-          <span className="bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-6xl font-bold text-transparent">
-            {percentage}%
-          </span>
+import { ReactNode } from "react";
 
-          <span className="text-xs font-light">{label}</span>
+function FeatureCard({ icon, title, description } : { icon: ReactNode; title: string; description: string }) {
+    return (
+        <div className="bg-gradient-to-br from-indigo-900/10 via-neutral-900 to-red-900/10 border border-neutral-700 h-56 px-10 rounded-lg flex flex-col gap-3 items-center justify-center text-center">
+            <div className="bg-neutral-950 border border-neutral-700 rounded-lg shadow-[4px_4px_23px_1px_#000000] size-10 text-white flex items-center justify-center">{icon}</div>
+
+            <p className="font-medium">{title}</p>
+            <p className="text-sm">{description}</p>
+            
         </div>
-        <span className="rounded-lg bg-white/10 px-4 py-2 text-sm text-white/70">
-          {description}
-        </span>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default FeatureCard;

@@ -93,3 +93,13 @@
         medium: "#F59E0B",
         low: "#10B981",
 */
+
+.orange-gradient{
+  background-image: linear-gradient(to bottom right, rgba(249, 115, 22, 0.1) 1%, #171717 25%);
+}
+.violet-gradient{
+  background-image: linear-gradient(to bottom right, rgba(107, 33, 168, 0.1) 1%, #171717 25%);
+}
+.green-gradient{
+  background-image: linear-gradient(to bottom right, rgba(22, 163, 74, 0.1) 1%, #171717 25%);
+}

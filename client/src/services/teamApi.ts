@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3000/api/teams/";
+const API_BASE_URL = `${import.meta.env.BASE_URL}/api/teams/`;
 
 export const createTeam = async (data: {
   name: string;
