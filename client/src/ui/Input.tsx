@@ -10,7 +10,7 @@ function Input({ type = "text", placeholder, width, ...rest }: InputProps) {
     <input
       placeholder={placeholder}
       type={type}
-      className={`border-light-800 rounded-sm border px-3 py-2 outline-none ${width}`}
+      className={`border-light-800 dark:border-dark-950 rounded-sm border px-3 py-2 outline-none ${width}`}
       {...rest}
     />
   );

@@ -1,7 +1,15 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   font-family: "Poppins", sans-serif;
+}
+
+.dark {
+  --background: #121212;
+  --text: #ffffff;
+  --primary: #90caf9;
 }
 
 ::-webkit-scrollbar {
@@ -21,6 +29,38 @@
   --color-light-900: oklch(14.08% 0.0044 285.82);
   --color-light-950: oklch(0% 0 0);
 
+  --color-brand-50: #edeeff;
+  --color-brand-100: #dee0ff;
+  --color-brand-200: #c3c4ff;
+  --color-brand-300: #9f9eff;
+  --color-brand-400: #8578ff;
+  --color-brand-500: #6548fc;
+  --color-brand-600: #6639f2;
+  --color-brand-700: #582cd6;
+  --color-brand-800: #4727ac;
+  --color-brand-900: #3d2788;
+  --color-brand-950: #25174f;
+
+  --color-dark-50: #f7f7f8;
+  --color-dark-100: #eeeef0;
+  --color-dark-200: #dadadd;
+  --color-dark-300: #b9bac0;
+  --color-dark-400: #93949d;
+  --color-dark-500: #767781;
+  --color-dark-600: #5f5f6a;
+  --color-dark-700: #4e4e56;
+  --color-dark-800: #434349;
+  --color-dark-900: #3a3a40;
+  --color-dark-950: #161618;
+
+  --color-main: #0a0a0a;
+  --color-side: #1c1917;
+  --color-hover: #292524;
+  --color-border: #292524;
+  --color-txt: #a6a09b;
+
+
+/*
   --color-brand-50: #eff5ff;
   --color-brand-100: #dbe8fe;
   --color-brand-200: #bfd7fe;
@@ -32,6 +72,7 @@
   --color-brand-800: #1e55af;
   --color-brand-900: #1e478a;
   --color-brand-950: #172e54;
+*/
 
   --sidebar-background: 0 0% 100%;
   --sidebar-foreground: 240 10% 3.9%;

@@ -1,9 +1,9 @@
-import { Task } from "../../types";
+import { TaskI } from "../../types";
 import { getDate } from "../../utils/getDate";
 import Priority from "./Priority";
 import { SlOptionsVertical } from "react-icons/sl";
 
-function TaskListView({ status, tasks }: { status: string; tasks: Task[] }) {
+function TaskListView({ status, tasks }: { status: string; tasks: TaskI[] }) {
   const task = tasks.filter((t) => t.status === status);
 
   return (

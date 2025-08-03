@@ -11,7 +11,7 @@ import { SiGoogleanalytics } from "react-icons/si";
 function Sidebar({ isExpanded }: { isExpanded: boolean }) {
   return (
     <aside
-      className={`h-screen w-12 px-2 py-3 md:max-w-[200px] lg:max-w-[255px] ${isExpanded ? "w-[220px]" : ""}`}
+      className={`dark:bg-neutral-950 dark:text-neutral-400 h-screen w-12 px-2 py-3 border-r border-r-transparent dark:border-r-neutral-700 md:max-w-[200px] lg:max-w-[255px] ${isExpanded ? "w-[220px]" : ""}`}
     >
       <div className="flex items-center justify-between">
         <h1 className="text-md font-bold">

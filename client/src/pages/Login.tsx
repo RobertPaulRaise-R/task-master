@@ -4,7 +4,7 @@ import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../services/userApi";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function Login() {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ function Login() {
   const mutation = useMutation({
     mutationFn: loginUser,
     onSuccess: () => {
-      navigate("/app/dashboard");
+      navigate("/app/");
     },
   });
 
@@ -27,8 +27,8 @@ function Login() {
   };
 
   return (
-    <div className="mx-auto flex h-screen">
-      <form className="m-auto" onSubmit={handleSubmit(onSubmit)}>
+    <div className="flex h-screen flex-col items-center justify-center">
+      <form className="mx-auto" onSubmit={handleSubmit(onSubmit)}>
         <h3 className="text-2xl font-semibold">Login</h3>
 
         <FormRow>
@@ -71,6 +71,13 @@ function Login() {
           )}
         </Button>
       </form>
+
+      <Link
+        to={"/signup"}
+        className="text-brand-500 hover:text-brand-600 active:text-brand-800 mt-4"
+      >
+        Dont have an account? Sign up!
+      </Link>
     </div>
   );
 }

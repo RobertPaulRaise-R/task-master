@@ -83,7 +83,6 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     };
   }, [isOpen, closeMenu]);
 
-  // Calculate position and alignment
   const getPositionStyles = () => {
     if (!triggerRef.current) {
       return { top: "0px", left: "0px" };
@@ -116,33 +115,6 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         left: 0,
       };
     }
-
-    // if (placement.startsWith("bottom")) {
-    //   top = triggerRect.bottom - containerRect.top + verticalOffset;
-    // } else {
-    //   // top placement
-    //   top =
-    //     triggerRect.top -
-    //     containerRect.top -
-    //     (dropdownRef.current?.offsetHeight || 0) -
-    //     verticalOffset;
-    // }
-
-    // if (placement.endsWith("start")) {
-    //   left = triggerRect.left - containerRect.left + horizontalOffset;
-    // } else {
-    //   // end placement
-    //   left =
-    //     triggerRect.right -
-    //     containerRect.left -
-    //     (dropdownRef.current?.offsetWidth || 0) -
-    //     horizontalOffset;
-    // }
-
-    // return {
-    //   top: `${top}px`,
-    //   left: `${left}px`,
-    // };
   };
 
   const positionStyles = isOpen
@@ -168,7 +140,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.15, ease: "easeInOut" }}
             style={positionStyles}
-            className={`absolute z-50 min-w-[200px] overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg focus:outline-none ${className}`}
+            className={`absolute z-50 min-w-[200px] overflow-hidden rounded-md border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 shadow-lg focus:outline-none ${className}`}
           >
             {items.map((item, index) => {
               if (item.isSeparator) {
@@ -190,7 +162,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                     }
                   }}
                   className={
-                    `flex items-center gap-2 px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-100 ${item.disabled ? "cursor-not-allowed text-gray-400" : "cursor-pointer text-gray-700"} ${item.className}` // Apply custom class
+                    `flex items-center gap-2 px-4 py-2 text-sm dark:text-neutral-400 transition-colors duration-200 hover:bg-gray-100 hover:dark:bg-neutral-800 ${item.disabled ? "cursor-not-allowed text-gray-400" : "cursor-pointer text-gray-700"} ${item.className}`
                   }
                 >
                   {item.icon && (

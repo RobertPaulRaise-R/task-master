@@ -1,4 +1,4 @@
-export interface Task {
+export interface TaskI {
   _id: string;
   title: string;
   description: string;
@@ -12,7 +12,7 @@ export interface Task {
   updatedAt: string;
 }
 
-export interface Chat {
+export interface ChatI {
   _id: string;
   name?: string;
   participants: string[];
@@ -27,7 +27,7 @@ export interface ProjectI {
   name?: string;
   description: string;
   teams: TeamI[];
-  tasks: Task[];
+  tasks: TaskI[];
   members: { name: string; avatar: string; email: string }[];
   createdBy: { _id: string; name: string };
   createdAt: string;
@@ -46,10 +46,11 @@ export interface TeamI {
 }
 
 export interface UserI {
+  _id: string;
   name: string;
   email: string;
   username: string;
-  password: string; // Hash this in practice
+  password: string;
   avatar?: string;
   position: string;
   settings?: {

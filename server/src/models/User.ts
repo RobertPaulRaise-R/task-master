@@ -5,8 +5,8 @@ interface IUser extends Document {
     name: string;
     email: string;
     username: string;
-    password: string; // Hash this in practice
-    avatar?: { data: Buffer | undefined; contentType: string | undefined }; // URL or path to avatar
+    password: string;
+    avatar?: { data: Buffer | undefined; contentType: string | undefined };
     company: string;
     position: string;
     settings?: {
@@ -28,7 +28,7 @@ const userSchema: Schema<IUserDocument> = new Schema(
         username: { type: String, required: true, unique: true, trim: true },
         password: { type: String, required: true },
         avatar: {
-            data: { type: Buffer },
+            data: { type: Buffer, default: Buffer.from("") },
             contentType: { type: String },
         },
         company: { type: String, default: "" },

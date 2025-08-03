@@ -66,8 +66,8 @@ function LandingPage() {
           </Link> */}
         </nav>
 
-        <main className="mt-20">
-          <section className="flex flex-col gap-8">
+        <main className="">
+          <section className="flex h-screen flex-col justify-center gap-8">
             <motion.h1
               initial={{ opacity: 0, scale: 0 }}
               whileInView={{ opacity: 1, scale: 1 }}

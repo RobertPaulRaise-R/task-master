@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useProjectById } from "./useProjectById";
-import { ProjectI } from "../../types";
+import { ProjectI, Task } from "../../types";
 import Spinner from "../../ui/Spinner";
 import Button from "../../ui/Button";
 import TeamCard from "./TeamCard";
@@ -10,10 +10,24 @@ import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import { useMutation } from "@tanstack/react-query";
 import { createTeam } from "../../services/teamApi";
+import { useTasks } from "../tasks/useTasks";
+import TaskCard from "../tasks/TaskCard";
 
 function Project() {
   const [project, setProject] = useState<ProjectI | null>(null);
-  const { project: projectData, isPending, error } = useProjectById();
+  const [tasks, setTasks] = useState<Task[] | null>(null);
+  const [projectMembers, setProjectMembers] = useState([]);
+
+  const {
+    project: projectData,
+    isPending: isProjectPending,
+    error: isProjectError,
+  } = useProjectById();
+  const {
+    tasks: tasksData,
+    isPending: isTasksPending,
+    error: isTasksError,
+  } = useTasks();
 
   const [showTeamForm, setShowTeamForm] = useState(false);
   const [showTaskForm, setShowTaskForm] = useState(false);
@@ -25,7 +39,11 @@ function Project() {
       console.log(projectData);
       setProject(projectData);
     }
-  }, [projectData]);
+
+    if (tasksData) {
+      setTasks(tasksData);
+    }
+  }, [projectData, tasksData]);
 
   const createTeamMutation = useMutation({
     mutationFn: (data: { name: string; project: string | undefined }) =>
@@ -69,6 +87,9 @@ function Project() {
     createTaskMutation.mutate({ ...data, project: project?._id });
   };
 
+  const isPending = isProjectPending || isTasksPending;
+  const error = isProjectError || isTasksError;
+
   if (isPending) return <Spinner size={20} />;
 
   if (error) return <p>Project Details not available</p>;
@@ -91,6 +112,12 @@ function Project() {
         <div className="flex items-center justify-between">
           <h2 className="text-brand-800 text-xl font-medium">Tasks</h2>
           <Button onClick={() => setShowTaskForm(true)}>New Task</Button>
+        </div>
+
+        <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {tasks &&
+            tasks.length > 0 &&
+            tasks.map((task) => <TaskCard task={task} />)}
         </div>
 
         <ModalView

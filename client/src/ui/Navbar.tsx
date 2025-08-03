@@ -9,16 +9,21 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import DropdownMenu, { DropdownMenuItem } from "./DropdownMenu";
 import { PiSignOutBold } from "react-icons/pi";
 import { IoMdSettings } from "react-icons/io";
-import { MdPerson } from "react-icons/md";
+import { MdOutlineDarkMode, MdPerson } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
 import { logoutUser } from "../services/userApi";
+import { IoSunnyOutline } from "react-icons/io5";
 
 function Navbar({
   isExpanded,
   setIsExpanded,
+  theme,
+  toggleTheme,
 }: {
   isExpanded: boolean;
   setIsExpanded: (e) => void;
+  theme: "light" | "dark";
+  toggleTheme: () => void;
 }) {
   const navigate = useNavigate();
   const url = useLocation();
@@ -54,11 +59,11 @@ function Navbar({
   ];
 
   return (
-    <nav className="bg-light-50 sticky top-0 z-50 w-full px-4 py-3">
+    <nav className="bg-light-50 dark:bg-neutral-950 sticky top-0 z-50 w-full px-4 py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
-            className="hover:bg-light-300 mt-auto rounded-full p-2"
+            className="hover:bg-light-300 hover:dark:bg-neutral-900 mt-auto rounded-full p-2 text-light-800 dark:text-dark-50"
             onClick={() => setIsExpanded((e) => !e)}
           >
             {isExpanded ? <FaAnglesLeft size={16} /> : <FaAnglesRight />}
@@ -68,7 +73,15 @@ function Navbar({
           </h2>
         </div>
 
+
         <div className="hidden items-center gap-4 lg:flex">
+            <button onClick={toggleTheme}>
+                { theme === "dark" ?
+                (<MdOutlineDarkMode size={20} color="white"/>)
+                : (<IoSunnyOutline size={20} color="black"/>)
+                }
+            </button>
+
           <div className="hidden md:inline-block">
             <SearchBar label="search anything" />
           </div>

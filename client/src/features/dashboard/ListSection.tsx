@@ -12,7 +12,7 @@ function ListSection({
   return (
     <ListSectionContext.Provider value={{}}>
       <div
-        className={`border-light-400 bg-light-50 text-light-900 max-h-[358px] overflow-hidden rounded-lg border ${className}`}
+        className={`border-light-400 dark:border-border bg-light-50 dark:bg-neutral-900 text-light-900 dark:text-dark-50 max-h-[358px] overflow-hidden rounded-lg border ${className}`}
       >
         {children}
       </div>
@@ -22,7 +22,7 @@ function ListSection({
 
 function Header({ label, children }: { label: string; children?: ReactNode }) {
   return (
-    <div className="sticky top-0 z-10 flex h-14 items-center justify-between px-6 pt-6 pb-2">
+    <div className="sticky top-0 z-10 flex h-14 items-center justify-between px-6 py-6 border-b border-light-400 dark:border-dark-600">
       <span className="font-medium">{label}</span>
       {children}
     </div>

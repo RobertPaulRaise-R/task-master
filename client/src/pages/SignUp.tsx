@@ -4,7 +4,7 @@ import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import { useMutation } from "@tanstack/react-query";
 import { createUser } from "../services/userApi";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ function SignUp() {
   const mutation = useMutation({
     mutationFn: createUser,
     onSuccess: () => {
-      navigate("/users/details");
+      navigate("/login");
     },
     onError: (error) => {
       console.error("Login error:", error.message);
@@ -24,13 +24,19 @@ function SignUp() {
   };
 
   return (
-    <div className="mx-auto flex h-screen">
-      <form className="m-auto" onSubmit={handleSubmit(onSubmit)}>
+    <div className="flex h-screen flex-col items-center justify-center">
+      <form className="mx-auto" onSubmit={handleSubmit(onSubmit)}>
         <h3 className="text-2xl font-semibold">SignUp</h3>
         <FormRow>
           <label>Name</label>
           <Input {...register("name", { required: true })} />
         </FormRow>
+
+        <FormRow>
+          <label>Username</label>
+          <Input {...register("username", { required: true })} />
+        </FormRow>
+
         <FormRow>
           <label>Email</label>
           <Input type="email" {...register("email", { required: true })} />
@@ -48,6 +54,13 @@ function SignUp() {
           <span className="font-medium">Sign Up</span>
         </Button>
       </form>
+
+      <Link
+        to={"/login"}
+        className="text-brand-500 hover:text-brand-600 active:text-brand-800 mt-4"
+      >
+        Already have an account? Login!
+      </Link>
     </div>
   );
 }

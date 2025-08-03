@@ -42,7 +42,7 @@ const ModalView: React.FC<ModalProps> = ({
     <div className="bg-light-200/25 fixed inset-0 z-50 flex items-center justify-center rounded-lg shadow-2xl backdrop-blur-sm">
       <div
         ref={modalRef}
-        className="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-xl"
+        className="relative w-full max-w-lg rounded-lg bg-white dark:bg-dark-800 p-6 shadow-lg"
       >
         <button
           className="hover:bg-light-300 absolute top-2 right-2 rounded-sm bg-none p-2 text-gray-500 hover:text-gray-700"

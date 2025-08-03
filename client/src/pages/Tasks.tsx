@@ -4,12 +4,12 @@ import KanbanColumn from "../features/tasks/KanbanColumn";
 import TaskListView from "../features/tasks/TaskListView";
 
 import { useForm } from "react-hook-form";
-import FormRow from "../ui/FormRow"; // Make sure your path is correct
-import Input from "../ui/Input"; // Make sure your path is correct
-import { Task } from "../types"; // Make sure your path is correct
-import { useTasks } from "../features/tasks/useTasks"; // Make sure your path is correct
-import Spinner from "../ui/Spinner"; // Make sure your path is correct
-import ModalView from "../ui/ModalView"; // Make sure your path is correct
+import FormRow from "../ui/FormRow";
+import Input from "../ui/Input";  
+import { TaskI } from "../types";  
+import { useTasks } from "../features/tasks/useTasks";
+import Spinner from "../ui/Spinner";
+import ModalView from "../ui/ModalView";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTask } from "../services/taskApi";
 import { updateTaskStatus } from "../features/tasks/updateTaskStatus";
@@ -25,7 +25,7 @@ function Tasks() {
     taskDueDate: string;
   }>();
 
-  const [tasks, setTasks] = useState<Task[]>(tasksData || []); // Initialize with empty array
+  const [tasks, setTasks] = useState<TaskI[]>(tasksData || []);
   const [view, setView] = useState<"kanban" | "list">("kanban");
   const [showForm, setShowForm] = useState(false);
 
@@ -35,7 +35,6 @@ function Tasks() {
     }
   }, [tasksData]);
 
-  // Update local state immediately
   const handleLocalTaskDrop = useCallback(
     (
       taskId: string,
@@ -56,7 +55,7 @@ function Tasks() {
       status,
     }: {
       taskId: string;
-      status: Task["status"];
+      status: TaskI["status"];
     }) => updateTaskStatus(taskId, status),
     onSuccess: () => {
       // Invalidate the tasks query to refetch updated data
@@ -75,7 +74,7 @@ function Tasks() {
 
       if (active && over && active.id !== over.id) {
         const taskId = active.id as string;
-        const newStatus = over.id as Task["status"];
+        const newStatus = over.id as TaskI["status"];
         handleLocalTaskDrop(taskId, newStatus);
         updateTaskStatusMutation.mutate({ taskId, status: newStatus });
       }
@@ -217,7 +216,7 @@ function Tasks() {
             {statuses.map((status) => (
               <KanbanColumn
                 key={status}
-                status={status as Task["status"]}
+                status={status as TaskI["status"]}
                 tasks={tasks}
               />
             ))}
