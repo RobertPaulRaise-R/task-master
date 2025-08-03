@@ -1,3 +1,4 @@
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 // Extend Express Request type to include _id
@@ -9,7 +10,7 @@ declare global {
     }
 }
 
-export const protect = (req: any, res: any, next: any) => {
+export const protect = (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.token;
 
     if (!token) {
@@ -19,7 +20,10 @@ export const protect = (req: any, res: any, next: any) => {
     try {
         const decoded: any = jwt.verify(
             token,
-            process.env.JWT_SECRET as string
+            process.env.JWT_SECRET as string,
+            {
+                complete: true,
+            }
         ); // Verify with your secret
         req.user = { _id: decoded.id }; // Attach user ID from token payload to req.user
         next();

@@ -5,7 +5,7 @@ import mongoose, { ObjectId } from "mongoose";
 
 export const createTeam = async (req: Request, res: Response) => {
     try {
-        const userId = (req as any).user?._id;
+        const userId = (req as Request).user?._id;
 
         console.log("Create Team API HIT");
         if (!userId) {
