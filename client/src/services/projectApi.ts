@@ -2,6 +2,15 @@ import axios from "axios";
 
 const API_BASE_URL = `${import.meta.env.BACKEND_BASE_URL}/api/projects`; 
 
+export const getProjects = async () => {
+    const res = await axios.get(API_BASE_URL, {
+        withCredentials: true,
+        headers: { "Content-Type" : "application/json" },
+    });
+
+    return res.data;
+}
+
 export const createProject = async (data: {
   name: string;
   description: string;

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { getProjects } from "../../services/projectApi";
 
 export function useProjects() {
   const {
@@ -8,10 +9,7 @@ export function useProjects() {
     data: projects,
   } = useQuery({
     queryKey: ["projects"],
-    queryFn: () =>
-      fetch("http://localhost:3000/api/projects/", {
-        credentials: "include",
-      }).then((res) => res.json()),
+    queryFn: getProjects
   });
 
   return { isPending, error, isError, projects };

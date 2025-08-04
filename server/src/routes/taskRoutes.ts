@@ -8,7 +8,7 @@ import {
 
 const router = express.Router();
 
-router.get("/", getTasks);
+router.get("/", getTasks as RequestHandler);
 router.post("/", createTask);
 router.patch("/:id", updateTask as RequestHandler);
 router.delete("/:id", deleteTask);

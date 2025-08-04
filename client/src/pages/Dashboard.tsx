@@ -4,11 +4,19 @@ import { ProjectI, TaskI, UserI } from "../types";
 import Spinner from "../ui/Spinner";
 import { useTasks } from "../features/tasks/useTasks";
 import StatsCard from "../features/dashboard/StatsCard";
-import { BiPlusCircle } from "react-icons/bi";
 import { useProjects } from "../features/projects/useProjects";
 import ProjectList from "../features/projects/ProjectListView";
 import React, { useEffect, useMemo, useState } from "react";
 import Sortable from "../ui/Sortable";
+import { BsPlusLg } from "react-icons/bs";
+import PeopleListView from "../features/dashboard/PeopleListView";
+import ModalView from "../ui/ModalView";
+import FormRow from "../ui/FormRow";
+import Input from "../ui/Input";
+import { useForm } from "react-hook-form";
+import Select from "../ui/Select";
+import Label from "../ui/Label";
+import Button from "../ui/Button";
 
 const cardsData = [
   { name: "Total Projects", value: 10 },
@@ -25,21 +33,31 @@ const taskSortables = [
     "Sort By Priority(Lowest)",
 ];
 
+const peoples : UserI[] = [];
+const projects: ProjectI[] = [];
+
 function Dashboard() {
+    const { register, handleSubmit } = useForm();
+
+
   const { isPending: isTaskPending, isError: isTaskError, tasks: tasksData} = useTasks();
+  /*
   const {
     isPending: isProjectPending,
     isError: isProjectError,
     projects,
   } = useProjects();
 
+
   useEffect(() => {
       if (projects) {
           cardsData[0].value = projects.length;
       }
   }, [projects]);
+  */
 
 
+  const [showForm, setShowForm] = useState<boolean>(false);
   const [taskFilter, setTaskFilter] = useState<string>("");
 
   const sortedTasks = useMemo(() => { 
@@ -53,35 +71,28 @@ function Dashboard() {
       return 0;
   })}, [tasksData, taskFilter]);
 
-  const isPending = isTaskPending || isProjectPending;
-  const isError = isTaskError || isProjectError;
+  const onSubmit = () => {};
 
+  /*
+
+      const isPending = isTaskPending || isProjectPending;
+  const isError = isTaskError || isProjectError;
   if (isPending) return <Spinner size={10} />;
   if (isError) return <p>Error loading dashboard</p>;
+  */
 
   return (
     <div className="mx-4 py-4">
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
         {cardsData.map((card) => (
-          <StatsCard name={card.name} value={card.value} />
+          <StatsCard name={card.name} value={card.value} key={card.name} />
         ))}
       </div>
 
-      <div className="mt-10 grid grid-cols-1 gap-x-10 gap-y-4 lg:grid-cols-2">
+      <div className="my-10 grid grid-cols-1 gap-x-10 gap-y-4 lg:grid-cols-2">
         <ListSection>
           <ListSection.Header label="Assigned Tasks">
             <div>
-            {/*
-                <select
-                    defaultValue="Sort By Title(A-Z)" 
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTaskFilter(e.target.value)}
-                    className="text-sm"
-                >
-                    {taskSortables.map((s) => (
-                        <option value={s}>{s}</option>
-                    ))}
-                </select>
-                */}
                 <Sortable 
                     sortable={taskSortables}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTaskFilter(e.target.value)}
@@ -91,12 +102,26 @@ function Dashboard() {
           </ListSection.Header>
 
           <ListSection.List>
-            {sortedTasks.length > 0 ? (
+            {!isTaskPending && sortedTasks.length > 0 ? (
               sortedTasks.map((item: TaskI, i: number) => (
                 <TaskItem item={item} key={i} />
               ))
             ) : (
-              <span>There is no tasks right now</span>
+                <div className="h-full flex flex-col items-center justify-center">
+                    <div>
+                        <div className="bg-light-400 dark:bg-neutral-700 p-2 flex items-center justify-between gap-3 rounded-lg">
+                            <div className="bg-light-200 dark:bg-neutral-800 h-18 w-18 rounded-lg"></div>
+
+                            <div className="flex flex-col gap-1">
+                                <div className="bg-light-200 dark:bg-neutral-800 h-4 w-32 rounded-lg"></div>
+                                <div className="bg-light-200 dark:bg-neutral-800 h-4 w-32 rounded-lg"></div>
+                                <div className="bg-light-200 dark:bg-neutral-800 h-4 w-32 rounded-lg"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <span className="font-medium pt-4">You don't assigned to any task</span>
+                    <p className="text-light-700 dark:text-neutral-400 text-sm">List of tasks you've assigned will appear here.</p>
+                </div>
             )}
           </ListSection.List>
         </ListSection>
@@ -108,20 +133,62 @@ function Dashboard() {
           </ListSection.Header>
 
           <ListSection.List>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button 
+                    onClick={() => setShowForm(true)}
+                    className="flex items-center gap-4 border border-light-400 dark:border-neutral-700 p-2 rounded-lg cursor-pointer">
+                    <p className="p-4 bg-light-300 dark:bg-neutral-800 rounded-full flex items-center justify-center">
+                        <BsPlusLg size={20}/> 
+                    </p>
+                    <span className="font-medium">
+                        New Project
+                    </span>
+                </button>
+
+                        <ModalView
+          title="Create New Task"
+          isOpen={showForm}
+          onClose={() => setShowForm((show) => !show)}
+        >
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-5"
+          >
+            <FormRow>
+              <Label label="Project Name" />
+              <Input
+                {...register("taskName", { required: true })}
+                placeholder="Create a doom game in typescript"
+              />
+            </FormRow>
+
+            <FormRow>
+              <Label label="Project Description"/>
+              <Input
+                {...register("taskDescription", { required: true })}
+                placeholder="Create a react typescript project and express as the backend and use sql lite for database"
+              />
+            </FormRow>
+
+
+            <div className="flex items-center justify-end gap-3">
+                <Button btn="secondary" >
+                    Cancel 
+                </Button>
+                <Button type="submit" btn="primary">
+                    Create
+                </Button>
+            </div>
+          </form>
+        </ModalView>
+
+                
             {projects && projects.length > 0 ? (
               projects.map((project: ProjectI, i: number) => (
                 <ProjectList project={project} key={i} />
               ))
-            ) : (
-              <div>
-                <button className="border-light-300 flex items-center gap-3 rounded-md border px-6 py-3 hover:cursor-pointer">
-                  <BiPlusCircle size={32} color="#4b5563" />
-                  <span className="text-light-700 font-medium">
-                    New Project
-                  </span>
-                </button>
-              </div>
-            )}
+            ) : null }
+            </div>
           </ListSection.List>
         </ListSection>
 
@@ -131,18 +198,18 @@ function Dashboard() {
           </ListSection.Header>
 
           <ListSection.List>
-            {projects.length > 0 ? (
-              projects.map((item: UserI, i: number) => (
-                <TaskItem item={item} key={i} />
+            {peoples.length > 0 ? (
+              peoples.map((user: UserI, i: number) => (
+                  <PeopleListView key={i} person={user}/>
               ))
             ) : (
-              <div>
-                <button className="border-light-300 flex items-center gap-3 rounded-md border px-6 py-3 hover:cursor-pointer">
-                  <BiPlusCircle size={32} color="#4b5563" />
-                  <span className="text-light-700 font-medium">
-                    New Project
-                  </span>
-                </button>
+              <div className="h-full flex flex-col items-center justify-center">
+                <div>
+                    <div>
+                    </div>
+                </div>
+                <span className="font-medium pt-4">There's no people in your workspace</span>
+                <p className="text-light-700 dark:text-neutral-400 text-sm">Start inviting your co-workers now!</p>
               </div>
             )}
           </ListSection.List>

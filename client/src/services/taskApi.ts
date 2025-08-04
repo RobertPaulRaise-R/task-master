@@ -1,6 +1,15 @@
 import axios from "axios";
 
-const API_BASE_URL = `${import.meta.env.BASE_URL}/api/tasks/`;
+const API_BASE_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}/api/tasks/`;
+
+export const getTasks = async () => {
+    const res = await axios.get(API_BASE_URL, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" }
+    });
+
+    return res.data;
+}
 
 export const createTask = async (data: {
   title: string;

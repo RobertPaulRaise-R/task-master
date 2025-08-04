@@ -39,13 +39,13 @@ const ModalView: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
-    <div className="bg-light-200/25 fixed inset-0 z-50 flex items-center justify-center rounded-lg shadow-2xl backdrop-blur-sm">
+    <div className="bg-light-200/25 dark:bg-neutral-950/25 fixed inset-0 z-50 flex items-center justify-center rounded-lg shadow-2xl backdrop-blur-sm">
       <div
         ref={modalRef}
-        className="relative w-full max-w-lg rounded-lg bg-white dark:bg-dark-800 p-6 shadow-lg"
+        className="relative w-full max-w-lg rounded-lg bg-white dark:bg-neutral-900 p-6 shadow-lg"
       >
         <button
-          className="hover:bg-light-300 absolute top-2 right-2 rounded-sm bg-none p-2 text-gray-500 hover:text-gray-700"
+          className="absolute top-2 right-2 rounded-md p-1 bg-light-200 dark:bg-neutral-800 text-light-600 dark:text-neutral-400 hover:text-light-900 dark:hover:text-neutral-100"
           onClick={onClose}
           aria-label="Close"
         >
@@ -53,7 +53,7 @@ const ModalView: React.FC<ModalProps> = ({
         </button>
 
         {title && (
-          <h2 className="text-brand-600 mb-4 text-xl font-semibold">{title}</h2>
+          <h2 className="text-brand-500 mb-4 text-xl font-semibold">{title}</h2>
         )}
 
         <div>{children}</div>

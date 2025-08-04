@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { getTasks } from "../../services/taskApi";
 
 export function useTasks() {
   const {
@@ -8,8 +9,7 @@ export function useTasks() {
     data: tasks,
   } = useQuery({
     queryKey: ["tasks"],
-    queryFn: () =>
-      fetch("http://localhost:3000/api/tasks").then((res) => res.json()),
+    queryFn: getTasks, 
   });
 
   return { isPending, error, isError, tasks };

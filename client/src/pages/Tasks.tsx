@@ -10,7 +10,7 @@ import { TaskI } from "../types";
 import { useTasks } from "../features/tasks/useTasks";
 import Spinner from "../ui/Spinner";
 import ModalView from "../ui/ModalView";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { InvalidateQueryFilters, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTask } from "../services/taskApi";
 import { updateTaskStatus } from "../features/tasks/updateTaskStatus";
 
@@ -21,8 +21,8 @@ function Tasks() {
   const { register, handleSubmit, reset } = useForm<{
     taskName: string;
     taskDescription: string;
-    taskPriority: "low" | "medium" | "high";
-    taskDueDate: string;
+    taskPriority: "Low" | "Medium" | "High";
+    taskDueDate: Date;
   }>();
 
   const [tasks, setTasks] = useState<TaskI[]>(tasksData || []);
@@ -58,13 +58,10 @@ function Tasks() {
       status: TaskI["status"];
     }) => updateTaskStatus(taskId, status),
     onSuccess: () => {
-      // Invalidate the tasks query to refetch updated data
-      queryClient.invalidateQueries(["tasks"]);
+      queryClient.invalidateQueries(["tasks"] as InvalidateQueryFilters);
     },
     onError: (error) => {
       console.error("Error updating task status:", error);
-      // Optionally, revert the local state update if the server update fails
-      // You might need to keep track of the previous state to do this effectively.
     },
   });
 
@@ -88,13 +85,13 @@ function Tasks() {
 
   const createTaskMutation = useMutation({
     mutationFn: (data: {
-      name: string;
+      title: string;
       description: string;
       priority: "Low" | "Medium" | "High";
-      dueDate: string;
+      dueDate: Date;
     }) => createTask(data),
     onSuccess: () => {
-      queryClient.invalidateQueries(["tasks"]);
+      queryClient.invalidateQueries(["tasks"] as InvalidateQueryFilters);
       setShowForm(false);
       reset();
     },
@@ -108,13 +105,12 @@ function Tasks() {
     taskName: string;
     taskDescription: string;
     taskPriority: "Low" | "Medium" | "High";
-    taskDueDate: string;
+    taskDueDate: Date;
   }) => {
     createTaskMutation.mutate({
       title: data.taskName,
       description: data.taskDescription,
-      priority:
-        data.taskPriority.charAt(0).toUpperCase() + data.taskPriority.slice(1), // Capitalize priority
+      priority: data.taskPriority,
       dueDate: data.taskDueDate,
     });
   };
@@ -191,9 +187,9 @@ function Tasks() {
                 className="border-light-800 rounded-sm border px-4 py-2"
                 {...register("taskPriority", { required: true })}
               >
-                <option value={"low"}>Low</option>
-                <option value={"medium"}>Medium</option>
-                <option value={"high"}>High</option>
+                <option value={"Low"}>Low</option>
+                <option value={"Medium"}>Medium</option>
+                <option value={"High"}>High</option>
               </select>
             </FormRow>
 
