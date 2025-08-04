@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = `${import.meta.env.BASE_URL}/api/users/`;
+const API_BASE_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}api/users`;
 
 export const getUser = async () => {
     try {
@@ -26,6 +26,7 @@ export const createUser = async (data: {
       withCredentials: true,
       headers: { "Content-Type": "application/json" },
     });
+    console.log(API_BASE_URL);
     return res.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Registration failed");

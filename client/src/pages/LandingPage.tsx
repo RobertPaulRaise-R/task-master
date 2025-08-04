@@ -10,6 +10,7 @@ import { CiHeadphones } from "react-icons/ci";
 import { BsDatabaseLock } from "react-icons/bs";
 import { TfiLayoutTabWindow } from "react-icons/tfi";
 import PriceCard from "../ui/PriceCard";
+import Accordian from "../ui/Accordian";
 
 const pricePlans = {
     free: [
@@ -189,6 +190,57 @@ function LandingPage() {
                 <PriceCard color="green" planName="Team" desc="Ideal solution for small teams and fast moving startups" price={42} planLen="month" features={pricePlans.team}/>
             </div>
           </section>
+
+          <section className="mt-40 grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <div>
+                <h3 className="lg:text-4xl font-semibold">Frequently asked Questions</h3>
+                <p className="mt-6 text-sm">Everything you need to know--features, benefits, and common questions answered clearly</p>
+            </div>
+
+            <div className="flex flex-col gap-3">
+                <Accordian question="What is Taskley and how does it work?" answer="Taskley is a task management sotware that is used to manage project and its taks effortlessly."/>
+                <Accordian question="Can I use Taskley for free?" answer="Yes, you can use Taskley for free with limited features."/>
+                <Accordian question="What integration does Taskley support?" answer="Taskley support Github and other productivity apps."/>
+                <Accordian question="How secure is Taskley?" answer="Taskley is secure with advanced encryptions. So users don't need to worry about data security."/>
+                <Accordian question="Can I upgrade or change my plan later?" answer="Yes, you can absolutely change your plan whenever you want."/>
+            </div>
+          </section>
+
+          <footer className="mt-40 grid grid-cols-1 lg:grid-cols-2">
+                <h3 className="text-2xl">Taskley</h3> 
+
+                <div className="flex justify-between pt-10 lg:pt-0">
+                    <div>
+                        <p className="font-medium">Product</p>
+                        <div className="flex flex-col gap-2 mt-4">
+                            <Link to={"/"} className="text-sm text-neutral-400 hover:text-white">Features</Link>
+                            <Link to={"/"} className="text-sm text-neutral-400 hover:text-white">Benefits</Link>
+                            <Link to={"/"} className="text-sm text-neutral-400 hover:text-white">Customers</Link>
+                            <Link to={"/"} className="text-sm text-neutral-400 hover:text-white">Pricing</Link>
+                            <Link to={"/"} className="text-sm text-neutral-400 hover:text-white">Contact</Link>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p className="font-medium">Company</p>
+                        <div className="flex flex-col gap-2 mt-4">
+                            <Link to={"/"} className="text-sm text-neutral-400 hover:text-white">About</Link>
+                            <Link to={"/"} className="text-sm text-neutral-400 hover:text-white">Blog</Link>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p className="font-medium">Social</p>
+                        <div className="flex flex-col gap-2 mt-4">
+                            <Link to={"/"} className="text-sm text-neutral-400 hover:text-white">X (Twitter)</Link>
+                            <Link to={"/"} className="text-sm text-neutral-400 hover:text-white">LinkedIn</Link>
+                            <Link to={"/"} className="text-sm text-neutral-400 hover:text-white">YouTube</Link>
+                        </div>
+                    </div>
+
+                </div>
+          </footer>
+          
 
         </main>
       </div>

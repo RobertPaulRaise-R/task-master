@@ -23,6 +23,7 @@ function SignUp() {
     mutation.mutate(data);
   };
 
+
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <form className="mx-auto" onSubmit={handleSubmit(onSubmit)}>

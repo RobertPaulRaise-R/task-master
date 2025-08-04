@@ -1,4 +1,5 @@
 import { BiCheckCircle } from "react-icons/bi";
+import { IoIosArrowRoundForward } from "react-icons/io";
 
 interface PriceCardProps {
     color: string;
@@ -24,7 +25,7 @@ function PriceCard({ color, planName, desc, price, planLen, features } : PriceCa
                 <p>/{planLen}</p>
             </div>
 
-            <button className="w-full bg-neutral-900 py-2 my-6 rounded-lg border border-neutral-700">Get Started </button>
+            <button className="w-full bg-neutral-900 py-2 my-6 rounded-lg border border-neutral-700 flex items-center justify-center hover:bg-neutral-800 cursor-pointer">Get Started <IoIosArrowRoundForward size={20}/></button>
 
             <div className="flex flex-col gap-3">
                 {features.map((feature) => (
