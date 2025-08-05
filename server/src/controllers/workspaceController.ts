@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { Workspace } from '../models/Workspace.js';
 
 
-export const createWorkspace = async (req: Request, res: Response) => {
+export const createWorkspace = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { name, description, visibility } = req.body;
     const userId = req.user?._id;
@@ -38,7 +38,7 @@ export const createWorkspace = async (req: Request, res: Response) => {
   }
 };
 
-export const getWorkspaces = async (req: Request, res: Response) => {
+export const getWorkspaces = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?._id;
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {

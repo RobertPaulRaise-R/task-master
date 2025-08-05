@@ -13,6 +13,7 @@ import chatRoutes from "./routes/chatRoutes.js";
 import friendRoutes from "./routes/friendRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
+import workspaceRoutes from "./routes/workspaceRoutes.js";
 import { setIO } from "./controllers/chatController.js";
 
 dotenv.config();
@@ -35,6 +36,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/users", userRoutes);
+app.use("/api/workspaces", workspaceRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/chats", chatRoutes);
 app.use("/api/friends", friendRoutes);
