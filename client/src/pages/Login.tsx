@@ -28,9 +28,9 @@ function Login() {
   };
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
+    <div className="bg-light-50 dark:bg-neutral-950 flex h-screen flex-col items-center justify-center">
       <form className="mx-auto" onSubmit={handleSubmit(onSubmit)}>
-        <h3 className="text-2xl font-semibold">Login</h3>
+        <h3 className="dark:text-white text-2xl font-semibold mb-6">Login</h3>
 
         <FormRow>
           <Label label="Email"/>
@@ -63,7 +63,7 @@ function Login() {
         <Button
           type="submit"
           btn="primary"
-          className="mt-5 w-full rounded-none"
+          className="mt-5 w-full"
           disabled={mutation.isPending}
         >
           {mutation.isPending ? (
@@ -76,7 +76,7 @@ function Login() {
 
       <Link
         to={"/signup"}
-        className="text-brand-500 hover:text-brand-600 active:text-brand-800 mt-4"
+        className="text-brand-500 dark:text-brand-300 hover:underline active:text-brand-500 mt-4"
       >
         Dont have an account? Sign up!
       </Link>

@@ -6,15 +6,17 @@
   font-family: "Poppins", sans-serif;
 }
 
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #444 #888;
+}
+
 .dark {
   --background: #121212;
   --text: #ffffff;
   --primary: #90caf9;
 }
 
-::-webkit-scrollbar {
-  display: none;
-}
 
 @theme {
   --color-light-50: oklch(100% 0 0);

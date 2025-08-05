@@ -21,7 +21,7 @@ function App() {
   }
 
   return (
-    <div className="bg-light-50 dark:bg-neutral-950 text-gray-900 dark:text-white flex h-screen">
+    <div className="bg-light-50 dark:bg-neutral-950 text-gray-900 dark:text-white flex h-screen custom-scrollbar">
       <Sidebar isExpanded={isExpanded} />
       <div className="m-2 w-full overflow-auto rounded-md shadow-md">
         <Navbar isExpanded={isExpanded} setIsExpanded={setIsExpanded} theme={theme} toggleTheme={toggleTheme} />

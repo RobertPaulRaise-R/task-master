@@ -28,8 +28,8 @@ function PriceCard({ color, planName, desc, price, planLen, features } : PriceCa
             <button className="w-full bg-neutral-900 py-2 my-6 rounded-lg border border-neutral-700 flex items-center justify-center hover:bg-neutral-800 cursor-pointer">Get Started <IoIosArrowRoundForward size={20}/></button>
 
             <div className="flex flex-col gap-3">
-                {features.map((feature) => (
-                    <div className="flex items-center gap-2">
+                {features.map((feature, i) => (
+                    <div key={i} className="flex items-center gap-2">
                         <BiCheckCircle />
                         <span>{feature}</span>
                     </div>

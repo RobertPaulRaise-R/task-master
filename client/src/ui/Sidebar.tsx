@@ -13,19 +13,20 @@ import { useWorkspaces } from "../hooks/useWorkspaces";
 
 function Sidebar({ isExpanded }: { isExpanded: boolean }) {
 
-    const { workspaces, isError, isPending } = useWorkspaces();
+    const { workspaces, isPending } = useWorkspaces();
+
+    console.log(workspaces);
 
     const [workspace, setWorkspace] = useState<string>("");
-
-    if (isPending) return <p>Loading...</p>
-    if (isError) return <p>Error fetching workspaces</p>
 
   return (
     <aside
       className={`dark:bg-neutral-950 dark:text-neutral-400 h-screen w-12 px-2 py-3 border-r border-r-transparent dark:border-r-neutral-700 md:max-w-[200px] lg:max-w-[255px] ${isExpanded ? "w-[220px]" : ""}`}
     >
       <div className="flex items-center justify-between">
-        <WorkspaceSelector workspace={workspace} setWorkspace={setWorkspace} workspaces={workspaces}/>
+        { !isPending && 
+            <WorkspaceSelector workspace={workspace} setWorkspace={setWorkspace} workspaces={workspaces}/>
+        }
       </div>
 
       <div className="flex flex-col">
