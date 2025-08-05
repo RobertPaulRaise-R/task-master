@@ -7,17 +7,25 @@ import { HiMiniChatBubbleLeftEllipsis } from "react-icons/hi2";
 import { MdDashboard, MdQueryStats, MdTaskAlt } from "react-icons/md";
 import { IoCalendarNumberSharp } from "react-icons/io5";
 import { SiGoogleanalytics } from "react-icons/si";
+import WorkspaceSelector from "./WorkspaceSelector";
+import { useState } from "react";
+import { useWorkspaces } from "../hooks/useWorkspaces";
 
 function Sidebar({ isExpanded }: { isExpanded: boolean }) {
+
+    const { workspaces, isError, isPending } = useWorkspaces();
+
+    const [workspace, setWorkspace] = useState<string>("");
+
+    if (isPending) return <p>Loading...</p>
+    if (isError) return <p>Error fetching workspaces</p>
+
   return (
     <aside
       className={`dark:bg-neutral-950 dark:text-neutral-400 h-screen w-12 px-2 py-3 border-r border-r-transparent dark:border-r-neutral-700 md:max-w-[200px] lg:max-w-[255px] ${isExpanded ? "w-[220px]" : ""}`}
     >
       <div className="flex items-center justify-between">
-        <h1 className="text-md font-bold">
-          <span className="bg-light-900 text-light-100 mr-2 px-2 py-1">T</span>
-          {isExpanded ? <span>Task Master</span> : null}
-        </h1>
+        <WorkspaceSelector workspace={workspace} setWorkspace={setWorkspace} workspaces={workspaces}/>
       </div>
 
       <div className="flex flex-col">

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = `${import.meta.env.BACKEND_BASE_URL}/api/projects`; 
+const API_BASE_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}/api/projects`; 
 
 export const getProjects = async () => {
     const res = await axios.get(API_BASE_URL, {
@@ -15,6 +15,7 @@ export const createProject = async (data: {
   name: string;
   description: string;
 }) => {
+    console.log(API_BASE_URL);
   const res = await axios.post(API_BASE_URL, data, {
     headers: { "Content-Type": "application/json" },
     withCredentials: true,

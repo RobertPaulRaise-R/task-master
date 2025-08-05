@@ -108,6 +108,8 @@ export const getProjectsByUser = async (req: Request, res: Response) => {
     try {
         const userId = req.user?._id;
 
+        console.log("getProjectsByUser API HIT");
+
         if (!userId) {
             return res
                 .status(400)

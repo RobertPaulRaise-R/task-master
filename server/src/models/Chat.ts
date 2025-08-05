@@ -5,6 +5,7 @@ interface IChat extends Document {
   participants: mongoose.Types.ObjectId[];
   type: "direct" | "group" | "team";
   lastMessageAt: Date;
+  workspaceId: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,6 +16,11 @@ const chatSchema: Schema<IChat> = new Schema(
     type: { type: String, enum: ["direct", "group", "team"], required: true },
     lastMessageAt: { type: Date, default: Date.now },
     name: { type: String },
+    workspaceId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Workspace',
+        default: null,
+    },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
   },
@@ -23,7 +29,6 @@ const chatSchema: Schema<IChat> = new Schema(
   }
 );
 
-// Index for performance
 chatSchema.index({ participants: 1, lastMessageAt: -1 });
 
 export const Chat = mongoose.model<IChat>("Chat", chatSchema);

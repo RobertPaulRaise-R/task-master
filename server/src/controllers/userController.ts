@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { User } from "../models/User.js";
 import { Friend } from "../models/Friend.js";
 import mongoose from "mongoose";
+import { Workspace } from "../models/Workspace.js";
 
 export const getUser = async (req: Request, res: Response) => {
     try {
@@ -106,7 +107,18 @@ export const registerUser = async (
             company,
         });
         await user.save();
-        res.status(201).json({ message: "User Registered Successfully " });
+
+        const workspace = new Workspace({
+            name: `${name}'s Personal Workspace`,
+            visibility: 'private',
+            members: [{ user: user._id, role: 'admin' }],
+            createdBy: user._id,
+            projects: [],
+            teams: [],
+        });
+        await workspace.save();
+
+        res.status(201).json({ user, workspace });
     } catch (error) {
         console.error("Error in registerUser:", error);
         res.status(500).json({ message: "Internal Server Error" });
@@ -155,7 +167,7 @@ export const loginUser = async (
 
         res.status(200).json({
             message: "Logged in successfully",
-            user: { id: user._id, email: user.email }, // Only send non-sensitive data
+            user: { id: user._id, email: user.email },
         });
     } catch (error) {
         console.error("Error in loginUser:", error);

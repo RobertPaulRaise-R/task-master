@@ -1,36 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProjectCard from "../features/projects/ProjectCard";
 import Button from "../ui/Button";
 import ModalView from "../ui/ModalView";
 import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { InvalidateQueryFilters, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProject } from "../services/projectApi";
 import { useProjects } from "../features/projects/useProjects";
 import Spinner from "../ui/Spinner";
-import { ProjectI } from "../types";
 
 function Projects() {
-  const { projects: projectsData, error, isPending } = useProjects();
-  const queryClient = useQueryClient();
-  const { register, handleSubmit, reset } = useForm();
+  const { projects, error, isPending } = useProjects();
+  const { register, handleSubmit, reset } = useForm<{ name: string, description: string}>();
 
   const [showProjectForm, setShowProjectForm] = useState(false);
-  const [projects, setProjects] = useState<ProjectI[]>(projectsData || []);
 
-  useEffect(() => {
-    if (projectsData) {
-      console.log(projectsData);
-      setProjects(projectsData);
-    }
-  }, [projectsData]);
-
+  const queryClient = useQueryClient();
   const createProjectMutation = useMutation({
     mutationFn: (data: { name: string; description: string }) =>
       createProject(data),
     onSuccess: () => {
-      queryClient.invalidateQueries(["projects"]);
+      queryClient.invalidateQueries(["projects"] as InvalidateQueryFilters);
       setShowProjectForm(false);
       reset();
     },
@@ -46,23 +37,21 @@ function Projects() {
     });
   };
 
-  if (isPending) return <Spinner size={20} />;
 
+  if (isPending) return <Spinner size={20} />;
   if (error) return <p>Error Loading Projects!</p>;
 
   return (
     <div className="p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Button>All Projects</Button>
-          <Button>Completed</Button>
-          <Button>Ongoing</Button>
-          <Button>Upcoming</Button>
+          <Button btn="secondary">All Projects</Button>
+          <Button btn="secondary">Completed</Button>
         </div>
 
         <div className="flex items-center gap-2">
           {/* SORTING OPTIONS TO BE IMPLEMENTED */}
-          <Button onClick={() => setShowProjectForm(true)}>
+          <Button btn="primary" onClick={() => setShowProjectForm(true)}>
             <span>New Project</span>
           </Button>
         </div>
@@ -85,13 +74,14 @@ function Projects() {
             <Input {...register("description", { required: true })} />
           </FormRow>
 
-          <button type="submit" className="bg-brand-600 py-2">
-            Create Project
-          </button>
+          <div className="flex items-center justify-end gap-3">
+            <Button btn="secondary">Cancel</Button>
+            <Button btn="primary" type="submit">Create</Button>
+          </div>
         </form>
       </ModalView>
 
-      {projects.length > 0 ? (
+      {!isPending && projects && Array.isArray(projects) && projects.length > 0 ? (
         <div className="mt-5 grid grid-cols-4 gap-3">
           {projects.map((project) => (
             <ProjectCard project={project} />

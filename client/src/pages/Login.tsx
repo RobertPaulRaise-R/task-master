@@ -5,6 +5,7 @@ import Button from "../ui/Button";
 import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../services/userApi";
 import { Link, useNavigate } from "react-router";
+import Label from "../ui/Label";
 
 function Login() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ function Login() {
         <h3 className="text-2xl font-semibold">Login</h3>
 
         <FormRow>
-          <label>Email</label>
+          <Label label="Email"/>
           <Input
             type="email"
             {...register("email", { required: "Email is required" })}
@@ -43,7 +44,7 @@ function Login() {
         </FormRow>
 
         <FormRow>
-          <label>Password</label>
+          <Label label="Password"/>
           <Input
             type="password"
             {...register("password", { required: "Password is required" })}
@@ -61,6 +62,7 @@ function Login() {
 
         <Button
           type="submit"
+          btn="primary"
           className="mt-5 w-full rounded-none"
           disabled={mutation.isPending}
         >

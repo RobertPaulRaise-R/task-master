@@ -10,6 +10,7 @@ interface ITask extends Document {
   projectId: mongoose.Types.ObjectId;
   teamId: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
+  workspaceId: mongoose.Types.ObjectId;
 }
 
 const taskSchema: Schema<ITask> = new Schema(
@@ -54,6 +55,11 @@ const taskSchema: Schema<ITask> = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
       default: null,
+    },
+    workspaceId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Workspace',
+        default: null,
     },
   },
   { timestamps: true }
