@@ -13,7 +13,7 @@ interface CalendarDaysProps {
     selectedDate: Date; // The specific date that is currently selected
     onClick: (day: DayType) => void;
     dailyTasks: DailyTasks;
-    todayActual: Date; 
+    todayActual: Date;
 }
 
 // Determines the styling for a day cell based on its state and task performance
@@ -26,34 +26,34 @@ const getPerformanceStyles = (
     let dayNumberText = isCurrentMonth
         ? "text-gray-700 dark:text-gray-200"
         : "text-gray-400 dark:text-gray-500";
-        let taskText = "text-gray-500 dark:text-gray-400";
+    let taskText = "text-gray-500 dark:text-gray-400";
 
-        if (!isCurrentMonth) {
+    if (!isCurrentMonth) {
+        cellBg =
+            "bg-gray-50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-700/50"; // Muted for other months
+    } else if (taskData && taskData.total > 0) {
+        const percentage = (taskData.completed / taskData.total) * 100;
+        if (percentage >= 75) {
             cellBg =
-                "bg-gray-50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-700/50"; // Muted for other months
-        } else if (taskData && taskData.total > 0) {
-                const percentage = (taskData.completed / taskData.total) * 100;
-                if (percentage >= 75) {
-                    cellBg =
-                        "bg-green-200 dark:bg-green-700 hover:bg-green-300 dark:hover:bg-green-600";
-                    dayNumberText = "text-green-800 dark:text-green-100";
-                    taskText = "text-green-700 dark:text-green-200";
-                } else if (percentage >= 40) {
-                    cellBg =
-                        "bg-yellow-200 dark:bg-yellow-700 hover:bg-yellow-300 dark:hover:bg-yellow-600";
-                    dayNumberText = "text-yellow-800 dark:text-yellow-100";
-                    taskText = "text-yellow-700 dark:text-yellow-200";
-                } else {
-                    // Bad performance or 0 completed
-                    cellBg =
-                        "bg-red-200 dark:bg-red-700 hover:bg-red-300 dark:hover:bg-red-600";
-                    dayNumberText = "text-red-800 dark:text-red-100";
-                    taskText = "text-red-700 dark:text-red-200";
-                }
-            }
-            // If current month and no tasks (taskData undefined or total is 0), default white/gray background applies
+                "bg-green-200 dark:bg-green-700 hover:bg-green-300 dark:hover:bg-green-600";
+            dayNumberText = "text-green-800 dark:text-green-100";
+            taskText = "text-green-700 dark:text-green-200";
+        } else if (percentage >= 40) {
+            cellBg =
+                "bg-yellow-200 dark:bg-yellow-700 hover:bg-yellow-300 dark:hover:bg-yellow-600";
+            dayNumberText = "text-yellow-800 dark:text-yellow-100";
+            taskText = "text-yellow-700 dark:text-yellow-200";
+        } else {
+            // Bad performance or 0 completed
+            cellBg =
+                "bg-red-200 dark:bg-red-700 hover:bg-red-300 dark:hover:bg-red-600";
+            dayNumberText = "text-red-800 dark:text-red-100";
+            taskText = "text-red-700 dark:text-red-200";
+        }
+    }
+    // If current month and no tasks (taskData undefined or total is 0), default white/gray background applies
 
-            return { cellBg, dayNumberText, taskText };
+    return { cellBg, dayNumberText, taskText };
 };
 
 function CalendarDays({
@@ -69,7 +69,7 @@ function CalendarDays({
         displayDate.getMonth(),
         1,
     );
-    
+
     const lastDayOfMonth = new Date(
         displayDate.getFullYear(),
         displayDate.getMonth() + 1,
@@ -104,8 +104,8 @@ function CalendarDays({
         dayIterator.setDate(dayIterator.getDate() + 1);
     }
 
-        return (
-            <div className="grid h-full grid-cols-7 grid-rows-6 border-r border-gray-200 dark:border-gray-600">
+    return (
+        <div className="grid h-full grid-cols-7 grid-rows-6 border-r border-gray-200 dark:border-gray-600">
             {daysInGrid.map((day) => {
                 const isToday = day.date.toDateString() === todayActual.toDateString();
                 const styles = getPerformanceStyles(day.taskInfo, day.currentMonth);
@@ -130,41 +130,41 @@ function CalendarDays({
 
                 return (
                     <div
-                    key={day.date.toISOString()}
-                    className={cellClasses}
-                    onClick={() => onClick(day)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") onClick(day);
-                    }}
-                    aria-label={`Date ${day.number}${day.month === displayDate.getMonth() ? `, ${styles.cellBg.includes("green") ? "Good day" : styles.cellBg.includes("yellow") ? "Average day" : styles.cellBg.includes("red") ? "Bad day" : day.taskInfo && day.taskInfo.total > 0 ? "Tasks scheduled" : "No tasks"}` : ", other month"}. ${day.taskInfo ? `${day.taskInfo.completed} of ${day.taskInfo.total} tasks completed.` : ""}`}
-                    aria-selected={day.selected}
+                        key={day.date.toISOString()}
+                        className={cellClasses}
+                        onClick={() => onClick(day)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") onClick(day);
+                        }}
+                        aria-label={`Date ${day.number}${day.month === displayDate.getMonth() ? `, ${styles.cellBg.includes("green") ? "Good day" : styles.cellBg.includes("yellow") ? "Average day" : styles.cellBg.includes("red") ? "Bad day" : day.taskInfo && day.taskInfo.total > 0 ? "Tasks scheduled" : "No tasks"}` : ", other month"}. ${day.taskInfo ? `${day.taskInfo.completed} of ${day.taskInfo.total} tasks completed.` : ""}`}
+                        aria-selected={day.selected}
                     >
-                    <p
-                    className={`self-end text-xs font-medium sm:text-sm ${styles.dayNumberText} ${isToday && day.currentMonth ? "font-bold" : ""}`}
-                    >
-                    {day.number}
-                    </p>
-                    {day.currentMonth && day.taskInfo && day.taskInfo.total > 0 && (
-                        <div
-                        className={`text-xxs mt-auto w-full rounded-sm p-1 text-center font-medium sm:text-xs ${styles.taskText} ${styles.cellBg.includes("green") || styles.cellBg.includes("yellow") || styles.cellBg.includes("red") ? "bg-black/10 dark:bg-white/10" : ""}`}
+                        <p
+                            className={`self-end text-xs font-medium sm:text-sm ${styles.dayNumberText} ${isToday && day.currentMonth ? "font-bold" : ""}`}
                         >
-                        {day.taskInfo.completed}/{day.taskInfo.total}
-                        <span className="hidden sm:inline"> tasks</span>
-                        </div>
-                    )}
-                    {day.currentMonth &&
-                        (!day.taskInfo || day.taskInfo.total === 0) && (
-                            <div className="text-xxs mt-auto w-full p-1 text-center text-gray-400 italic sm:text-xs dark:text-gray-500">
-                            No tasks
+                            {day.number}
+                        </p>
+                        {day.currentMonth && day.taskInfo && day.taskInfo.total > 0 && (
+                            <div
+                                className={`text-xxs mt-auto w-full rounded-sm p-1 text-center font-medium sm:text-xs ${styles.taskText} ${styles.cellBg.includes("green") || styles.cellBg.includes("yellow") || styles.cellBg.includes("red") ? "bg-black/10 dark:bg-white/10" : ""}`}
+                            >
+                                {day.taskInfo.completed}/{day.taskInfo.total}
+                                <span className="hidden sm:inline"> tasks</span>
                             </div>
-                    )}
+                        )}
+                        {day.currentMonth &&
+                            (!day.taskInfo || day.taskInfo.total === 0) && (
+                                <div className="text-xxs mt-auto w-full p-1 text-center text-gray-400 italic sm:text-xs dark:text-gray-500">
+                                    No tasks
+                                </div>
+                            )}
                     </div>
                 );
             })}
-            </div>
-        );
+        </div>
+    );
 }
 
 export default CalendarDays;

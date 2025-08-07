@@ -1,9 +1,8 @@
 import axios from "axios";
-
-const API_BASE_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}/api/tasks/`;
+import { TASKS_API_URL } from "../constants";
 
 export const getTasks = async () => {
-    const res = await axios.get(API_BASE_URL, {
+    const res = await axios.get(TASKS_API_URL, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" }
     });
@@ -12,17 +11,20 @@ export const getTasks = async () => {
 }
 
 export const createTask = async (data: {
-  title: string;
-  description: string;
-  priority: "Low" | "Medium" | "High";
-  dueDate: Date;
+    name: string;
+    description: string;
+    assignedTo?: string;
+    priority: "Low" | "Medium" | "High";
+    dueDate: Date;
+    projectId: string | undefined;
+    workspaceId: string;
 }) => {
-  const res = await axios.post(API_BASE_URL, data, {
-      withCredentials: true,
-      headers: { "Content-Type": "application/json" },
-  });
+    const res = await axios.post(TASKS_API_URL, data, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+    });
 
-  console.log(res);
+    console.log(res);
 
-  return res.data;
+    return res.data;
 };

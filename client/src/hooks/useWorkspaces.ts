@@ -1,18 +1,12 @@
 import { useQuery } from "@tanstack/react-query"
-import { WorkspaceI } from "../types";
 import { getWorkspaces } from "../services/worksapceApi";
 
-interface WorkspaceResult {
-    data: WorkspaceI[];
-}
-
 export const useWorkspaces = () => {
-    const {data , isPending, isError, error} = useQuery<WorkspaceResult>({
+    const { data: workspaces, isPending, isError, error } = useQuery({
         "queryKey": ["workspaces"],
-        "queryFn": getWorkspaces, 
+        "queryFn": getWorkspaces,
     });
 
-    const workspaces = data?.data || [] as WorkspaceI[];
 
     return { isPending, isError, error, workspaces };
 

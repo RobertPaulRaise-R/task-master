@@ -1,7 +1,7 @@
 import CalendarView from "../features/calendar/CalendarView";
 
 function Calendar() {
-  return <CalendarView />;
+    return <CalendarView />;
 }
 
 export default Calendar;

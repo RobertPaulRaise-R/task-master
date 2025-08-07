@@ -1,7 +1,9 @@
+/*
+import { TaskI } from "../../types";
 import UserAvatar from "./UserAvatar";
 
 // Component for a single task bar on the timeline
-const TaskBar = ({ task, firstDay }) => {
+const TaskBar = ({ task, firstDay } : { task: TaskI; firstDay: number }) => {
   // Calculate grid column start and span based on task days
   // Add 2: 1 for the team name column, 1 because grid columns are 1-indexed
   const startColumn = task.startDay - firstDay + 2;
@@ -20,13 +22,11 @@ const TaskBar = ({ task, firstDay }) => {
     >
       <span className="truncate font-medium">{task.title}</span>
       <div className="flex flex-shrink-0 items-center space-x-2">
-        {/* Display progress if available */}
         {task.progress && (
           <span className="bg-opacity-20 rounded bg-black px-1.5 py-0.5 text-xs font-semibold">
             {task.progress}
           </span>
         )}
-        {/* Display user avatars */}
         <div className="flex items-center">
           {task.users.map((userId, index) => (
             <UserAvatar key={userId + index} userId={userId} index={index} />
@@ -38,3 +38,4 @@ const TaskBar = ({ task, firstDay }) => {
 };
 
 export default TaskBar;
+*/

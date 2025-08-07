@@ -132,6 +132,7 @@ export const loginUser = async (
     next: NextFunction
 ) => {
     try {
+        console.log("loginUser API HIT");
         const { email, password } = req.body;
 
         if (!email || !password) {
@@ -160,10 +161,10 @@ export const loginUser = async (
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: process.env.NODE_ENV === "production" ? true : false,
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 30 * 24 * 60 * 60 * 1000,
-            partitioned: true,
+            partitioned: process.env.NODE_ENV === "production" ? true : false,
         });
 
         res.status(200).json({
@@ -187,6 +188,7 @@ export const logoutUser = async (
             sameSite: "strict",
             secure: true,
         });
+
         res.json({ message: "Logged Out" });
     } catch (error) {
         console.error("Error in logoutUser:", error);

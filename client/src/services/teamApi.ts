@@ -1,26 +1,20 @@
 import axios from "axios";
+import { TEAMS_API_URL } from "../constants";
 
-const API_BASE_URL = `${import.meta.env.BASE_URL}/api/teams/`;
 
 export const createTeam = async (data: {
-  name: string;
-  project: string | undefined;
+    name: string;
+    workspaceId: string;
 }) => {
-  if (!data.name || !data.project) {
-    throw new Error("Need project name");
-  }
+    if (!data.name || !data.workspaceId) {
+        throw new Error("Need project name and workspaceId");
+    }
 
-  console.log(data);
-  try {
-    const res = await axios.post(API_BASE_URL, data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
+    const res = await axios.post(TEAMS_API_URL, data, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+        withCredentials: true,
     });
     return res.data;
-  } catch (error) {
-    console.error("Axios request failed:", error.response || error.message);
-    throw error;
-  }
 };

@@ -19,8 +19,8 @@ const projectSchema: Schema<IProject> = new Schema(
     {
         name: { type: String, required: true },
         description: { type: String, default: null },
-        startDate: { type: Date },
-        endDate: { type: Date },
+        startDate: { type: Date, default: Date.now() },
+        endDate: { type: Date, default: null },
         status: {
             type: String,
             enum: ["Planned", "In Progress", "Completed", "On Hold"],

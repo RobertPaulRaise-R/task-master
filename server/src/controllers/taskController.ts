@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { Task } from "../models/Task.js";
-import mongoose from "mongoose";
 import { Project } from "../models/Project.js";
 import { Team } from "../models/Team.js";
 
 export const getTasks = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
-    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(401).json({ message: 'Unauthorized or invalid user ID' });
+    console.log(userId);
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized or invalid user id' });
     }
 
     const directTasks = await Task.find({ userId }).lean();
@@ -27,7 +27,7 @@ export const getTasks = async (req: Request, res: Response) => {
     );
 
     if (uniqueTasks.length === 0) {
-      return res.status(404).json({ message: 'No tasks found for this user' });
+      return res.status(200).json([]);
     }
 
     res.status(200).json(uniqueTasks);
@@ -38,7 +38,27 @@ export const getTasks = async (req: Request, res: Response) => {
 };
 
 export const createTask = async (req: Request, res: Response) => {
-    const task = new Task(req.body);
+    const userId = req.user?._id;
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized or invalid user ID' });
+    }
+
+    const { name, description, priority, dueDate, projectId, workspaceId } = req.body;
+
+    if (!name || !description || !priority || !dueDate || !projectId || !workspaceId) {
+        return res.status(401).json({ message: "Need name, description, priority, dueDate, projectId, workspaceId "});
+    }
+
+    const task = new Task({
+        name,
+        description,
+        priority,
+        dueDate,
+        projectId,
+        userId,
+        workspaceId
+    });
     const savedTask = await task.save();
     res.status(200).json(savedTask);
 };

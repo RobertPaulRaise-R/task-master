@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import mongoose from 'mongoose';
 import { Workspace } from '../models/Workspace.js';
 
 
@@ -8,7 +7,7 @@ export const createWorkspace = async (req: Request, res: Response, next: NextFun
         const { name, description, visibility } = req.body;
         const userId = req.user?._id;
 
-        if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+        if (!userId) {
             return res.status(401).json({ message: 'Unauthorized or invalid user ID' });
         }
 
@@ -20,7 +19,7 @@ export const createWorkspace = async (req: Request, res: Response, next: NextFun
             name,
             description: description || null,
             visibility: visibility || 'private',
-            members: [{ user: userId, role: 'admin' }], // Creator is admin
+            members: [{ user: userId, role: 'admin' }],
             createdBy: userId,
             projects: [],
             teams: [],

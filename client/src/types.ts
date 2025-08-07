@@ -62,6 +62,7 @@ export interface UserI {
 }
 
 export interface WorkspaceI {
+    _id: string;
     name: string;
     description?: string;
     visibility: 'public' | 'private';
@@ -72,8 +73,8 @@ export interface WorkspaceI {
     projects: string[];
     teams: string[];
     createdBy: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     settings?: {
         theme?: 'light' | 'dark';
         notifications?: boolean;

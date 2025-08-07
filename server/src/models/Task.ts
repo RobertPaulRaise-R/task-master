@@ -1,21 +1,21 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 interface ITask extends Document {
-  title: string;
+  name: string;
   description: string;
   status: "To Do" | "In Progress" | "In Review" | "Done";
   priority: "Low" | "Medium" | "High";
   dueDate: Date;
-  color: string;
+  assignedTo: mongoose.Types.ObjectId;
   projectId: mongoose.Types.ObjectId;
   teamId: mongoose.Types.ObjectId;
-  userId: mongoose.Types.ObjectId;
   workspaceId: mongoose.Types.ObjectId;
+  createdBy: mongoose.Types.ObjectId;
 }
 
 const taskSchema: Schema<ITask> = new Schema(
   {
-    title: {
+    name: {
       type: String,
       required: true,
     },
@@ -37,10 +37,6 @@ const taskSchema: Schema<ITask> = new Schema(
       type: Date,
       default: null,
     },
-    color: {
-      type: String,
-      default: "333333",
-    },
     projectId: {
       type: Schema.Types.ObjectId,
       ref: "Project",
@@ -51,16 +47,21 @@ const taskSchema: Schema<ITask> = new Schema(
       ref: "Team",
       default: null,
     },
-    userId: {
+    assignedTo: {
       type: Schema.Types.ObjectId,
       ref: "User",
       default: null,
     },
     workspaceId: {
         type: Schema.Types.ObjectId,
-        ref: 'Workspace',
+        ref: "Workspace",
         default: null,
     },
+    createdBy: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        default: null,
+    }
   },
   { timestamps: true }
 );

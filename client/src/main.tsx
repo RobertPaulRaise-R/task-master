@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import Dashboard from "./pages/Dashboard.tsx";
 import Projects from "./pages/Projects.tsx";
 import Tasks from "./pages/Tasks.tsx";
@@ -18,43 +18,48 @@ import Settings from "./pages/Settings.tsx";
 import People from "./pages/People.tsx";
 import Profile from "./pages/Profile.tsx";
 import Project from "./features/projects/Project.tsx";
+import { Provider } from "react-redux";
+import { store } from "./store.ts";
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ThemeProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
+    <StrictMode>
+        <Provider store={store}>
+            <ThemeProvider>
+                <QueryClientProvider client={queryClient}>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<LandingPage />} />
 
-            <Route path="/signup" element={<SignUp />} />
+                            <Route path="/signup" element={<SignUp />} />
 
-            <Route path="/login" element={<Login />} />
+                            <Route path="/login" element={<Login />} />
 
-            <Route path="app" element={<App />}>
-              <Route index path="dashboard" element={<Dashboard />} />
-              <Route path="tasks" element={<Tasks />} />
-              <Route path="projects" element={<Projects />} />
-              <Route path="projects/:id" element={<Project />} />
+                            <Route path="app" element={<App />}>
+                                <Route index element={<Navigate to={"dashboard"} replace />} />
+                                <Route path="dashboard" element={<Dashboard />} />
+                                <Route path="tasks" element={<Tasks />} />
+                                <Route path="projects" element={<Projects />} />
+                                <Route path="projects/:id" element={<Project />} />
 
-              <Route path="people" element={<People />} />
-              <Route path="chat" element={<Chat />} />
+                                <Route path="people" element={<People />} />
+                                <Route path="chat" element={<Chat />} />
 
-              <Route path="calendar" element={<Calendar />} />
-              <Route path="timeline" element={<Timeline />} />
-              <Route path="analytics" />
+                                <Route path="calendar" element={<Calendar />} />
+                                <Route path="timeline" element={<Timeline />} />
+                                <Route path="analytics" />
 
-              <Route path="settings" element={<Settings />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="notification" />
+                                <Route path="settings" element={<Settings />} />
+                                <Route path="profile" element={<Profile />} />
+                                <Route path="notification" />
 
-              <Route path="404" />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </ThemeProvider>
-  </StrictMode>,
+                                <Route path="*" />
+                            </Route>
+                        </Routes>
+                    </BrowserRouter>
+                </QueryClientProvider>
+            </ThemeProvider>
+        </Provider>
+    </StrictMode>,
 );

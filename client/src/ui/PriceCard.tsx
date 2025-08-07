@@ -10,10 +10,10 @@ interface PriceCardProps {
     features: string[];
 }
 
-function PriceCard({ color, planName, desc, price, planLen, features } : PriceCardProps) {
+function PriceCard({ color, planName, desc, price, planLen, features }: PriceCardProps) {
     const colorClass = color === "orange" ? "orange-gradient" :
-                       color === "violet" ? "violet-gradient" :
-                       color === "green" ? "green-gradient" : "";
+        color === "violet" ? "violet-gradient" :
+            color === "green" ? "green-gradient" : "";
 
     return (
         <div className={`p-6 rounded-xl border border-neutral-700 ${colorClass}`}>
@@ -25,7 +25,7 @@ function PriceCard({ color, planName, desc, price, planLen, features } : PriceCa
                 <p>/{planLen}</p>
             </div>
 
-            <button className="w-full bg-neutral-900 py-2 my-6 rounded-lg border border-neutral-700 flex items-center justify-center hover:bg-neutral-800 cursor-pointer">Get Started <IoIosArrowRoundForward size={20}/></button>
+            <button className="w-full bg-neutral-900 py-2 my-6 rounded-lg border border-neutral-700 flex items-center justify-center hover:bg-neutral-800 cursor-pointer">Get Started <IoIosArrowRoundForward size={20} /></button>
 
             <div className="flex flex-col gap-3">
                 {features.map((feature, i) => (

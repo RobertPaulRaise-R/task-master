@@ -3,6 +3,29 @@ import { Project } from "../models/Project.js";
 import { Team } from "../models/Team.js";
 import mongoose from "mongoose";
 import { Task } from "../models/Task.js";
+import { Workspace } from "../models/Workspace.js";
+
+export const getProjects = async (req: Request, res: Response) => {
+    try {
+        const { workspaceId } = req.query;
+        
+        console.log("workspaceId", workspaceId);
+
+        if (!workspaceId) {
+            return res.status(400).json({ message: "Missing required parameter workspaceId" });
+        }
+
+        const workspace = await Workspace.findById(workspaceId);
+
+        const projects = workspace?.projects;
+
+        res.status(200).json(projects);
+    } catch (error) {
+        res.status(500).json({
+            message: "An error occurred while fetching the projects.",
+        });
+    }
+}
 
 export const getProjectById = async (req: Request, res: Response) => {
     try {
@@ -25,9 +48,9 @@ export const getProjectById = async (req: Request, res: Response) => {
                 },
             })
             .populate({
-                path: "members", // Populate the 'members' field directly in the Project document
-                model: "User", // Specify the User model
-                select: "name avatar email", // Select specific fields from the User document
+                path: "members",
+                model: "User",
+                select: "name avatar email",
             })
             .populate({
                 path: "tasks",
@@ -55,38 +78,27 @@ export const getProjectById = async (req: Request, res: Response) => {
 
 export const createProject = async (req: Request, res: Response) => {
     try {
-        const userId: unknown = req.user?._id;
-        const { name, description } = req.body;
+        const userId = req.user?._id;
+        const { name, description, workspaceId } = req.body;
 
         if (!userId) {
             return res.status(400).json({
                 message: "User ID not found. Authentication required.",
             });
         }
-        if (!name) {
+        if (!name || !description || !workspaceId) {
             return res
                 .status(400)
-                .json({ message: "Project name is required." });
+                .json({ message: "Project name, description, workspaceId is required." });
         }
 
         const project = await Project.create({
             name,
             description,
-            teams: [],
             startDate: Date.now(),
+            workspaceId,
             createdBy: userId,
         });
-
-        const managerTeam = await Team.create({
-            name: "Managers",
-            members: [userId], // Add the project creator as a member
-            project: project._id, // Link this team to the newly created project
-            createdBy: userId,
-        });
-
-        project.teams!.push(managerTeam._id as mongoose.Types.ObjectId);
-        project.members?.push(userId as mongoose.Types.ObjectId);
-        project.save();
 
         res.status(200).json(project);
     } catch (error) {
@@ -101,41 +113,6 @@ export const createProject = async (req: Request, res: Response) => {
             message:
                 "Internal server error. Could not create project or manager team.",
         });
-    }
-};
-
-export const getProjectsByUser = async (req: Request, res: Response) => {
-    try {
-        const userId = req.user?._id;
-
-        console.log("getProjectsByUser API HIT");
-
-        if (!userId) {
-            return res
-                .status(400)
-                .json({ message: "User ID not found in request." });
-        }
-
-        // 1. Find all teams the user is a member of
-        const userTeams = await Team.find({ members: userId }).select(
-            "project"
-        ); // Select only the project ID
-
-        // Extract unique project IDs from the teams
-        const projectIds = userTeams.map((team) => team.project);
-        const uniqueProjectIds = [
-            ...new Set(projectIds.map((id) => id.toString())),
-        ].map((id) => new mongoose.Types.ObjectId(id));
-
-        // 2. Find all projects associated with those project IDs
-        const projects = await Project.find({
-            _id: { $in: uniqueProjectIds },
-        }).populate({ path: "createdBy", select: "name" });
-
-        res.status(200).json(projects);
-    } catch (error) {
-        console.error("Error in getProjectsByUser:", error); // Use console.error for errors
-        res.status(500).json({ message: "Internal server error." });
     }
 };
 

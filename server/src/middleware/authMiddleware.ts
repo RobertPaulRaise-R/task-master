@@ -21,8 +21,9 @@ export const protect = (req: any, res: any, next: any) => {
         const decoded: any = jwt.verify(
             token,
             process.env.JWT_SECRET as string
-        ); // Verify with your secret
-        req.user = { _id: decoded.id }; // Attach user ID from token payload to req.user
+        );
+
+        req.user = { _id: decoded.id };
         next();
     } catch (error) {
         console.error("Token verification failed:", error);
