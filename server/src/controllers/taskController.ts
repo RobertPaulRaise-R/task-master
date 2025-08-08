@@ -3,38 +3,65 @@ import { Task } from "../models/Task.js";
 import { Project } from "../models/Project.js";
 import { Team } from "../models/Team.js";
 
-export const getTasks = async (req: Request, res: Response) => {
-  try {
+export const getUserNotDoneTasks = async (req: Request, res: Response) => {
     const userId = req.user?._id;
-    console.log(userId);
+    const { workspaceId } = req.query;
+
     if (!userId) {
-      return res.status(401).json({ message: 'Unauthorized or invalid user id' });
+        return res.status(401).json({ message: 'Unauthorized or invalid user id' });
     }
 
-    const directTasks = await Task.find({ userId }).lean();
-
-    const projects = await Project.find({ members: userId }).select('_id').lean();
-    const projectIds = projects.map((project) => project._id);
-    const projectTasks = await Task.find({ projectId: { $in: projectIds } }).lean();
-
-    const teams = await Team.find({ members: userId }).select('_id').lean();
-    const teamIds = teams.map((team) => team._id);
-    const teamTasks = await Task.find({ teamId: { $in: teamIds } }).lean();
-
-    const allTasks = [...directTasks, ...projectTasks, ...teamTasks];
-    const uniqueTasks = Array.from(
-      new Map(allTasks.map((task) => [task._id.toString(), task])).values()
-    );
-
-    if (uniqueTasks.length === 0) {
-      return res.status(200).json([]);
+    if (!workspaceId) {
+        return res.status(401).json({ message: 'Requires workspaceId' });
     }
 
-    res.status(200).json(uniqueTasks);
-  } catch (error) {
-    console.error('Error fetching tasks:', error);
-    res.status(500).json({ message: 'Server error while fetching tasks' });
-  }
+    try {
+        const tasks = await Task.find({
+            workspaceId: workspaceId,
+            assignedTo: userId,
+            status: { $ne: 'done' }
+        })
+            .populate('projectId', 'name')
+            .populate('assignedTo', 'name email')
+            .populate('createdBy', 'name email')
+            .select('title description status priority dueDate createdAt')
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(tasks);
+    } catch (error) {
+        console.error('Error fetching user tasks:', error);
+        throw error;
+    }
+}
+
+export const getUserAllTasks = async (req: Request, res: Response) => {
+    const userId = req.user?._id;
+    const { workspaceId } = req.query;
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized or invalid user id' });
+    }
+
+    if (!workspaceId) {
+        return res.status(401).json({ message: 'Requires workspaceId' });
+    }
+
+    try {
+        const tasks = await Task.find({
+            workspaceId: workspaceId,
+            assignedTo: userId,
+        })
+            .populate('projectId', 'name')
+            .populate('assignedTo', 'name email')
+            .populate('createdBy', 'name email')
+            .select('name description status priority dueDate createdAt')
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(tasks);
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+        res.status(500).json({ message: 'Server error while fetching tasks' });
+    }
 };
 
 export const createTask = async (req: Request, res: Response) => {
@@ -47,7 +74,7 @@ export const createTask = async (req: Request, res: Response) => {
     const { name, description, priority, dueDate, projectId, workspaceId } = req.body;
 
     if (!name || !description || !priority || !dueDate || !projectId || !workspaceId) {
-        return res.status(401).json({ message: "Need name, description, priority, dueDate, projectId, workspaceId "});
+        return res.status(401).json({ message: "Need name, description, priority, dueDate, projectId, workspaceId " });
     }
 
     const task = new Task({

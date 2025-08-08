@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { Friend } from "../models/Friend.js";
 import { User } from "../models/User.js";
+import { Friends } from "../models/Friend.js";
 
-// Get all friends
 export const getFriends = async (
     req: Request,
     res: Response,
@@ -10,7 +9,7 @@ export const getFriends = async (
 ) => {
     const userId = req.user?._id;
 
-    const friendships = await Friend.find({
+    const friendships = await Friends.find({
         $or: [{ user: userId }, { friend: userId }],
         status: "accepted",
     })
@@ -23,9 +22,9 @@ export const getFriends = async (
     }
 
     const friends = friendships.map((friendship) =>
-        friendship.user._id.toString() === userId
-            ? friendship.friend
-            : friendship.user
+        friendship.userId1._id.toString() === userId
+            ? friendship.userId2
+            : friendship.userId1
     );
 
     res.status(200).json(friends);
@@ -39,7 +38,7 @@ export const getFriendRequests = async (
 ) => {
     const userId = req.user?._id;
 
-    const requests = await Friend.find({
+    const requests = await Friends.find({
         friend: userId,
         status: "pending",
     }).populate("user", "-password");
@@ -47,7 +46,6 @@ export const getFriendRequests = async (
     res.status(200).json(requests);
 };
 
-// Get friend status with another user
 export const getFriendStatus = async (
     req: Request,
     res: Response,
@@ -56,7 +54,7 @@ export const getFriendStatus = async (
     const userId = req._id;
     const otherUserId = req.params.userId;
 
-    const friendship = await Friend.findOne({
+    const friendship = await Friends.findOne({
         $or: [
             { user: userId, friend: otherUserId },
             { user: otherUserId, friend: userId },
@@ -66,7 +64,6 @@ export const getFriendStatus = async (
     res.status(200).json({ status: friendship?.status || "none" });
 };
 
-// Send friend request
 export const sendFriendRequest = async (
     req: Request,
     res: Response,
@@ -74,8 +71,6 @@ export const sendFriendRequest = async (
 ) => {
     const userId = req.user?._id;
     const friendId = req.params.userId;
-
-    console.log(userId, friendId);
 
     if (!userId) {
         res.status(404);
@@ -87,17 +82,13 @@ export const sendFriendRequest = async (
         throw new Error("UserId required");
     }
 
-    console.log("sendFriendRequest API HIT");
-
-    // Check if user exists
     const user = await User.findById(friendId);
     if (!user) {
         res.status(404);
         throw new Error("User not found");
     }
 
-    // Check if friendship already exists
-    const existingFriendship = await Friend.findOne({
+    const existingFriendship = await Friends.findOne({
         $or: [
             { user: userId, friend: friendId },
             { user: friendId, friend: userId },
@@ -109,7 +100,7 @@ export const sendFriendRequest = async (
         throw new Error("Friendship already exists");
     }
 
-    const friendship = await Friend.create({
+    const friendship = await Friends.create({
         user: userId,
         friend: friendId,
         status: "pending",
@@ -123,7 +114,6 @@ export const sendFriendRequest = async (
     });
 };
 
-// Accept friend request
 export const acceptFriendRequest = async (
     req: Request,
     res: Response,
@@ -134,7 +124,7 @@ export const acceptFriendRequest = async (
 
     console.log(userId, requestId);
 
-    const friendship = await Friend.findOne({
+    const friendship = await Friends.findOne({
         _id: requestId,
         friend: userId,
         status: "pending",
@@ -151,7 +141,6 @@ export const acceptFriendRequest = async (
     res.status(200).json(friendship);
 };
 
-// Reject friend request
 export const rejectFriendRequest = async (
     req: Request,
     res: Response,
@@ -160,7 +149,7 @@ export const rejectFriendRequest = async (
     const userId = req._id;
     const requestId = req.params.requestId;
 
-    const friendship = await Friend.findOne({
+    const friendship = await Friends.findOne({
         _id: requestId,
         friend: userId,
         status: "pending",
@@ -176,7 +165,6 @@ export const rejectFriendRequest = async (
     res.status(200).json({ message: "Friend request rejected" });
 };
 
-// Remove friend
 export const removeFriend = async (
     req: Request,
     res: Response,
@@ -185,7 +173,7 @@ export const removeFriend = async (
     const userId = req._id;
     const friendId = req.params.friendId;
 
-    const friendship = await Friend.findOne({
+    const friendship = await Friends.findOne({
         $or: [
             { user: userId, friend: friendId },
             { user: friendId, friend: userId },

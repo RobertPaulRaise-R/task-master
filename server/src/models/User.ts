@@ -6,13 +6,7 @@ interface IUser extends Document {
     email: string;
     username: string;
     password: string;
-    avatar?: { data: Buffer | undefined; contentType: string | undefined };
-    company: string;
-    position: string;
-    settings?: {
-        theme: "light" | "dark";
-        notifications: boolean;
-    };
+    workspaces: [{ workspaceId: mongoose.Types.ObjectId, role: "admin" | "member" | "guest" }];
     createdAt: Date;
     updatedAt: Date;
 }
@@ -27,32 +21,39 @@ const userSchema: Schema<IUserDocument> = new Schema(
         email: { type: String, required: true, unique: true },
         username: { type: String, required: true, unique: true, trim: true },
         password: { type: String, required: true },
-        avatar: {
-            data: { type: Buffer, default: Buffer.from("") },
-            contentType: { type: String },
-        },
-        company: { type: String, default: "" },
-        position: { type: String, default: "" },
-        settings: {
-            theme: { type: String, enum: ["light", "dark"], default: "light" },
-            notifications: { type: Boolean, default: true },
-        },
+        workspaces: [{
+            workspaceId: {
+                type: Schema.Types.ObjectId,
+                ref: 'Workspace',
+                required: true,
+            },
+            role: {
+                type: String,
+                enum: ['admin', 'member', 'guest'],
+                default: 'member',
+            },
+        }],
+        createdAt: { type: Date, default: Date.now },
+        updatedAt: { type: Date, default: Date.now },
     },
     {
-        timestamps: true, // Automatically manages createdAt/updatedAt
+        timestamps: true,
     }
 );
 
-userSchema.methods.comparePassword = function (
+userSchema.methods.comparePassword = function(
     candidatePassword: string
 ): Promise<boolean> {
     return bcrypt.compare(candidatePassword, this.password);
 };
 
-userSchema.pre<IUserDocument>("save", async function (next) {
+userSchema.pre<IUserDocument>("save", async function(next) {
     if (!this.isModified("password")) return next();
     this.password = await bcrypt.hash(this.password, 10);
     next();
 });
+
+userSchema.index({ email: 1 });
+userSchema.index({ 'workspaces.workspaceId': 1 });
 
 export const User = mongoose.model<IUserDocument>("User", userSchema);

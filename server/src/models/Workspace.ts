@@ -1,89 +1,56 @@
 import mongoose, { Schema } from 'mongoose';
 
 interface IWorkspace {
-  name: string;
-  description?: string;
-  visibility: 'public' | 'private';
-  members: Array<{
-    user: Schema.Types.ObjectId;
-    role: 'admin' | 'member';
-  }>;
-  projects: Schema.Types.ObjectId[];
-  teams: Schema.Types.ObjectId[];
-  createdBy: Schema.Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
-  settings?: {
-    theme?: 'light' | 'dark';
-    notifications?: boolean;
-  };
+    name: string;
+    description?: string;
+    visibility: 'public' | 'private';
+    createdBy: Schema.Types.ObjectId;
+    createdAt: Date;
+    updatedAt: Date;
+    settings?: {
+        notifications?: boolean;
+    };
 }
 
-const workspaceSchema: Schema<IWorkspace> = new Schema(
-  {
+const workspaceSchema = new Schema({
     name: {
-      type: String,
-      required: true,
-      trim: true,
+        type: String,
+        required: true,
+        trim: true,
     },
     description: {
-      type: String,
-      default: null,
+        type: String,
+        trim: true,
     },
     visibility: {
-      type: String,
-      enum: ['public', 'private'],
-      default: 'private',
+        type: String,
+        enum: ["public", "private"],
+        default: "private"
     },
-    members: [
-      {
-        user: {
-          type: Schema.Types.ObjectId,
-          ref: 'User',
-          required: true,
-        },
-        role: {
-          type: String,
-          enum: ['admin', 'member'],
-          default: 'member',
-        },
-      },
-    ],
-    projects: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Project',
-      },
-    ],
-    teams: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Team',
-      },
-    ],
     createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now,
     },
     settings: {
-      theme: {
-        type: String,
-        enum: ['light', 'dark'],
-        default: 'light',
-      },
-      notifications: {
-        type: Boolean,
-        default: true,
-      },
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+        notification: {
+            type: Boolean,
+            default: false,
+        }
+    }
+},
+    {
+        timestamps: true
+    });
 
-workspaceSchema.index({ 'members.user': 1 });
-workspaceSchema.index({ createdBy: 1 });
+workspaceSchema.index({ name: 1 });
 
 export const Workspace = mongoose.model<IWorkspace>("Workspace", workspaceSchema);

@@ -17,9 +17,8 @@ export const getProjects = async (req: Request, res: Response) => {
 
         const workspace = await Workspace.findById(workspaceId);
 
-        const projects = workspace?.projects;
 
-        res.status(200).json(projects);
+        res.status(200).json([]);
     } catch (error) {
         res.status(500).json({
             message: "An error occurred while fetching the projects.",

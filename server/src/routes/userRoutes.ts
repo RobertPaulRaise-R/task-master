@@ -10,7 +10,6 @@ import multer from "multer";
 import {
     registerUser,
     loginUser,
-    uploadAvatar,
     logoutUser,
     isAuthenticaed,
     getUserByEmail,
@@ -29,10 +28,12 @@ router.post("/", registerUser as RequestHandler);
 router.get("/auth", isAuthenticaed as RequestHandler);
 router.post("/login", loginUser as RequestHandler);
 router.post("/logout", logoutUser);
+/*
 router.post(
     "/:id/avatar",
     upload.single("avatar"),
     uploadAvatar as RequestHandler
 );
+*/
 
 export default router;

@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import { User } from "../models/User.js";
-import { Friend } from "../models/Friend.js";
 import mongoose from "mongoose";
 import { Workspace } from "../models/Workspace.js";
+import { Friends } from "../models/Friend.js";
 
 export const getUser = async (req: Request, res: Response) => {
     try {
@@ -23,11 +23,10 @@ export const getUser = async (req: Request, res: Response) => {
 
 export const getUserByEmail = async (req: Request, res: Response) => {
     try {
-        const userId = req.user?._id; // This is the ID of the logged-in user
+        const userId = req.user?._id;
         const { query: email } = req.query;
 
         if (!userId) {
-            // Ensure userId is available (from authentication middleware)
             return res.status(401).json({ message: "Not authenticated." });
         }
 
@@ -45,38 +44,24 @@ export const getUserByEmail = async (req: Request, res: Response) => {
 
         const friendId = friend._id as mongoose.Types.ObjectId;
 
-        // Prevent searching for yourself
         if (userId.toString() === friendId.toString()) {
-            // You might want to return a different status or a special message here
-            // For example, status: 'self' to display "You" or hide the button
             return res
                 .status(200)
                 .json({ friend: friend.toObject(), status: "self" });
         }
 
-        const friendship = await Friend.findOne({
+        const friendship = await Friends.findOne({
             $or: [
-                { user: userId, friend: friendId },
-                { user: friendId, friend: userId },
+                { userId1: userId, userId2: friendId },
+                { userId1: friendId, userId2: userId },
             ],
         });
 
         let status = friendship?.status || "none";
-        let requestDirection = "none"; // 'sent' or 'received'
-
-        if (friendship && friendship.status === "pending") {
-            // Check who sent the request
-            if (friendship.user.toString() === userId.toString()) {
-                requestDirection = "sent"; // I sent the request
-            } else if (friendship.friend.toString() === userId.toString()) {
-                requestDirection = "received"; // They sent me the request
-            }
-        }
 
         res.status(200).json({
-            friend: friend.toObject(), // Send as plain object
+            friend: friend.toObject(),
             status: status,
-            requestDirection: requestDirection, // Add this new field
         });
     } catch (error) {
         console.error("Error in getUserByEmail:", error);
@@ -196,6 +181,7 @@ export const logoutUser = async (
     }
 };
 
+/*
 export const uploadAvatar = async (
     req: Request,
     res: Response,
@@ -207,7 +193,7 @@ export const uploadAvatar = async (
             return res.status(404).json({ message: "User not found" });
         }
 
-        user.avatar = {
+        user.avatarUrl = {
             data: req.file?.buffer,
             contentType: req.file?.mimetype,
         };
@@ -219,6 +205,7 @@ export const uploadAvatar = async (
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
+*/
 
 export const isAuthenticaed = async (
     req: Request,

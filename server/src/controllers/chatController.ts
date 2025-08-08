@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Message } from "../models/Message.js";
 import { Chat } from "../models/Chat.js";
-import { Friend } from "../models/Friend.js";
 import { Server } from "socket.io";
+import { Friends } from "../models/Friend.js";
 
 interface AuthenticatedUser {
   _id: string;
@@ -149,10 +149,10 @@ export const getUserChats = async (req: Request, res: Response) => {
           }
           const friendId = friendParticipant._id;
 
-          const friendship = await Friend.findOne({
+          const friendship = await Friends.findOne({
             $or: [
-              { user: userId, friend: friendId, status: "accepted" },
-              { user: friendId, friend: userId, status: "accepted" },
+              { userId1: userId, userId2: friendId, status: "accepted" },
+              { userId1: friendId, userId2: userId, status: "accepted" },
             ],
           });
 

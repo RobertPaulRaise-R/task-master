@@ -31,4 +31,57 @@ const chatSchema: Schema<IChat> = new Schema(
 
 chatSchema.index({ participants: 1, lastMessageAt: -1 });
 
+// New ChatSchema will update later
+const ChatSchema = new Schema({
+  workspaceId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Workspace',
+    required: true,
+  },
+  projectId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Project',
+    default: null,
+  },
+  type: {
+    type: String,
+    enum: ['group', 'direct'],
+    required: true,
+  },
+  participants: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  }],
+  name: {
+    type: String,
+    trim: true,
+  },
+  messages: [{
+    sender: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
+  }],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+ChatSchema.index({ workspaceId: 1, projectId: 1, type: 1 });
+
 export const Chat = mongoose.model<IChat>("Chat", chatSchema);
