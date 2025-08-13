@@ -6,34 +6,12 @@ import { BiSolidSend } from "react-icons/bi";
 import ChatMessage from "./ChatMessage";
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Chat } from "../../types";
-
-const initialChatData = [
-    {
-        chatId: "asd97saa967asd55",
-        senderId: "Robert Paul Raise",
-        content: "Hello",
-        timestamp: Date.now() - 60 * 60,
-        isRead: false,
-    },
-    {
-        chatId: "asd97saa967asd55",
-        senderId: "Brock Lesnar",
-        content: "Vanakam bro",
-        timestamp: Date.now(),
-        isRead: false,
-    },
-];
+import { useMutation } from "@tanstack/react-query";
+import { ChatI, MessageI } from "../../types";
 
 function ChatSection() {
-    const { data, isError, isLoading } = useQuery({
-        queryKey: ["messages"],
-        queryFn: () => { },
-    });
-
     const [message, setMessage] = useState<string>("");
-    const [messages, setMessages] = useState<Chat[]>([]);
+    const [messages, setMessages] = useState<MessageI[]>([]);
     const [socket, setSocket] = useState<Socket | null>(null);
     const chatId = "asd97saa967asd55";
 
@@ -54,7 +32,7 @@ function ChatSection() {
     }, [chatId]);
 
     const sendMessageMutation = useMutation<
-        Chat,
+        ChatI,
         Error,
         { chatId: string; content: string; senderId: string }
     >({

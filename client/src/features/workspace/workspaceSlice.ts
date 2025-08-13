@@ -1,14 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WorkspaceI } from "../../types";
 
-const initialState: WorkspaceI = {
+const defaultState: WorkspaceI = {
     _id: "",
     name: "",
     description: "",
     visibility: "private",
-    members: [],
-    projects: [],
-    teams: [],
     createdBy: "",
     createdAt: "",
     updatedAt: "",
@@ -18,13 +15,18 @@ const initialState: WorkspaceI = {
     }
 }
 
+const storedWorkspace = localStorage.getItem("workspace");
+const initialState = storedWorkspace ? JSON.parse(storedWorkspace) : defaultState;
+
 export const workspaceSlice = createSlice({
     name: "workspace",
     initialState,
     reducers: {
         changeWorkspace: (state, action: PayloadAction<WorkspaceI>) => {
+            const workspace = JSON.stringify({ ...state, ...action.payload });
+            localStorage.setItem("workspace", workspace);
             return { ...state, ...action.payload };
-        }
+        },
     }
 });
 

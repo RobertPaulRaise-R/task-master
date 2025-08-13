@@ -1,7 +1,6 @@
 import ListSection from "../features/dashboard/ListSection";
 import TaskItem from "../features/dashboard/TaskItem";
 import { ProjectI, TaskI, UserI } from "../types";
-import { useTasks } from "../features/tasks/useTasks";
 import StatsCard from "../features/dashboard/StatsCard";
 import ProjectList from "../features/projects/ProjectListView";
 import React, { useMemo, useState } from "react";
@@ -14,6 +13,9 @@ import Input from "../ui/Input";
 import { useForm } from "react-hook-form";
 import Label from "../ui/Label";
 import Button from "../ui/Button";
+import Spinner from "../ui/Spinner";
+import { useProjects } from "../api/queries/useProjects";
+import { useTasks } from "../api/queries/useTasks";
 
 const cardsData = [
     { name: "Total Projects", value: 10 },
@@ -31,39 +33,30 @@ const taskSortables = [
 ];
 
 const peoples: UserI[] = [];
-const projects: ProjectI[] = [];
 
 function Dashboard() {
     const { register, handleSubmit } = useForm();
 
-
-    const { isPending: isTaskPending, tasks: tasksData } = useTasks();
-    /*
-    const {
-      isPending: isProjectPending,
-      isError: isProjectError,
-      projects,
-    } = useProjects();
-  
-  
-    useEffect(() => {
-        if (projects) {
-            cardsData[0].value = projects.length;
-        }
-    }, [projects]);
-    */
-
+    const { isPending: isTaskPending, tasks: tasksData, isError: isTaskError } = useTasks();
+    const { projects, isPending: isProjectPending, isError: isProjectError } = useProjects();
 
     const [showForm, setShowForm] = useState<boolean>(false);
-    const [taskFilter, setTaskFilter] = useState<string>("");
+    const [taskFilter, setTaskFilter] = useState<string>(taskSortables[2]);
 
     const sortedTasks = useMemo(() => {
         if (!tasksData) return [];
         return [...tasksData].sort((a, b) => {
             if (taskFilter === "Sort By Title(A-Z)") {
-                return a.title.localeCompare(b.title);
+                return a.name.localeCompare(b.name);
             } else if (taskFilter === "Sort By Title(Z-A)") {
-                return b.title.localeCompare(a.title);
+                return b.name.localeCompare(a.name);
+            } else if (taskFilter === "Nearest Due Date") {
+                const dateA = new Date(a.dueDate);
+                const dateB = new Date(b.dueDate);
+                if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
+                if (isNaN(dateA.getTime())) return 1;
+                if (isNaN(dateB.getTime())) return -1;
+                return dateA.getTime() - dateB.getTime();
             }
             return 0;
         })
@@ -71,13 +64,10 @@ function Dashboard() {
 
     const onSubmit = () => { };
 
-    /*
-  
-        const isPending = isTaskPending || isProjectPending;
+    const isPending = isTaskPending || isProjectPending;
     const isError = isTaskError || isProjectError;
     if (isPending) return <Spinner size={10} />;
     if (isError) return <p>Error loading dashboard</p>;
-    */
 
     return (
         <div className="mx-4 py-4">
@@ -181,7 +171,7 @@ function Dashboard() {
                             </ModalView>
 
 
-                            {projects && projects.length > 0 ? (
+                            {!isProjectPending && projects && projects.length > 0 ? (
                                 projects.map((project: ProjectI, i: number) => (
                                     <ProjectList project={project} key={i} />
                                 ))

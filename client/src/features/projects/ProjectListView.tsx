@@ -1,18 +1,6 @@
 import { useNavigate } from "react-router";
 import { ProjectI } from "../../types";
 
-/*
-_id: string;
-name?: string;
-description: string;
-teams: TeamI[];
-tasks: Task[];
-members: { name: string; avatar: string; email: string }[];
-createdBy: { _id: string; name: string };
-createdAt: string;
-updatedAt: string;
-*/
-
 function ProjectListView({ project }: { project: ProjectI }) {
     const navigate = useNavigate();
     return (

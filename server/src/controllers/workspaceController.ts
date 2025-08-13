@@ -45,11 +45,9 @@ export const getWorkspaces = async (req: Request, res: Response, next: NextFunct
             return res.status(401).json({ message: 'Unauthorized or invalid user ID' });
         }
 
-        const workspaces = await Workspace.find({ 'members.user': userId })
-        .populate('createdBy', 'name email')
-        .populate('projects', 'name status')
-        .populate('teams', 'name')
-        .lean();
+        const workspaces = await Workspace.find({ createdBy: userId })
+            .populate('createdBy', 'name email')
+            .lean();
 
         if (workspaces.length === 0) {
             return res.status(404).json({ message: 'No workspaces found for this user' });

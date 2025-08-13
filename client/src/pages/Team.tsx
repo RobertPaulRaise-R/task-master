@@ -2,15 +2,15 @@ import { ChangeEvent, useEffect, useState } from "react";
 import Input from "../ui/Input";
 import { UserI } from "../types";
 import Button from "../ui/Button";
-import { useFriends } from "../hooks/useFriends";
 import Spinner from "../ui/Spinner";
-import { getUserForFriendRequest } from "../services/userApi";
 import { useMutation } from "@tanstack/react-query";
-import { acceptFriendRequests, sendFriendRequest } from "../services/friendApi";
-import { useFriendRequests } from "../hooks/useFriendRequests";
 import ListSection from "../features/dashboard/ListSection";
+import { useFriends } from "../api/queries/useFriends";
+import { useFriendRequests } from "../api/queries/useFriendRequests";
+import { getUserForFriendRequest } from "../api/services/userApi";
+import { acceptFriendRequests, sendFriendRequest } from "../api/services/friendApi";
 
-function People() {
+function Team() {
     const [searchInput, setSearchInput] = useState<string>("");
     const [friends, setFriends] = useState<UserI[] | null>([]);
     const [requests, setRequests] = useState<
@@ -182,4 +182,4 @@ function UserNameAndProfile({ name }: { name: string }) {
     );
 }
 
-export default People;
+export default Team;

@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProjectById } from "../../services/projectApi";
 import { useParams } from "react-router";
+import { getProjectById } from "../services/projectApi";
 
 export function useProjectById() {
-    const { id } = useParams<{ id: string }>();
+    const { id: projectId } = useParams<{ id: string }>();
 
     const {
         isPending,
@@ -11,8 +11,8 @@ export function useProjectById() {
         isError,
         data: project,
     } = useQuery({
-        queryKey: ["projects"],
-        queryFn: () => getProjectById(id),
+        queryKey: [projectId],
+        queryFn: () => getProjectById(projectId),
     });
 
     return { isPending, error, isError, project };

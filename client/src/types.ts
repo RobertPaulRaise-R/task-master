@@ -1,13 +1,15 @@
 export interface TaskI {
     _id: string;
-    title: string;
+    name: string;
     description: string;
-    status: "To Do" | "In Progress" | "In Review" | "Done";
-    priority: "High" | "Medium" | "Low";
+    status: "todo" | "in_progress" | "done";
+    priority: "high" | "medium" | "low";
     dueDate: string;
     projectId: string;
-    userId: string;
-    __v: number;
+    assignedTo: {
+        name: string;
+    };
+    workspaceId: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -22,13 +24,25 @@ export interface ChatI {
     updatedAt: string;
 }
 
+export interface MessageI {
+    _id: string;
+    chatId: string;
+    senderId: string;
+    content: string;
+    timestamp: Date;
+    isRead: boolean;
+    attachments?: string[];
+}
+
+
 export interface ProjectI {
     _id: string;
-    name?: string;
+    workspaceId: string;
+    name: string;
     description: string;
-    teams: TeamI[];
-    tasks: TaskI[];
-    members: { name: string; avatar: string; email: string }[];
+    startDate: string;
+    endDate: string;
+    status: "active" | "completed" | "on_hold" | "cancelled";
     createdBy: { _id: string; name: string };
     createdAt: string;
     updatedAt: string;
@@ -66,12 +80,6 @@ export interface WorkspaceI {
     name: string;
     description?: string;
     visibility: 'public' | 'private';
-    members: Array<{
-        user: string;
-        role: 'admin' | 'member';
-    }>;
-    projects: string[];
-    teams: string[];
     createdBy: string;
     createdAt: string;
     updatedAt: string;

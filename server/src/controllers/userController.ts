@@ -4,6 +4,7 @@ import { User } from "../models/User.js";
 import mongoose from "mongoose";
 import { Workspace } from "../models/Workspace.js";
 import { Friends } from "../models/Friend.js";
+import router from "../routes/userRoutes.js";
 
 export const getUser = async (req: Request, res: Response) => {
     try {
@@ -18,6 +19,27 @@ export const getUser = async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error in getUser:", error);
         res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+export const getUsersByWorkspace = async (req: Request, res: Response) => {
+    try {
+        const { workspaceId } = req.query;
+
+        if (!workspaceId) {
+            return res.status(400).json({ message: 'Invalid or missing workspaceId' });
+        }
+
+        const users = await User.find(
+            { "workspaces.workspaceId": workspaceId },
+            { name: 1, email: 1, username: 1, workspaces: 1 }
+        );
+
+        console.log("workspaceId: ", workspaceId, "users:", users)
+
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching getUsersByWorkspace" });
     }
 }
 
@@ -75,9 +97,9 @@ export const registerUser = async (
     next: NextFunction
 ) => {
     try {
-        const { name, username, email, password, avatar, settings, company } =
-            req.body;
+        const { name, username, email, password } = req.body;
         const existing = await User.findOne({ email });
+
         if (existing) {
             return res.status(400).json({ message: "Email already exists" });
         }
@@ -87,9 +109,6 @@ export const registerUser = async (
             username,
             email,
             password,
-            avatar,
-            settings,
-            company,
         });
         await user.save();
 
@@ -103,7 +122,12 @@ export const registerUser = async (
         });
         await workspace.save();
 
-        res.status(201).json({ user, workspace });
+        const result = await User.updateOne(
+            { _id: user._id },
+            { $push: { workspaces: { workspaceId: workspace._id, role: "admin" } } }
+        );
+
+        res.status(201).json({ result, workspace });
     } catch (error) {
         console.error("Error in registerUser:", error);
         res.status(500).json({ message: "Internal Server Error" });

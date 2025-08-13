@@ -1,4 +1,6 @@
-function ChatMessage({ chat }) {
+import { MessageI } from "../../types";
+
+function ChatMessage({ chat } : { chat: MessageI}) {
     const alignmentClass =
         chat.senderId === "Robert Paul Raise" ? "justify-end" : "justify-start";
 

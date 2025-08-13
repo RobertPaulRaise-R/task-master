@@ -5,12 +5,12 @@ import { ChatContext } from "../../pages/Chat";
 function ChatPeople({ person }: { person: PersonType }) {
     const { setShowChat } = useContext(ChatContext);
 
+    console.log(setShowChat);
+
     return (
         <div
             className="border-light-300 mt-2 flex gap-2 rounded-lg border p-2"
-            onClick={() =>
-                setShowChat(setShowChat === person.name ? "" : person.name)
-            }
+            onClick={() => {}}
         >
             {person.img ? (
                 <img src="" alt="" />

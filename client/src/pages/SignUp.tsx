@@ -3,9 +3,9 @@ import Button from "../ui/Button";
 import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import { useMutation } from "@tanstack/react-query";
-import { createUser } from "../services/userApi";
 import { Link, useNavigate } from "react-router";
 import Label from "../ui/Label";
+import { createUser } from "../api/services/userApi";
 
 function SignUp() {
     const navigate = useNavigate();

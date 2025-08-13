@@ -34,12 +34,10 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 
     const toggleOpen = useCallback(() => {
         setIsOpen((prev) => !prev);
-        console.log("Opening Dropdown menu");
     }, []);
 
     const closeMenu = useCallback(() => {
         setIsOpen(false);
-        console.log("Closing dropdown menu");
     }, []);
 
     useEffect(() => {
@@ -87,8 +85,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         }
 
         const triggerRect = triggerRef.current.getBoundingClientRect();
-        const containerRect = document.body.getBoundingClientRect();
-        console.log(triggerRect, containerRect);
+
+        //const containerRect = document.body.getBoundingClientRect();
 
         let top: number;
 
@@ -141,7 +139,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                                 return (
                                     <div
                                         key={`separator-${index}`}
-                                        className="my-2 h-px bg-gray-200"
+                                        className="my-2 h-px bg-neutral-900"
                                     />
                                 );
                             }
@@ -156,13 +154,13 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                                         }
                                     }}
                                     className={
-                                        `flex items-center gap-2 px-4 py-2 text-sm dark:text-neutral-400 transition-colors duration-200 hover:bg-gray-100 hover:dark:bg-neutral-800 ${item.disabled ? "cursor-not-allowed text-gray-400" : "cursor-pointer text-gray-700"} ${item.className}`
+                                        `flex items-center gap-2 px-4 py-2 text-sm dark:text-white transition-colors duration-200 hover:bg-gray-100 hover:dark:bg-neutral-700 ${item.disabled ? "cursor-not-allowed text-gray-400" : "cursor-pointer text-gray-700"} ${item.className}`
                                     }
                                 >
                                     {item.icon && (
                                         <span className="h-4 w-4 flex-shrink-0">{item.icon}</span>
                                     )}
-                                    <span>{item.label}</span>
+                                    <span className="">{item.label}</span>
                                     {item.rightIcon && (
                                         <span className="ml-auto h-4 w-4 flex-shrink-0">
                                             {item.rightIcon}

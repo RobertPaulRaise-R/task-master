@@ -4,7 +4,7 @@ import { HiOutlineClock } from "react-icons/hi2";
 import { Link } from "react-router";
 import { getDate } from "../../utils/getDate";
 import { TaskI } from "../../types";
-// import { MdOutlinePerson } from "react-icons/md";
+import { MdOutlinePerson } from "react-icons/md";
 
 function TaskItem({ item }: { item: TaskI }) {
     const date = getDate(item.dueDate);
@@ -16,7 +16,7 @@ function TaskItem({ item }: { item: TaskI }) {
         >
             <div className="flex flex-col gap-1">
                 <span className="col-span-4 line-clamp-1 text-[16px] font-medium">
-                    {item.title}
+                    {item.name}
                 </span>
                 <div className="text-light-700 dark:text-dark-400 flex items-center gap-3 text-[14px]">
                     <span className="flex items-center gap-1">
@@ -27,10 +27,10 @@ function TaskItem({ item }: { item: TaskI }) {
                         <HiOutlineClock />
                         {item.status}
                     </span>
-                    {/* <span className="flex items-center gap-0.5">
-            <MdOutlinePerson />
-            {item.userId}
-          </span> */}
+                    <span className="flex items-center gap-0.5">
+                        <MdOutlinePerson />
+                        {item.assignedTo.name}
+                    </span>
                 </div>
             </div>
 

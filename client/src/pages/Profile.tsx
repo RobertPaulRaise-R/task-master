@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useUser from "../hooks/useUser";
 import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import Spinner from "../ui/Spinner";
@@ -7,6 +6,7 @@ import ModalView from "../ui/ModalView";
 import { IoLocationOutline } from "react-icons/io5";
 import { FaLaptopCode } from "react-icons/fa6";
 import Button from "../ui/Button";
+import useUser from "../api/queries/useUser";
 
 function Profile() {
     const { user, isError, isPending } = useUser();

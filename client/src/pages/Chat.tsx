@@ -2,10 +2,10 @@ import { createContext, useState } from "react";
 import ChatSection from "../features/chat/ChatSection";
 import PeopleSection from "../features/chat/PeopleSection";
 
-export const ChatContext = createContext({});
+export const ChatContext = createContext({} as { showChat: boolean; setShowChat: (value: boolean) => void});
 
 function Chat() {
-    const [showChat, setShowChat] = useState("");
+    const [showChat, setShowChat] = useState(false);
 
     return (
         <ChatContext.Provider value={{ showChat, setShowChat }}>

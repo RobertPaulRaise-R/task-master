@@ -1,10 +1,19 @@
 import axios from "axios";
-import { USERS_API_URL } from "../constants";
+import { USERS_API_URL } from "../../constants";
 
 export const getUser = async () => {
     const res = await axios.get(`${USERS_API_URL}`, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
+    });
+
+    return res.data;
+}
+
+export const getUsersByWorkspace = async (workspaceId: string) => {
+    const res = await axios.get(`${USERS_API_URL}/workspace/?workspaceId=${workspaceId}`, {
+        withCredentials: true,
+        headers: { "Content-Type" : "application/json" },
     });
 
     return res.data;

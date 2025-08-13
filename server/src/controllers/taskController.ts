@@ -1,7 +1,27 @@
 import { Request, Response } from "express";
 import { Task } from "../models/Task.js";
-import { Project } from "../models/Project.js";
-import { Team } from "../models/Team.js";
+
+export const getTaskById = async (req: Request, res: Response) => {
+    const taskId = req.params.id;
+
+    console.log("getTaskById API HIT");
+
+    if (!taskId) {
+        return res.status(401).json({ message: 'Requires taskId' });
+    }
+
+    try {
+        const task = await Task.findById(taskId);
+
+        if (!task) {
+            res.status(400).json({ message: "There is no task with the given id" });
+        }
+
+        res.status(200).json(task);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error while fetching getTaskById' });
+    }
+}
 
 export const getUserNotDoneTasks = async (req: Request, res: Response) => {
     const userId = req.user?._id;
@@ -24,32 +44,29 @@ export const getUserNotDoneTasks = async (req: Request, res: Response) => {
             .populate('projectId', 'name')
             .populate('assignedTo', 'name email')
             .populate('createdBy', 'name email')
-            .select('title description status priority dueDate createdAt')
+            .select('name description status priority dueDate createdAt')
             .sort({ createdAt: -1 });
 
         res.status(200).json(tasks);
     } catch (error) {
-        console.error('Error fetching user tasks:', error);
-        throw error;
+        res.status(500).json({ message: 'Server error while fetching getUserNotDoneTasks' });
     }
 }
 
-export const getUserAllTasks = async (req: Request, res: Response) => {
-    const userId = req.user?._id;
-    const { workspaceId } = req.query;
+export const getTasksByProject = async (req: Request, res: Response) => {
+    const { projectId } = req.query;
 
-    if (!userId) {
-        return res.status(401).json({ message: 'Unauthorized or invalid user id' });
-    }
+    console.log("getTasksByProject API HIT");
 
-    if (!workspaceId) {
-        return res.status(401).json({ message: 'Requires workspaceId' });
+    console.log("projectId", projectId);
+
+    if (!projectId) {
+        return res.status(401).json({ message: 'Requires projectId' });
     }
 
     try {
         const tasks = await Task.find({
-            workspaceId: workspaceId,
-            assignedTo: userId,
+            projectId: projectId
         })
             .populate('projectId', 'name')
             .populate('assignedTo', 'name email')
@@ -59,8 +76,7 @@ export const getUserAllTasks = async (req: Request, res: Response) => {
 
         res.status(200).json(tasks);
     } catch (error) {
-        console.error('Error fetching tasks:', error);
-        res.status(500).json({ message: 'Server error while fetching tasks' });
+        res.status(500).json({ message: 'Server error while fetching getTasksByProject', error: error });
     }
 };
 
@@ -71,7 +87,7 @@ export const createTask = async (req: Request, res: Response) => {
         return res.status(401).json({ message: 'Unauthorized or invalid user ID' });
     }
 
-    const { name, description, priority, dueDate, projectId, workspaceId } = req.body;
+    const { name, description, priority, assignedTo, dueDate, projectId, workspaceId } = req.body;
 
     if (!name || !description || !priority || !dueDate || !projectId || !workspaceId) {
         return res.status(401).json({ message: "Need name, description, priority, dueDate, projectId, workspaceId " });
@@ -82,6 +98,7 @@ export const createTask = async (req: Request, res: Response) => {
         description,
         priority,
         dueDate,
+        assignedTo,
         projectId,
         userId,
         workspaceId

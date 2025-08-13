@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { CgProfile } from "react-icons/cg";
 import { BiBell } from "react-icons/bi";
 
@@ -10,11 +10,12 @@ import { PiSignOutBold } from "react-icons/pi";
 import { IoMdSettings } from "react-icons/io";
 import { MdOutlineDarkMode, MdPerson } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
-import { logoutUser } from "../services/userApi";
 import { IoSunnyOutline } from "react-icons/io5";
-import { useWorkspaces } from "../hooks/useWorkspaces";
 import { useState } from "react";
 import WorkspaceSelector from "../features/workspace/WorkspaceSelector";
+import { useWorkspaces } from "../api/queries/useWorkspaces";
+import { logoutUser } from "../api/services/userApi";
+import { WorkspaceI } from "../types";
 
 function Navbar({
     isExpanded,
@@ -30,10 +31,10 @@ function Navbar({
     const { workspaces, isPending } = useWorkspaces();
 
     const navigate = useNavigate();
-    const url = useLocation();
-    const pageName = url.pathname.slice(5);
 
-    const [workspace, setWorkspace] = useState<string>("");
+    const workspaceFromLocalStorage = localStorage.getItem("workspace");
+
+    const [workspace, setWorkspace] = useState<WorkspaceI| null>(workspaceFromLocalStorage ? JSON.parse(workspaceFromLocalStorage) : "");
 
 
     const { mutate } = useMutation({
@@ -68,16 +69,21 @@ function Navbar({
     return (
         <nav className="bg-light-50 dark:bg-neutral-950 sticky top-0 z-50 w-full px-4 py-3">
             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center gap-3">
                     <button
-                        className="hover:bg-light-300 hover:dark:bg-neutral-900 mt-auto rounded-full p-2 text-light-800 dark:text-dark-50"
+                        className="hover:bg-light-300 hover:dark:bg-neutral-900 size-10 flex items-center justify-center rounded-full p-2 text-light-800 dark:text-dark-50"
                         onClick={() => setIsExpanded(!isExpanded)}
                     >
-                        {isExpanded ? <FaAnglesLeft size={16} /> : <FaAnglesRight />}
+                        {isExpanded ? <FaAnglesLeft size={16} className="block" /> : <FaAnglesRight className="inline-block"/>}
                     </button>
+                    {/*
                     <h2 className="text-brand-500 text-md font-bold uppercase">
                         {pageName}
                     </h2>
+                    */}
+                    {!isPending &&
+                        <WorkspaceSelector workspaces={workspaces} workspace={workspace} setWorkspace={setWorkspace} />
+                    }
                 </div>
 
 
@@ -89,9 +95,6 @@ function Navbar({
                         }
                     </button>
 
-                    {!isPending &&
-                        <WorkspaceSelector workspaces={workspaces} workspace={workspace} setWorkspace={setWorkspace} />
-                    }
 
                     <DropdownMenu
                         items={userMenuItems}

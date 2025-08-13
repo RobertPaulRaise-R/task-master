@@ -16,7 +16,7 @@ function TaskListView({ status, tasks }: { status: string; tasks: TaskI[] }) {
                 {task.map((t) => (
                     <div className="border-light-200 grid grid-cols-24 items-center gap-2 border p-2">
                         <input type="checkbox" className="col-span-1" />
-                        <span className="col-span-7 font-medium">{t.title}</span>
+                        <span className="col-span-7 font-medium">{t.name}</span>
                         <span className="col-span-7 place-items-center align-middle text-sm">
                             {t.description}
                         </span>

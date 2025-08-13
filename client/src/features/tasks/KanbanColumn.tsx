@@ -6,11 +6,11 @@ function KanbanColumn({
     status,
     tasks,
 }: {
-    status: "To Do" | "In Progress" | "In Review" | "Done";
+    status: "todo" | "in_progress" | "done"; 
     tasks: TaskI[];
 }) {
     const { setNodeRef, isOver } = useDroppable({
-        id: status, // Unique ID for the droppable area
+        id: status,
     });
 
     const filteredTasks: TaskI[] = tasks.filter((task) => task.status === status);
@@ -29,6 +29,7 @@ function KanbanColumn({
                     <TaskCard
                         key={task._id}
                         task={task}
+                        cursorType="grab"
                     />
                 ))}
             </div>

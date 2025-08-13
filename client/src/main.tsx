@@ -15,11 +15,12 @@ import SignUp from "./pages/SignUp.tsx";
 import Login from "./pages/Login.tsx";
 import Timeline from "./pages/Timeline.tsx";
 import Settings from "./pages/Settings.tsx";
-import People from "./pages/People.tsx";
 import Profile from "./pages/Profile.tsx";
 import Project from "./features/projects/Project.tsx";
 import { Provider } from "react-redux";
 import { store } from "./store.ts";
+import Team from "./pages/Team.tsx";
+import Task from "./features/tasks/Task.tsx";
 
 const queryClient = new QueryClient();
 
@@ -28,36 +29,37 @@ createRoot(document.getElementById("root")!).render(
         <Provider store={store}>
             <ThemeProvider>
                 <QueryClientProvider client={queryClient}>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={<LandingPage />} />
+                        <BrowserRouter>
+                            <Routes>
+                                <Route path="/" element={<LandingPage />} />
 
-                            <Route path="/signup" element={<SignUp />} />
+                                <Route path="/signup" element={<SignUp />} />
 
-                            <Route path="/login" element={<Login />} />
+                                <Route path="/login" element={<Login />} />
 
-                            <Route path="app" element={<App />}>
-                                <Route index element={<Navigate to={"dashboard"} replace />} />
-                                <Route path="dashboard" element={<Dashboard />} />
-                                <Route path="tasks" element={<Tasks />} />
-                                <Route path="projects" element={<Projects />} />
-                                <Route path="projects/:id" element={<Project />} />
+                                <Route path="app" element={<App />}>
+                                    <Route index element={<Navigate to={"dashboard"} replace />} />
+                                    <Route path="dashboard" element={<Dashboard />} />
+                                    <Route path="tasks" element={<Tasks />} />
+                                    <Route path="tasks/:id" element={<Task />} />
+                                    <Route path="projects" element={<Projects />} />
+                                    <Route path="projects/:id" element={<Project />} />
 
-                                <Route path="people" element={<People />} />
-                                <Route path="chat" element={<Chat />} />
+                                    <Route path="team" element={<Team />} />
+                                    <Route path="chat" element={<Chat />} />
 
-                                <Route path="calendar" element={<Calendar />} />
-                                <Route path="timeline" element={<Timeline />} />
-                                <Route path="analytics" />
+                                    <Route path="calendar" element={<Calendar />} />
+                                    <Route path="timeline" element={<Timeline />} />
+                                    <Route path="analytics" />
 
-                                <Route path="settings" element={<Settings />} />
-                                <Route path="profile" element={<Profile />} />
-                                <Route path="notification" />
+                                    <Route path="settings" element={<Settings />} />
+                                    <Route path="profile" element={<Profile />} />
+                                    <Route path="notification" />
 
-                                <Route path="*" />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
+                                    <Route path="*" />
+                                </Route>
+                            </Routes>
+                        </BrowserRouter>
                 </QueryClientProvider>
             </ThemeProvider>
         </Provider>

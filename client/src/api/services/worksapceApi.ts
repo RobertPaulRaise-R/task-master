@@ -1,5 +1,5 @@
 import axios from "axios"
-import { WORKSPACES_API_URL } from "../constants";
+import { WORKSPACES_API_URL } from "../../constants";
 
 export const getWorkspaces = async () => {
     const res = await axios.get(WORKSPACES_API_URL, {

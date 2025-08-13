@@ -3,9 +3,9 @@ import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { useMutation } from "@tanstack/react-query";
-import { loginUser } from "../services/userApi";
 import { Link, useNavigate } from "react-router";
 import Label from "../ui/Label";
+import { loginUser } from "../api/services/userApi";
 
 function Login() {
     const navigate = useNavigate();

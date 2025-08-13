@@ -1,7 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getTasks } from "../../services/taskApi";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { getTasks } from "../../api/services/taskApi";
 
 export function useTasks() {
+    const workspace = useSelector((state: RootState) => state.workspace);
+
     const {
         isPending,
         error,
@@ -9,7 +13,7 @@ export function useTasks() {
         data: tasks,
     } = useQuery({
         queryKey: ["tasks"],
-        queryFn: getTasks,
+        queryFn: () => getTasks(workspace._id),
     });
 
     return { isPending, error, isError, tasks };

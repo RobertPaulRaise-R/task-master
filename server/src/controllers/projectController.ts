@@ -3,22 +3,20 @@ import { Project } from "../models/Project.js";
 import { Team } from "../models/Team.js";
 import mongoose from "mongoose";
 import { Task } from "../models/Task.js";
-import { Workspace } from "../models/Workspace.js";
 
 export const getProjects = async (req: Request, res: Response) => {
     try {
         const { workspaceId } = req.query;
-        
-        console.log("workspaceId", workspaceId);
+
+        console.log("getProjects workspaceId", workspaceId);
 
         if (!workspaceId) {
             return res.status(400).json({ message: "Missing required parameter workspaceId" });
         }
 
-        const workspace = await Workspace.findById(workspaceId);
+        const projects = await Project.find({ workspaceId: workspaceId }).populate("createdBy", "name").select("name description status createdAt");
 
-
-        res.status(200).json([]);
+        res.status(200).json(projects);
     } catch (error) {
         res.status(500).json({
             message: "An error occurred while fetching the projects.",
@@ -30,35 +28,13 @@ export const getProjectById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
-        if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
+        if (!id) {
             return res
                 .status(400)
                 .json({ message: "Invalid project ID format" });
         }
 
         const project = await Project.findById(id)
-            .populate({
-                path: "teams",
-                model: Team,
-                populate: {
-                    path: "members",
-                    model: "User",
-                    select: "name avatar",
-                },
-            })
-            .populate({
-                path: "members",
-                model: "User",
-                select: "name avatar email",
-            })
-            .populate({
-                path: "tasks",
-                model: Task,
-                populate: {
-                    path: "userId",
-                    model: "User",
-                },
-            });
 
         if (!project) {
             res.status(404).json({ message: "The Project is not available" });

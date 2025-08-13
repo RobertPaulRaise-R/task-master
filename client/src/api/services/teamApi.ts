@@ -1,6 +1,5 @@
 import axios from "axios";
-import { TEAMS_API_URL } from "../constants";
-
+import { TEAMS_API_URL } from "../../constants";
 
 export const createTeam = async (data: {
     name: string;

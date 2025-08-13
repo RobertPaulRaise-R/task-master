@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FRIENDS_API_URL } from "../constants";
+import { FRIENDS_API_URL } from "../../constants";
 
 
 export const getFriends = async () => {

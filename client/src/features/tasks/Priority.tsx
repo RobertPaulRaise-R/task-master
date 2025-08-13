@@ -1,8 +1,8 @@
-function Priority({ priority }: { priority: "High" | "Medium" | "Low" }) {
+function Priority({ priority }: { priority: "high" | "medium" | "low" }) {
     const color =
-        priority === "High"
+        priority === "high"
             ? "bg-red-100 text-red-800"
-            : priority === "Medium"
+            : priority === "medium"
                 ? "bg-blue-100 text-blue-800"
                 : "bg-green-100 text-green-800";
 

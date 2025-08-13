@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { WorkspaceI } from "../../types";
 import { RiExpandUpDownFill } from "react-icons/ri";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { createWorkspace } from "../../services/worksapceApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ModalView from "../../ui/ModalView";
 import FormRow from "../../ui/FormRow";
 import Label from "../../ui/Label";
@@ -12,9 +11,11 @@ import Select from "../../ui/Select";
 import Button from "../../ui/Button";
 import { useDispatch } from "react-redux";
 import { changeWorkspace } from "./workspaceSlice";
+import { createWorkspace } from "../../api/services/worksapceApi";
 
-function WorkspaceSelector({ workspace, workspaces, setWorkspace }: { workspace: string; workspaces: WorkspaceI[] | undefined; setWorkspace: (value: string) => void }) {
+function WorkspaceSelector({ workspace, workspaces, setWorkspace }: { workspace: WorkspaceI | null; workspaces: WorkspaceI[] | undefined; setWorkspace: (value: WorkspaceI) => void }) {
     const dispatch = useDispatch();
+    const queryClient = useQueryClient();
 
     const [showWorkspace, setShowWorkspace] = useState<boolean>(false);
     const [showForm, setShowForm] = useState<boolean>(false);
@@ -38,13 +39,8 @@ function WorkspaceSelector({ workspace, workspaces, setWorkspace }: { workspace:
 
     const handleChangeWorkspace = useCallback((workspace: WorkspaceI) => {
         dispatch(changeWorkspace(workspace));
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (workspaces && workspaces.length > 0) {
-            handleChangeWorkspace(workspaces[0]);
-        }
-    }, [workspaces, handleChangeWorkspace]);
+        queryClient.invalidateQueries();
+    }, [dispatch, queryClient]);
 
     const onSubmit = (data: {
         name: string;
@@ -60,10 +56,10 @@ function WorkspaceSelector({ workspace, workspaces, setWorkspace }: { workspace:
     return (
         <div className="relative w-[250px]">
             <div
-                className="bg-light-300 dark:bg-neutral-900 hover:bg-light-400 dark:hover:bg-neutral-800 px-2 py-4 flex items-center rounded-lg"
+                className="bg-light-300 dark:bg-neutral-900 hover:bg-light-400 dark:hover:bg-neutral-800 px-2 py-3 flex items-center justify-between rounded-lg"
                 onClick={() => setShowWorkspace((show) => !show)}>
                 <span className="overflow-hidden line-clamp-1">
-                    {workspace === "" ? workspaces && workspaces[0].name : workspace}
+                    {workspace?.name}
                 </span>
                 <RiExpandUpDownFill />
             </div>
@@ -75,7 +71,7 @@ function WorkspaceSelector({ workspace, workspaces, setWorkspace }: { workspace:
                             <span
                                 key={i}
                                 onClick={() => {
-                                    setWorkspace(w.name)
+                                    setWorkspace(w)
                                     handleChangeWorkspace(w)
                                     setShowWorkspace(false)
                                 }}

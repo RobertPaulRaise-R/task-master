@@ -42,8 +42,8 @@ function Sidebar({ isExpanded }: { isExpanded: boolean }) {
                 <TabGroup>
                     <Tab
                         isExpanded={isExpanded}
-                        to="people"
-                        label="People"
+                        to="team"
+                        label="Team"
                         icon={<RiTeamFill size={20} />}
                     />
                     <Tab

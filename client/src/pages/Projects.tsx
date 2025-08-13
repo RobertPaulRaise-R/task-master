@@ -6,12 +6,12 @@ import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import { useForm } from "react-hook-form";
 import { InvalidateQueryFilters, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createProject } from "../services/projectApi";
-import { useProjects } from "../features/projects/useProjects";
 import Spinner from "../ui/Spinner";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import Label from "../ui/Label";
+import { useProjects } from "../api/queries/useProjects";
+import { createProject } from "../api/services/projectApi";
 
 function Projects() {
     const workspace = useSelector((state: RootState) => state.workspace);
@@ -43,7 +43,6 @@ function Projects() {
         });
     };
 
-
     if (isPending) return <Spinner size={20} />;
     if (error) return <p>Error Loading Projects!</p>;
 
@@ -56,14 +55,12 @@ function Projects() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    {/* SORTING OPTIONS TO BE IMPLEMENTED */}
                     <Button btn="primary" onClick={() => setShowProjectForm(true)}>
                         <span>New Project</span>
                     </Button>
                 </div>
             </div>
 
-            {/* NEW PROJECT FORM */}
             <ModalView
                 title="Create New Project"
                 isOpen={showProjectForm}
@@ -72,12 +69,12 @@ function Projects() {
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
                     <FormRow>
                         <Label label="Project Name" />
-                        <Input {...register("name", { required: true })} />
+                        <Input placeholder="Enter project name" {...register("name", { required: true })} />
                     </FormRow>
 
                     <FormRow>
                         <Label label="Project Description" />
-                        <Input {...register("description", { required: true })} />
+                        <Input placeholder="Enter project description" {...register("description", { required: true })} />
                     </FormRow>
 
                     <div className="flex items-center justify-end gap-3">
@@ -90,7 +87,7 @@ function Projects() {
             {!isPending && projects && Array.isArray(projects) && projects.length > 0 ? (
                 <div className="mt-5 grid grid-cols-4 gap-3">
                     {projects.map((project) => (
-                        <ProjectCard project={project} />
+                        <ProjectCard key={project._id} project={project} />
                     ))}
                 </div>
             ) : (
