@@ -8,7 +8,6 @@ import Sortable from "../ui/Sortable";
 import { BsPlusLg } from "react-icons/bs";
 import PeopleListView from "../features/dashboard/PeopleListView";
 import ModalView from "../ui/ModalView";
-import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import { useForm } from "react-hook-form";
 import Label from "../ui/Label";
@@ -16,6 +15,7 @@ import Button from "../ui/Button";
 import Spinner from "../ui/Spinner";
 import { useProjects } from "../api/queries/useProjects";
 import { useTasks } from "../api/queries/useTasks";
+import Row from "../ui/Row";
 
 const cardsData = [
     { name: "Total Projects", value: 10 },
@@ -66,12 +66,13 @@ function Dashboard() {
 
     const isPending = isTaskPending || isProjectPending;
     const isError = isTaskError || isProjectError;
+
     if (isPending) return <Spinner size={10} />;
     if (isError) return <p>Error loading dashboard</p>;
 
     return (
         <div className="mx-4 py-4">
-            <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
                 {cardsData.map((card) => (
                     <StatsCard name={card.name} value={card.value} key={card.name} />
                 ))}
@@ -114,7 +115,6 @@ function Dashboard() {
                     </ListSection.List>
                 </ListSection>
 
-                {/* PROJECT SECTION */}
                 <ListSection>
                     <ListSection.Header label="Projects">
                         <div></div>
@@ -142,21 +142,21 @@ function Dashboard() {
                                     onSubmit={handleSubmit(onSubmit)}
                                     className="flex flex-col gap-5"
                                 >
-                                    <FormRow>
+                                    <Row>
                                         <Label label="Project Name" />
                                         <Input
                                             {...register("taskName", { required: true })}
                                             placeholder="Create a doom game in typescript"
                                         />
-                                    </FormRow>
+                                    </Row>
 
-                                    <FormRow>
+                                    <Row>
                                         <Label label="Project Description" />
                                         <Input
                                             {...register("taskDescription", { required: true })}
                                             placeholder="Create a react typescript project and express as the backend and use sql lite for database"
                                         />
-                                    </FormRow>
+                                    </Row>
 
 
                                     <div className="flex items-center justify-end gap-3">

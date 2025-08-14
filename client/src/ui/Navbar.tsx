@@ -8,14 +8,17 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import DropdownMenu, { DropdownMenuItem } from "./DropdownMenu";
 import { PiSignOutBold } from "react-icons/pi";
 import { IoMdSettings } from "react-icons/io";
-import { MdOutlineDarkMode, MdPerson } from "react-icons/md";
+import { MdDashboard, MdOutlineDarkMode, MdPerson } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
 import { IoSunnyOutline } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import WorkspaceSelector from "../features/workspace/WorkspaceSelector";
 import { useWorkspaces } from "../api/queries/useWorkspaces";
 import { logoutUser } from "../api/services/userApi";
 import { WorkspaceI } from "../types";
+import Tabs from "./Tabs";
+import Tab from "./Tab";
+import TabGroup from "./TabGroup";
 
 function Navbar({
     isExpanded,
@@ -34,7 +37,8 @@ function Navbar({
 
     const workspaceFromLocalStorage = localStorage.getItem("workspace");
 
-    const [workspace, setWorkspace] = useState<WorkspaceI| null>(workspaceFromLocalStorage ? JSON.parse(workspaceFromLocalStorage) : "");
+    const [workspace, setWorkspace] = useState<WorkspaceI | null>(workspaceFromLocalStorage ? JSON.parse(workspaceFromLocalStorage) : "");
+    const [showMenu, setShowMenu] = useState(false);
 
 
     const { mutate } = useMutation({
@@ -47,6 +51,27 @@ function Navbar({
     const handleLogout = () => {
         mutate();
     };
+
+    const menuRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(event.target as Node)
+            ) {
+                setShowMenu(false);
+            }
+        }
+
+        if (showMenu) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [showMenu]);
 
     const userMenuItems: DropdownMenuItem[] = [
         {
@@ -67,14 +92,14 @@ function Navbar({
     ];
 
     return (
-        <nav className="bg-light-50 dark:bg-neutral-950 sticky top-0 z-50 w-full px-4 py-3">
+        <nav className="bg-light-50 dark:bg-neutral-950 sticky top-0 z-20 w-full px-4 py-3">
             <div className="flex items-center justify-between">
                 <div className="flex items-center justify-center gap-3">
                     <button
-                        className="hover:bg-light-300 hover:dark:bg-neutral-900 size-10 flex items-center justify-center rounded-full p-2 text-light-800 dark:text-dark-50"
+                        className="hidden lg:flex hover:bg-light-300 hover:dark:bg-neutral-900 size-10 items-center justify-center rounded-full p-2 text-light-800 dark:text-dark-50"
                         onClick={() => setIsExpanded(!isExpanded)}
                     >
-                        {isExpanded ? <FaAnglesLeft size={16} className="block" /> : <FaAnglesRight className="inline-block"/>}
+                        {isExpanded ? <FaAnglesLeft size={16} className="block" /> : <FaAnglesRight className="inline-block" />}
                     </button>
                     {/*
                     <h2 className="text-brand-500 text-md font-bold uppercase">
@@ -117,9 +142,43 @@ function Navbar({
                     />
                 </div>
 
-                <button className="hover:bg-brand-200 rounded-2xl p-2 lg:hidden">
-                    <RxHamburgerMenu />
+                <button className="lg:hidden">
+                    <IconButton onClick={() => setShowMenu(show => !show)}>
+                        <RxHamburgerMenu />
+                    </IconButton>
                 </button>
+
+                {
+                    showMenu ?
+                        <div ref={menuRef} className="absolute z-50 flex flex-col bg-light-200 dark:bg-neutral-600 w-[250px] h-screen top-0 right-0 px-4 shadow-lg shadow-black/30 rounded-lg">
+                            <Tabs isExpanded={isExpanded} />
+                            <TabGroup>
+                                <Tab
+                                    isExpanded={isExpanded}
+                                    to="profile"
+                                    label="Profile"
+                                    icon={<MdPerson size={20} />}
+                                />
+
+                                <Tab
+                                    isExpanded={isExpanded}
+                                    to="settings"
+                                    label="Settings"
+                                    icon={<IoMdSettings size={20} />}
+                                />
+
+                                <Tab
+                                    isExpanded={isExpanded}
+                                    to="logout"
+                                    label="Logout"
+                                    icon={<PiSignOutBold size={20} />}
+                                />
+
+
+                            </TabGroup>
+                        </div>
+                        : null
+                }
             </div>
         </nav>
     );

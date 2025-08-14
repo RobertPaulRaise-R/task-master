@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form";
-import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router";
 import Label from "../ui/Label";
 import { loginUser } from "../api/services/userApi";
+import Row from "../ui/Row";
 
 function Login() {
     const navigate = useNavigate();
@@ -32,7 +32,7 @@ function Login() {
             <form className="mx-auto" onSubmit={handleSubmit(onSubmit)}>
                 <h3 className="dark:text-white text-2xl font-semibold mb-6">Login</h3>
 
-                <FormRow>
+                <Row>
                     <Label label="Email" />
                     <Input
                         type="email"
@@ -41,9 +41,9 @@ function Login() {
                     {errors.email && (
                         <span className="text-sm text-red-500">{errors.email.message}</span>
                     )}
-                </FormRow>
+                </Row>
 
-                <FormRow>
+                <Row>
                     <Label label="Password" />
                     <Input
                         type="password"
@@ -54,7 +54,7 @@ function Login() {
                             {errors.password.message}
                         </span>
                     )}
-                </FormRow>
+                </Row>
 
                 {mutation.isError && (
                     <div className="mb-4 text-red-500">{mutation.error.message}</div>

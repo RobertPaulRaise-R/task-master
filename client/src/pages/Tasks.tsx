@@ -5,13 +5,14 @@ import TaskListView from "../features/tasks/TaskListView";
 
 import { TaskI } from "../types";
 import Spinner from "../ui/Spinner";
-import { InvalidateQueryFilters, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import Button from "../ui/Button";
-import { updateTaskStatus } from "../api/services/taskApi";
 import { useTasks } from "../api/queries/useTasks";
+import { useUpdateTaskMutation } from "../api/mutations/useUpdateTaskMutation";
 
 function Tasks() {
     const { isPending, tasks: tasksData, error } = useTasks();
+    const { mutate } = useUpdateTaskMutation();
     const queryClient = useQueryClient();
 
     const [view, setView] = useState<"kanban" | "list">("kanban");
@@ -28,21 +29,6 @@ function Tasks() {
         [queryClient],
     );
 
-    const updateTaskStatusMutation = useMutation({
-        mutationFn: ({
-            taskId,
-            status,
-        }: {
-            taskId: string;
-            status: TaskI["status"];
-        }) => updateTaskStatus(taskId, status),
-        onSuccess: () => {
-            queryClient.invalidateQueries(["tasks"] as InvalidateQueryFilters);
-        },
-        onError: (error) => {
-            console.error("Error updating task status:", error);
-        },
-    });
 
     const handleDragEnd = useCallback(
         (event: DragEndEvent) => {
@@ -52,10 +38,10 @@ function Tasks() {
                 const taskId = active.id as string;
                 const newStatus = over.id as TaskI["status"];
                 handleLocalTaskDrop(taskId, newStatus);
-                updateTaskStatusMutation.mutate({ taskId, status: newStatus });
+                mutate({ _id: taskId, status: newStatus });
             }
         },
-        [handleLocalTaskDrop, updateTaskStatusMutation],
+        [handleLocalTaskDrop, mutate],
     );
 
     const statuses = ["todo", "in_progress", "done"];

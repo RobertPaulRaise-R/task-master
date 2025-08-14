@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import Spinner from "../ui/Spinner";
 import ModalView from "../ui/ModalView";
@@ -7,6 +6,7 @@ import { IoLocationOutline } from "react-icons/io5";
 import { FaLaptopCode } from "react-icons/fa6";
 import Button from "../ui/Button";
 import useUser from "../api/queries/useUser";
+import Row from "../ui/Row";
 
 function Profile() {
     const { user, isError, isPending } = useUser();
@@ -74,10 +74,10 @@ function Profile() {
                 title="Profile Edit"
                 isOpen={isProfileEditing} onClose={() => setIsProfileEditing(false)}>
                 <form>
-                    <FormRow>
+                    <Row>
                         <label>Name</label>
                         <Input />
-                    </FormRow>
+                    </Row>
                     <input
                         type="file"
                         accept="image/*"

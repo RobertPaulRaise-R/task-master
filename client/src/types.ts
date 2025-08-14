@@ -5,8 +5,12 @@ export interface TaskI {
     status: "todo" | "in_progress" | "done";
     priority: "high" | "medium" | "low";
     dueDate: string;
-    projectId: string;
+    projectId: {
+        _id: string;
+        name: string;
+    };
     assignedTo: {
+        _id: string;
         name: string;
     };
     workspaceId: string;

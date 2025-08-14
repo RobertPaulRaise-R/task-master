@@ -11,7 +11,11 @@ export const getTaskById = async (req: Request, res: Response) => {
     }
 
     try {
-        const task = await Task.findById(taskId);
+        const task = await Task.findById(taskId)
+            .populate('projectId', 'name')
+            .populate('assignedTo', 'name username')
+            .populate('createdBy', 'name username');
+
 
         if (!task) {
             res.status(400).json({ message: "There is no task with the given id" });
@@ -42,7 +46,7 @@ export const getUserNotDoneTasks = async (req: Request, res: Response) => {
             status: { $ne: 'done' }
         })
             .populate('projectId', 'name')
-            .populate('assignedTo', 'name email')
+            .populate('assignedTo', 'name username')
             .populate('createdBy', 'name email')
             .select('name description status priority dueDate createdAt')
             .sort({ createdAt: -1 });
@@ -74,6 +78,8 @@ export const getTasksByProject = async (req: Request, res: Response) => {
             .select('name description status priority dueDate createdAt')
             .sort({ createdAt: -1 });
 
+        console.log(tasks);
+
         res.status(200).json(tasks);
     } catch (error) {
         res.status(500).json({ message: 'Server error while fetching getTasksByProject', error: error });
@@ -100,7 +106,7 @@ export const createTask = async (req: Request, res: Response) => {
         dueDate,
         assignedTo,
         projectId,
-        userId,
+        createdBy: userId,
         workspaceId
     });
     const savedTask = await task.save();

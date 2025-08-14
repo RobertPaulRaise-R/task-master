@@ -2,7 +2,6 @@ import { useState } from "react";
 import ProjectCard from "../features/projects/ProjectCard";
 import Button from "../ui/Button";
 import ModalView from "../ui/ModalView";
-import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import { useForm } from "react-hook-form";
 import { InvalidateQueryFilters, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -12,6 +11,7 @@ import { RootState } from "../store";
 import Label from "../ui/Label";
 import { useProjects } from "../api/queries/useProjects";
 import { createProject } from "../api/services/projectApi";
+import Row from "../ui/Row";
 
 function Projects() {
     const workspace = useSelector((state: RootState) => state.workspace);
@@ -67,15 +67,15 @@ function Projects() {
                 onClose={() => setShowProjectForm(false)}
             >
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-                    <FormRow>
+                    <Row>
                         <Label label="Project Name" />
                         <Input placeholder="Enter project name" {...register("name", { required: true })} />
-                    </FormRow>
+                    </Row>
 
-                    <FormRow>
+                    <Row>
                         <Label label="Project Description" />
                         <Input placeholder="Enter project description" {...register("description", { required: true })} />
-                    </FormRow>
+                    </Row>
 
                     <div className="flex items-center justify-end gap-3">
                         <Button btn="secondary" onClick={() => setShowProjectForm(false)}>Cancel</Button>

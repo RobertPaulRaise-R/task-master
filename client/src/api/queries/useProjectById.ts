@@ -11,7 +11,7 @@ export function useProjectById() {
         isError,
         data: project,
     } = useQuery({
-        queryKey: [projectId],
+        queryKey: [`P${projectId}`],
         queryFn: () => getProjectById(projectId),
     });
 

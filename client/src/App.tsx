@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast"
 import { Navigate, Outlet } from "react-router";
 import Sidebar from "./ui/Sidebar";
 import Navbar from "./ui/Navbar";
@@ -27,6 +28,8 @@ function App() {
                 <Navbar isExpanded={isExpanded} setIsExpanded={setIsExpanded} theme={theme} toggleTheme={toggleTheme} />
                 <Outlet />
             </div>
+
+            <Toaster position="bottom-right" reverseOrder={false}/>
         </div>
     );
 }

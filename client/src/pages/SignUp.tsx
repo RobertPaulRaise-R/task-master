@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form";
 import Button from "../ui/Button";
-import FormRow from "../ui/FormRow";
 import Input from "../ui/Input";
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router";
 import Label from "../ui/Label";
 import { createUser } from "../api/services/userApi";
+import Row from "../ui/Row";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -40,28 +40,28 @@ function SignUp() {
         <div className="dark:bg-neutral-950 flex h-screen flex-col items-center justify-center">
             <form className="mx-auto" onSubmit={handleSubmit(onSubmit)}>
                 <h3 className="dark:text-white text-2xl font-semibold mb-4">SignUp</h3>
-                <FormRow>
+                <Row>
                     <Label label="Name" />
                     <Input {...register("name", { required: true })} />
-                </FormRow>
+                </Row>
 
-                <FormRow>
+                <Row>
                     <Label label="Username" />
                     <Input {...register("username", { required: true })} />
-                </FormRow>
+                </Row>
 
-                <FormRow>
+                <Row>
                     <Label label="Email" />
                     <Input type="email" {...register("email", { required: true })} />
-                </FormRow>
+                </Row>
 
-                <FormRow>
+                <Row>
                     <Label label="Password" />
                     <Input
                         type="password"
                         {...register("password", { required: true })}
                     />
-                </FormRow>
+                </Row>
 
                 <Button type="submit" btn="primary" className="w-full mt-4">
                     <span className="font-medium">Sign Up</span>

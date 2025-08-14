@@ -50,22 +50,21 @@ export const createTask = async (data: {
     return res.data;
 };
 
-export const updateTaskStatus = async (
-    taskId: string,
-    status: TaskI["status"],
-): Promise<TaskI> => {
-    const response = await axios.put(
-        `${TASKS_API_URL}/${taskId}`,
-        { status },
-        {
-            withCredentials: true,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        },
-    );
+export const updateTask = async (data: {
+    _id: string;
+    name?: string;
+    description?: string;
+    status?: string;
+    priority?: string;
+    dueDate?: string;
+    assignedTo?: string;
+}) => {
+    const res = await axios.put(`${TASKS_API_URL}/${data._id}`, data, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+    });
 
-    return response.data;
+    return res.data;
 };
 
 export const deleteTaskById = async (taskId: string) => {

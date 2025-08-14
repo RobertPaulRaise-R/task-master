@@ -4,7 +4,6 @@ import { RiExpandUpDownFill } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ModalView from "../../ui/ModalView";
-import FormRow from "../../ui/FormRow";
 import Label from "../../ui/Label";
 import Input from "../../ui/Input";
 import Select from "../../ui/Select";
@@ -12,6 +11,7 @@ import Button from "../../ui/Button";
 import { useDispatch } from "react-redux";
 import { changeWorkspace } from "./workspaceSlice";
 import { createWorkspace } from "../../api/services/worksapceApi";
+import Row from "../../ui/Row";
 
 function WorkspaceSelector({ workspace, workspaces, setWorkspace }: { workspace: WorkspaceI | null; workspaces: WorkspaceI[] | undefined; setWorkspace: (value: WorkspaceI) => void }) {
     const dispatch = useDispatch();
@@ -102,26 +102,26 @@ function WorkspaceSelector({ workspace, workspaces, setWorkspace }: { workspace:
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-5"
                 >
-                    <FormRow>
+                    <Row>
                         <Label label="Workspace Name" />
                         <Input
                             {...register("name", { required: true })}
                             placeholder="Enter workspace name"
                         />
-                    </FormRow>
+                    </Row>
 
-                    <FormRow>
+                    <Row>
                         <Label label="Visibility" />
                         <Select options={["public", "private"]} value={optionsValue} setValue={setOptionsValue} />
-                    </FormRow>
+                    </Row>
 
-                    <FormRow>
+                    <Row>
                         <Label label="Workspace Description" />
                         <Input
                             {...register("description", { required: true })}
                             placeholder="Enter workspace description"
                         />
-                    </FormRow>
+                    </Row>
 
 
                     <div className="flex items-center justify-end gap-3">
