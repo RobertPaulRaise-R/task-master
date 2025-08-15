@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router";
 import Label from "../ui/Label";
 import { loginUser } from "../api/services/userApi";
 import Row from "../ui/Row";
+import toast from "react-hot-toast";
 
 function Login() {
     const navigate = useNavigate();
@@ -19,8 +20,12 @@ function Login() {
     const mutation = useMutation({
         mutationFn: loginUser,
         onSuccess: () => {
-            navigate("/app/");
+            toast.success("Login successfull");
+            navigate("/app");
         },
+        onError: () => {
+            toast.error("Login failed");
+        }
     });
 
     const onSubmit = (data: { email: string; password: string }) => {
@@ -28,7 +33,7 @@ function Login() {
     };
 
     return (
-        <div className="bg-light-50 dark:bg-neutral-950 flex h-screen flex-col items-center justify-center">
+        <div className="bg-light-50 dark:bg-neutral-950 h-svh flex flex-col items-center justify-center">
             <form className="mx-auto" onSubmit={handleSubmit(onSubmit)}>
                 <h3 className="dark:text-white text-2xl font-semibold mb-6">Login</h3>
 

@@ -5,7 +5,7 @@ interface InputProps {
     [key: string]: unknown;
 }
 
-function Input({ type = "text", placeholder, width, ...rest }: InputProps) {
+function Input({ type = "text", placeholder, width = "w-[350px]", ...rest }: InputProps) {
     return (
         <input
             placeholder={placeholder}

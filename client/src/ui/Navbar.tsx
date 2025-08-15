@@ -19,6 +19,8 @@ import { WorkspaceI } from "../types";
 import Tabs from "./Tabs";
 import Tab from "./Tab";
 import TabGroup from "./TabGroup";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 function Navbar({
     isExpanded,
@@ -32,18 +34,19 @@ function Navbar({
     toggleTheme: () => void;
 }) {
     const { workspaces, isPending } = useWorkspaces();
+    const workspaceFromLocalStorage = useSelector((state: RootState) => state.workspace);
 
     const navigate = useNavigate();
 
-    const workspaceFromLocalStorage = localStorage.getItem("workspace");
 
-    const [workspace, setWorkspace] = useState<WorkspaceI | null>(workspaceFromLocalStorage ? JSON.parse(workspaceFromLocalStorage) : "");
+    const [workspace, setWorkspace] = useState<WorkspaceI | null>(workspaceFromLocalStorage || "");
     const [showMenu, setShowMenu] = useState(false);
 
 
     const { mutate } = useMutation({
         mutationFn: logoutUser,
         onSuccess: () => {
+            localStorage.removeItem("taskley-workspace");
             navigate("/");
         },
     });
@@ -101,11 +104,7 @@ function Navbar({
                     >
                         {isExpanded ? <FaAnglesLeft size={16} className="block" /> : <FaAnglesRight className="inline-block" />}
                     </button>
-                    {/*
-                    <h2 className="text-brand-500 text-md font-bold uppercase">
-                        {pageName}
-                    </h2>
-                    */}
+
                     {!isPending &&
                         <WorkspaceSelector workspaces={workspaces} workspace={workspace} setWorkspace={setWorkspace} />
                     }
@@ -113,12 +112,12 @@ function Navbar({
 
 
                 <div className="hidden lg:items-center gap-4 lg:flex">
-                    <button onClick={toggleTheme}>
+                    <IconButton onClick={toggleTheme}>
                         {theme === "dark" ?
-                            (<MdOutlineDarkMode size={20} color="white" />)
-                            : (<IoSunnyOutline size={20} color="black" />)
+                            (<MdOutlineDarkMode size={24} />)
+                            : (<IoSunnyOutline size={24} />)
                         }
-                    </button>
+                    </IconButton>
 
 
                     <DropdownMenu

@@ -16,14 +16,16 @@ import { useForm } from "react-hook-form";
 import SelectMember from "../../ui/SelectMember";
 import { useWorkspaceMembers } from "../../api/queries/useWorkspaceMembers";
 import { useUpdateTaskMutation } from "../../api/mutations/useUpdateTaskMutation";
+import Select from "../../ui/Select";
+
+const statusOptions = ["todo", "in_progress", "done"];
+const priorityOptions = ["low", "medium", "high"];
 
 function TaskDetailCard({ task }: { task: TaskI }) {
     const { register, handleSubmit } = useForm<{
         _id: string;
         name?: string;
         description?: string;
-        status?: string;
-        priority?: string;
         dueDate?: string;
         assignedTo?: string;
     }>();
@@ -33,6 +35,8 @@ function TaskDetailCard({ task }: { task: TaskI }) {
 
     const [member, setMember] = useState<UserI>();
     const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [status, setStatus] = useState<string>(task.status);
+    const [priority, setPriority] = useState<string>(task.priority);
 
     const dueDate = getDate(task.dueDate);
     const createdDate = getDate(task.createdAt);
@@ -41,12 +45,10 @@ function TaskDetailCard({ task }: { task: TaskI }) {
         _id: string;
         name?: string;
         description?: string;
-        status?: string;
-        priority?: string;
         dueDate?: string;
         assignedTo?: string;
     }) => {
-        mutate({ ...data, assignedTo: member?._id, _id: task._id });
+        mutate({ ...data, priority, status, assignedTo: member?._id, _id: task._id });
     };
 
     if (isPending) return <p>Loading members</p>
@@ -80,12 +82,17 @@ function TaskDetailCard({ task }: { task: TaskI }) {
                 <div>
                     <Col>
                         <Label label="Status: " />
-                        <Status status={task.status} />
+                        {isEditing ?
+                            <Select options={statusOptions} value={status} setValue={setStatus} /> :
+                            <Status status={task.status} />
+                        }
                     </Col>
 
                     <Col>
                         <Label label="Priority: " />
-                        <Priority priority={task.priority} />
+                        {isEditing ? <Select options={priorityOptions} value={priority} setValue={setPriority} /> :
+                            <Priority priority={task.priority} />
+                        }
                     </Col>
                 </div>
 

@@ -21,14 +21,15 @@ import { Provider } from "react-redux";
 import { store } from "./store.ts";
 import Team from "./pages/Team.tsx";
 import Task from "./features/tasks/Task.tsx";
+import ProtectedRoute from "./ProtectedRoute.tsx";
 
 const queryClient = new QueryClient();
 
 declare global {
-  interface Window {
-    __TANSTACK_QUERY_CLIENT__:
-      import("@tanstack/query-core").QueryClient;
-  }
+    interface Window {
+        __TANSTACK_QUERY_CLIENT__:
+        import("@tanstack/query-core").QueryClient;
+    }
 }
 
 // This code is for all users
@@ -39,15 +40,16 @@ createRoot(document.getElementById("root")!).render(
         <Provider store={store}>
             <ThemeProvider>
                 <QueryClientProvider client={queryClient}>
-                        <BrowserRouter>
-                            <Routes>
-                                <Route path="/" element={<LandingPage />} />
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<LandingPage />} />
 
-                                <Route path="/signup" element={<SignUp />} />
+                            <Route path="/signup" element={<SignUp />} />
 
-                                <Route path="/login" element={<Login />} />
+                            <Route path="/login" element={<Login />} />
 
-                                <Route path="app" element={<App />}>
+                            <Route path="app" element={<ProtectedRoute />}>
+                                <Route element={<App />}>
                                     <Route index element={<Navigate to={"dashboard"} replace />} />
                                     <Route path="dashboard" element={<Dashboard />} />
                                     <Route path="tasks" element={<Tasks />} />
@@ -68,8 +70,9 @@ createRoot(document.getElementById("root")!).render(
 
                                     <Route path="*" />
                                 </Route>
-                            </Routes>
-                        </BrowserRouter>
+                            </Route>
+                        </Routes>
+                    </BrowserRouter>
                 </QueryClientProvider>
             </ThemeProvider>
         </Provider>

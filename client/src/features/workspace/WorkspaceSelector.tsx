@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { WorkspaceI } from "../../types";
 import { RiExpandUpDownFill } from "react-icons/ri";
 import { useForm } from "react-hook-form";
@@ -53,8 +53,30 @@ function WorkspaceSelector({ workspace, workspaces, setWorkspace }: { workspace:
         });
     };
 
+    const workspaceRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (
+                workspaceRef.current &&
+                !workspaceRef.current.contains(event.target as Node)
+            ) {
+                setShowWorkspace(false);
+            }
+        }
+
+        if (showWorkspace) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [showWorkspace]);
+
+
     return (
-        <div className="relative w-[250px]">
+        <div ref={workspaceRef} className="relative w-[250px]">
             <div
                 className="bg-light-300 dark:bg-neutral-900 hover:bg-light-400 dark:hover:bg-neutral-800 px-2 py-3 flex items-center justify-between rounded-lg"
                 onClick={() => setShowWorkspace((show) => !show)}>

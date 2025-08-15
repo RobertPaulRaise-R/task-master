@@ -57,6 +57,7 @@ export const logoutUser = async () => {
         `${USERS_API_URL}/logout`,
         {},
         {
+            
             withCredentials: true,
             headers: { "Content-Type": "application/json" },
         },

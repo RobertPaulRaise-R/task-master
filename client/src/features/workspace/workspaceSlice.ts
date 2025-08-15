@@ -15,7 +15,7 @@ const defaultState: WorkspaceI = {
     }
 }
 
-const storedWorkspace = localStorage.getItem("workspace");
+const storedWorkspace = localStorage.getItem("taskley-workspace");
 const initialState = storedWorkspace ? JSON.parse(storedWorkspace) : defaultState;
 
 export const workspaceSlice = createSlice({
@@ -24,7 +24,7 @@ export const workspaceSlice = createSlice({
     reducers: {
         changeWorkspace: (state, action: PayloadAction<WorkspaceI>) => {
             const workspace = JSON.stringify({ ...state, ...action.payload });
-            localStorage.setItem("workspace", workspace);
+            localStorage.setItem("taskley-workspace", workspace);
             return { ...state, ...action.payload };
         },
     }

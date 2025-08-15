@@ -1,10 +1,32 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Select({ options, value, setValue }: { options: string[]; value: string; setValue: (value: string) => void }) {
     const [showOptions, setShowOptions] = useState<boolean>(false);
 
+    const selectRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (
+                selectRef.current &&
+                !selectRef.current.contains(event.target as Node)
+            ) {
+                setShowOptions(false);
+            }
+        }
+
+        if (showOptions) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [showOptions]);
+
+
     return (
-        <div className="relative text-light-800 dark:text-white">
+        <div ref={selectRef} className="relative text-light-800 dark:text-white w-[200px]">
             <div className="py-2 px-4 h-min[42px] dark:text-white rounded-sm bg-light-50 dark:bg-neutral-900 border border-light-800 dark:border-neutral-700" onClick={() => setShowOptions(true)}>
                 {value === "" ? <span className="text-neutral-600">No options selected</span> : value}
             </div>
