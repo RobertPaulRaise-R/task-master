@@ -1,4 +1,5 @@
 import { useTaskById } from "../../api/queries/useTaskById";
+import CommentSection from "../../ui/CommentSection";
 import TaskDetailCard from "./TaskDetailCard";
 
 function Task() {
@@ -8,9 +9,9 @@ function Task() {
     if (isError) return <span>Error while fetching the task</span>
 
     return (
-        <div className="my-4 px-4 grid grid-cols-1 lg:grid-cols-2">
-            <TaskDetailCard task={task}/>
-
+        <div className="my-4 px-4 grid grid-cols-1 lg:grid-cols-2 gap-y-10">
+            <TaskDetailCard task={task} />
+            <CommentSection taskId={task._id} />
         </div>
     );
 }

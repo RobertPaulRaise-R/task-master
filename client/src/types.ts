@@ -92,3 +92,16 @@ export interface WorkspaceI {
         notifications?: boolean;
     };
 }
+
+export interface CommentI {
+    _id: string;
+    workspaceId: string;
+    taskId: string;
+    content: string;
+    createdBy: {
+        _id: string;
+        name: string;
+    };
+    createdAt: string;
+    updatedAt: string;
+}

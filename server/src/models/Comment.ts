@@ -1,11 +1,8 @@
 import mongoose, { Schema } from "mongoose";
-import { type } from "os";
-import { ref } from "process";
 
 export interface IComment extends Document {
     workspaceId: mongoose.Types.ObjectId;
     taskId: mongoose.Types.ObjectId;
-    parentCommentId: mongoose.Types.ObjectId;
     content: string;
     createdBy: mongoose.Types.ObjectId;
     createdAt: Date;
@@ -22,11 +19,6 @@ const commentSchema = new Schema<IComment>({
         type: Schema.Types.ObjectId,
         ref: 'Task',
         required: true,
-    },
-    parentCommentId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Comment',
-        default: null,
     },
     content: {
         type: String,
@@ -48,6 +40,6 @@ const commentSchema = new Schema<IComment>({
     },
 });
 
-commentSchema.index({ workspaceId: 1, taskId: 1, parentCommentId: 1, createdAt: 1 });
+commentSchema.index({ workspaceId: 1, taskId: 1, createdAt: 1 });
 
 export const Comment = mongoose.model<IComment>("Comment", commentSchema);

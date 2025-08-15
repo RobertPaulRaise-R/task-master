@@ -20,7 +20,7 @@ function IconButton({
             ref={ref}
             onClick={onClick}
             disabled={disabled}
-            className={`dark:hover:text-white dark:bg-neutral-900 dark:text-neutral-400 max-w-10 rounded-md border border-transparent p-1 hover:cursor-pointer ${bgColor}`}
+            className={`dark:hover:text-white hover:text-light-900 dark:bg-neutral-900 bg-light-200 dark:text-neutral-400 text-light-700 max-w-10 rounded-md border border-transparent p-1 hover:cursor-pointer ${bgColor}`}
         >
             {children}
         </button>

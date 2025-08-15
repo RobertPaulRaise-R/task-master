@@ -1,6 +1,5 @@
 import axios from "axios";
 import { TASKS_API_URL } from "../../constants";
-import { TaskI } from "../../types";
 
 export const getTasks = async (workspaceId: string) => {
     const res = await axios.get(`${TASKS_API_URL}/?workspaceId=${workspaceId}`, {

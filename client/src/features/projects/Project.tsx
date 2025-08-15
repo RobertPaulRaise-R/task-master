@@ -22,8 +22,8 @@ function Project() {
     const workspace = useSelector((state: RootState) => state.workspace);
 
     const { project, isPending: isProjectPending, isError: isProjectError } = useProjectById();
-    const { tasks, isPending: isTasksPending, isError: isTasksError } = useTasksByProject(project?._id);
-    const { members, isPending: isMembersPending, isError: isMembersError } = useWorkspaceMembers();
+    const { tasks, isPending: isTasksPending } = useTasksByProject(project?._id);
+    const { members } = useWorkspaceMembers();
 
     const [showTaskForm, setShowTaskForm] = useState(false);
     const [assignTo, setAssignTo] = useState<UserI | undefined>();

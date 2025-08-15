@@ -5,3 +5,4 @@ export const PROJECTS_API_URL   = `${BACKEND_API_URL}/projects`;
 export const TEAMS_API_URL       = `${BACKEND_API_URL}/teams`;
 export const USERS_API_URL       = `${BACKEND_API_URL}/users`;
 export const WORKSPACES_API_URL  = `${BACKEND_API_URL}/workspaces`;
+export const COMMENTS_API_URL  = `${BACKEND_API_URL}/comments`;

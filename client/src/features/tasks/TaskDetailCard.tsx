@@ -10,7 +10,7 @@ import Priority from "./Priority";
 import { FaRegCalendarAlt, FaSave } from "react-icons/fa";
 import { getDate } from "../../utils/getDate";
 import { Link } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Input from "../../ui/Input";
 import { useForm } from "react-hook-form";
 import SelectMember from "../../ui/SelectMember";
@@ -18,7 +18,15 @@ import { useWorkspaceMembers } from "../../api/queries/useWorkspaceMembers";
 import { useUpdateTaskMutation } from "../../api/mutations/useUpdateTaskMutation";
 
 function TaskDetailCard({ task }: { task: TaskI }) {
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit } = useForm<{
+        _id: string;
+        name?: string;
+        description?: string;
+        status?: string;
+        priority?: string;
+        dueDate?: string;
+        assignedTo?: string;
+    }>();
 
     const { members, isPending, isError } = useWorkspaceMembers();
     const { mutate } = useUpdateTaskMutation();

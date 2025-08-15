@@ -8,7 +8,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import DropdownMenu, { DropdownMenuItem } from "./DropdownMenu";
 import { PiSignOutBold } from "react-icons/pi";
 import { IoMdSettings } from "react-icons/io";
-import { MdDashboard, MdOutlineDarkMode, MdPerson } from "react-icons/md";
+import { MdOutlineDarkMode, MdPerson } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
 import { IoSunnyOutline } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
@@ -142,11 +142,11 @@ function Navbar({
                     />
                 </div>
 
-                <button className="lg:hidden">
+                <div className="lg:hidden">
                     <IconButton onClick={() => setShowMenu(show => !show)}>
                         <RxHamburgerMenu />
                     </IconButton>
-                </button>
+                </div>
 
                 {
                     showMenu ?
