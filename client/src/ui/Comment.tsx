@@ -28,15 +28,10 @@ function Comment({ comment }: { comment: CommentI }) {
                         text={comment.content}
                         maxLine="2"
                         ellipsis={
-                            <span
-                                className="text-blue-500 cursor-pointer hover:underline ml-1"
-                                onClick={() => setShowMore(true)}
-                            >
-                                show less
-                            </span>
+                                "show more"
                         }
                         trimRight
-                        basedOn="letters"
+                        basedOn="words"
                         onClick={() => setShowMore(true)}
                     />
                 )}
