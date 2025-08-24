@@ -7,7 +7,7 @@ export const getFriends = async (
     res: Response,
     next: NextFunction
 ) => {
-    const userId = req.user?._id;
+    const userId = req.userId;
 
     const friendships = await Friends.find({
         $or: [{ user: userId }, { friend: userId }],
@@ -36,7 +36,7 @@ export const getFriendRequests = async (
     res: Response,
     next: NextFunction
 ) => {
-    const userId = req.user?._id;
+    const userId = req.userId;
 
     const requests = await Friends.find({
         friend: userId,
@@ -51,7 +51,7 @@ export const getFriendStatus = async (
     res: Response,
     next: NextFunction
 ) => {
-    const userId = req._id;
+    const userId = req.userId;
     const otherUserId = req.params.userId;
 
     const friendship = await Friends.findOne({
@@ -69,7 +69,7 @@ export const sendFriendRequest = async (
     res: Response,
     next: NextFunction
 ) => {
-    const userId = req.user?._id;
+    const userId = req.userId;
     const friendId = req.params.userId;
 
     if (!userId) {
@@ -119,7 +119,7 @@ export const acceptFriendRequest = async (
     res: Response,
     next: NextFunction
 ) => {
-    const userId = req.user?._id;
+    const userId = req.userId;
     const requestId = req.params.requestId;
 
     console.log(userId, requestId);
@@ -146,7 +146,7 @@ export const rejectFriendRequest = async (
     res: Response,
     next: NextFunction
 ) => {
-    const userId = req._id;
+    const userId = req.userId;
     const requestId = req.params.requestId;
 
     const friendship = await Friends.findOne({
@@ -170,7 +170,7 @@ export const removeFriend = async (
     res: Response,
     next: NextFunction
 ) => {
-    const userId = req._id;
+    const userId = req.userId;
     const friendId = req.params.friendId;
 
     const friendship = await Friends.findOne({

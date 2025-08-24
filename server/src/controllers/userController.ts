@@ -4,11 +4,10 @@ import { User } from "../models/User.js";
 import mongoose from "mongoose";
 import { Workspace } from "../models/Workspace.js";
 import { Friends } from "../models/Friend.js";
-import router from "../routes/userRoutes.js";
 
 export const getUser = async (req: Request, res: Response) => {
     try {
-        const userId = req.user?._id;
+        const userId = req.userId;
         if (!userId) {
             return res.status(401).json({ message: "Not authenticated." });
         }
