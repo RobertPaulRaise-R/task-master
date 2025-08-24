@@ -1,12 +1,14 @@
-import { useForm } from "react-hook-form";
-import Button from "../ui/Button";
-import Input from "../ui/Input";
-import { useMutation } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router";
-import Label from "../ui/Label";
-import { createUser } from "../api/services/userApi";
-import Row from "../ui/Row";
+import { SignUp } from "@clerk/clerk-react";
 
+function SignUpPage() {
+    return (
+        <div className="inline-flex items-center justify-center h-svh w-svw">
+            <SignUp />
+        </div>
+    );
+}
+
+/*
 function SignUp() {
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm<{
@@ -77,5 +79,6 @@ function SignUp() {
         </div>
     );
 }
+*/
 
-export default SignUp;
+export default SignUpPage;

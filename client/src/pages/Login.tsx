@@ -1,13 +1,15 @@
-import { useForm } from "react-hook-form";
-import Input from "../ui/Input";
-import Button from "../ui/Button";
-import { useMutation } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router";
-import Label from "../ui/Label";
-import { loginUser } from "../api/services/userApi";
-import Row from "../ui/Row";
-import toast from "react-hot-toast";
+import { SignIn } from "@clerk/clerk-react";
 
+
+function Login() {
+    return (
+        <div className="inline-flex items-center justify-center h-svh w-svw">
+            <SignIn signUpUrl="/signup"/>
+        </div>
+    );
+}
+
+/*
 function Login() {
     const navigate = useNavigate();
 
@@ -88,5 +90,6 @@ function Login() {
         </div>
     );
 }
+*/
 
 export default Login;

@@ -1,7 +1,7 @@
 import axios from "axios"
 import { COMMENTS_API_URL } from "../../constants";
 
-export const createComment = async (data) => {
+export const createComment = async (data: { taskId: string; workspaceId: string; content: string }) => {
     const res = await axios.post(`${COMMENTS_API_URL}`, data, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" }

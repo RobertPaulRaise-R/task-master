@@ -11,7 +11,6 @@ import Calendar from "./pages/Calendar.tsx";
 import Chat from "./pages/Chat.tsx";
 import LandingPage from "./pages/LandingPage.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import SignUp from "./pages/SignUp.tsx";
 import Login from "./pages/Login.tsx";
 import Timeline from "./pages/Timeline.tsx";
 import Settings from "./pages/Settings.tsx";
@@ -22,8 +21,16 @@ import { store } from "./store.ts";
 import Team from "./pages/Team.tsx";
 import Task from "./features/tasks/Task.tsx";
 import ProtectedRoute from "./ProtectedRoute.tsx";
+import { ClerkProvider } from '@clerk/clerk-react'
+import SignUpPage from "./pages/SignUpPage.tsx";
 
 const queryClient = new QueryClient();
+
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
+if (!PUBLISHABLE_KEY) {
+    throw new Error('Missing Publishable Key')
+}
 
 declare global {
     interface Window {
@@ -37,44 +44,46 @@ window.__TANSTACK_QUERY_CLIENT__ = queryClient;
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <Provider store={store}>
-            <ThemeProvider>
-                <QueryClientProvider client={queryClient}>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={<LandingPage />} />
+        <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+            <Provider store={store}>
+                <ThemeProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <BrowserRouter>
+                            <Routes>
+                                <Route path="/" element={<LandingPage />} />
 
-                            <Route path="/signup" element={<SignUp />} />
+                                <Route path="/signup" element={<SignUpPage />} />
 
-                            <Route path="/login" element={<Login />} />
+                                <Route path="/login" element={<Login />} />
 
-                            <Route path="app" element={<ProtectedRoute />}>
-                                <Route element={<App />}>
-                                    <Route index element={<Navigate to={"dashboard"} replace />} />
-                                    <Route path="dashboard" element={<Dashboard />} />
-                                    <Route path="tasks" element={<Tasks />} />
-                                    <Route path="tasks/:id" element={<Task />} />
-                                    <Route path="projects" element={<Projects />} />
-                                    <Route path="projects/:id" element={<Project />} />
+                                <Route path="app" element={<ProtectedRoute />}>
+                                    <Route element={<App />}>
+                                        <Route index element={<Navigate to={"dashboard"} replace />} />
+                                        <Route path="dashboard" element={<Dashboard />} />
+                                        <Route path="tasks" element={<Tasks />} />
+                                        <Route path="tasks/:id" element={<Task />} />
+                                        <Route path="projects" element={<Projects />} />
+                                        <Route path="projects/:id" element={<Project />} />
 
-                                    <Route path="team" element={<Team />} />
-                                    <Route path="chat" element={<Chat />} />
+                                        <Route path="team" element={<Team />} />
+                                        <Route path="chat" element={<Chat />} />
 
-                                    <Route path="calendar" element={<Calendar />} />
-                                    <Route path="timeline" element={<Timeline />} />
-                                    <Route path="analytics" />
+                                        <Route path="calendar" element={<Calendar />} />
+                                        <Route path="timeline" element={<Timeline />} />
+                                        <Route path="analytics" />
 
-                                    <Route path="settings" element={<Settings />} />
-                                    <Route path="profile" element={<Profile />} />
-                                    <Route path="notification" />
+                                        <Route path="settings" element={<Settings />} />
+                                        <Route path="profile" element={<Profile />} />
+                                        <Route path="notification" />
 
-                                    <Route path="*" />
+                                        <Route path="*" />
+                                    </Route>
                                 </Route>
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
-                </QueryClientProvider>
-            </ThemeProvider>
-        </Provider>
+                            </Routes>
+                        </BrowserRouter>
+                    </QueryClientProvider>
+                </ThemeProvider>
+            </Provider>
+        </ClerkProvider>
     </StrictMode>,
 );
